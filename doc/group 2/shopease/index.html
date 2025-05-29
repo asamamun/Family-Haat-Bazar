@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopEase Navbar</title>
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            padding-top: 120px; /* Compensate for fixed navbar height */
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        /* Navbar styles */
+        .navbar {
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+        
+        /* Top Bar - Prussian Blue (#003153) */
+        .top-bar {
+            background-color: #003153;
+            color: white;
+            padding: 10px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .delivery-location, .app-download, .auth-section {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        
+        .search-container {
+            flex-grow: 1;
+            max-width: 500px;
+            display: flex;
+            margin: 0 20px;
+        }
+        
+        .search-bar {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px 0 0 4px;
+            width: 100%;
+        }
+        
+        .search-btn {
+            padding: 8px 15px;
+            border: none;
+            background-color: #d4db0ec4;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
+        
+        .right-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .language-selector {
+            padding: 5px;
+            border-radius: 4px;
+            border: none;
+            background-color: #f8f8f8;
+        }
+        
+        /* Bottom Navigation - Azure Blue (#007FFF) */
+        .bottom-nav {
+            background-color: #007FFF;
+            color: white;
+        }
+        
+        /* Category Sidebar Styles */
+        .category-sidebar {
+            position: fixed;
+            top: 0;
+            left: -350px;
+            width: 350px;
+            height: 100vh;
+            background: white;
+            z-index: 1050;
+            transition: left 0.3s ease;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            overflow-y: auto;
+        }
+
+        .category-sidebar.show {
+            left: 0;
+        }
+
+        .sidebar-header {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .sidebar-header h5 {
+            margin: 0;
+            font-size: 1.25rem;
+        }
+
+        .sidebar-close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-close-btn:hover {
+            transform: rotate(90deg);
+        }
+
+        .category-list {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        .category-item {
+            border-bottom: 1px solid #eee;
+        }
+
+        .category-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            color: #1e293b;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            background: white;
+        }
+
+        .category-link:hover {
+            background: #f8fafc;
+            color: #2563eb;
+            padding-left: 25px;
+        }
+
+        .category-icon {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+            color: #2563eb;
+        }
+
+        .subcategory-list {
+            background: #f8fafc;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .subcategory-list.show {
+            max-height: 500px;
+        }
+
+        .subcategory-link {
+            display: block;
+            padding: 12px 50px;
+            color: #1e293b;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid #eee;
+            font-size: 0.9rem;
+        }
+
+        .subcategory-link:hover {
+            background: white;
+            color: #2563eb;
+            padding-left: 55px;
+        }
+
+        /* Sidebar overlay */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1040;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .fa-chevron-right.rotate-90 {
+            transform: rotate(90deg);
+            transition: transform 0.3s ease;
+        }
+        
+        .nav-menu {
+            padding: 10px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+        
+        .menu-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .nav-links a {
+            padding: 5px 0;
+            position: relative;
+        }
+        
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Nav Right - with 30px space from nav-left */
+        .nav-right {
+            display: flex;
+            gap: 20px;
+            margin-left: 30px;
+        }
+        
+        .nav-right-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* Sample content to demonstrate scrolling */
+        .content {
+            height: 2000px;
+            padding: 20px;
+        }
+        
+        marquee {
+            color: rgb(252, 250, 250);
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 1024px) {
+            body {
+                padding-top: 180px;
+            }
+            
+            .top-bar {
+                flex-direction: column;
+                padding: 15px 5%;
+            }
+            
+            .search-container {
+                margin: 10px 0;
+                max-width: 100%;
+            }
+            
+            .nav-menu {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .nav-left {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+                width: 100%;
+            }
+            
+            .nav-links {
+                flex-direction: column;
+                gap: 10px;
+                width: 100%;
+            }
+            
+            .nav-right {
+                margin-left: 0;
+                margin-top: 15px;
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .category-sidebar {
+                width: 300px;
+                left: -300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <!-- Top Bar - Prussian Blue -->
+        <div class="top-bar">
+            <div class="logo-section">
+                <div class="logo"><a href="index.html">ShopEase</a></div>
+            </div>
+            
+            <div class="delivery-location">
+                <span class="delivery-icon">🚚</span>
+                <span>Select your delivery location</span>
+            </div>
+            
+            <div class="search-container">
+                <input type="text" class="search-bar" placeholder="Search your products">
+                <button class="search-btn">🔍</button>
+            </div>
+            
+            <div class="right-section">
+                <a href="#" class="app-download">
+                    <span class="app-icon">📱</span>
+                    <span>Download App Now</span>
+                </a>
+                
+                <select class="language-selector">
+                    <option>বাংলা</option>
+                    <option>English</option>
+                </select>
+                
+                <div class="auth-section">
+                    <span class="user-icon">👤</span>
+                    <span>Sign In / Sign up</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bottom Navigation - Azure Blue -->
+        <div class="bottom-nav">
+            <div class="nav-menu">
+                <div class="nav-left">
+                    <div class="menu-toggle" id="categoryToggle">
+                        <span class="hamburger">☰</span>
+                        <span>Select Category</span>
+                    </div>
+                    
+                    <div class="nav-links">
+                        <a href="index.html">Home</a>
+                        <a href="hot-deals.html">Hot Deals</a>
+                        <a href="brands.html">Brands</a>
+                    </div>
+                </div>
+                <div class="nav-right">
+                    <marquee>Free Shipping on Orders Over ৳1000!</marquee>
+                </div>
+                <div class="nav-right">
+                    <a href="#" class="nav-right-item">
+                        <span class="icon">🛒</span>
+                        <span>Cart</span>
+                    </a>
+                    <a href="#" class="nav-right-item">
+                        <span class="icon">📦</span>
+                        <span>Orders</span>
+                    </a>
+                    <a href="#" class="nav-right-item">
+                        <span class="icon">🏪</span>
+                        <span>Our outlets</span>
+                    </a>
+                    <a href="#" class="nav-right-item">
+                        <span class="icon">❓</span>
+                        <span>Help line</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Category Sidebar -->
+    <div class="category-sidebar" id="categorySidebar">
+        <div class="sidebar-header">
+            <h5 class="mb-0">Shop by Category</h5>
+            <button class="sidebar-close-btn" id="closeSidebar">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <ul class="category-list">
+            <li class="category-item">
+                <a href="#" class="category-link" data-category="food">
+                    <span><i class="fas fa-apple-alt category-icon"></i>Food & Beverages</span>
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+                <ul class="subcategory-list">
+                    <li><a href="#" class="subcategory-link">Fresh Fruits</a></li>
+                    <li><a href="#" class="subcategory-link">Vegetables</a></li>
+                    <li><a href="#" class="subcategory-link">Snacks & Cookies</a></li>
+                    <li><a href="#" class="subcategory-link">Beverages</a></li>
+                    <li><a href="#" class="subcategory-link">Dairy Products</a></li>
+                </ul>
+            </li>
+            <li class="category-item">
+                <a href="#" class="category-link" data-category="baby-care">
+                    <span><i class="fas fa-baby category-icon"></i>Baby Care</span>
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+                <ul class="subcategory-list">
+                    <li><a href="#" class="subcategory-link">Diapers</a></li>
+                    <li><a href="#" class="subcategory-link">Baby Food</a></li>
+                    <li><a href="#" class="subcategory-link">Toys</a></li>
+                    <li><a href="#" class="subcategory-link">Baby Clothing</a></li>
+                </ul>
+            </li>
+            <li class="category-item">
+                <a href="#" class="category-link" data-category="home-kitchen">
+                    <span><i class="fas fa-home category-icon"></i>Home & Kitchen</span>
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+                <ul class="subcategory-list">
+                    <li><a href="#" class="subcategory-link">Cookware</a></li>
+                    <li><a href="#" class="subcategory-link">Kitchen Appliances</a></li>
+                    <li><a href="#" class="subcategory-link">Storage Solutions</a></li>
+                    <li><a href="#" class="subcategory-link">Cleaning Supplies</a></li>
+                </ul>
+            </li>
+            <li class="category-item">
+                <a href="#" class="category-link" data-category="womens-corner">
+                    <span><i class="fas fa-female category-icon"></i>Women's Corner</span>
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+                <ul class="subcategory-list">
+                    <li><a href="#" class="subcategory-link">Fashion & Clothing</a></li>
+                    <li><a href="#" class="subcategory-link">Accessories</a></li>
+                    <li><a href="#" class="subcategory-link">Footwear</a></li>
+                    <li><a href="#" class="subcategory-link">Handbags</a></li>
+                </ul>
+            </li>
+            <li class="category-item">
+                <a href="#" class="category-link" data-category="beauty-health">
+                    <span><i class="fas fa-heart category-icon"></i>Beauty & Health</span>
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+                <ul class="subcategory-list">
+                    <li><a href="#" class="subcategory-link">Skincare</a></li>
+                    <li><a href="#" class="subcategory-link">Makeup</a></li>
+                    <li><a href="#" class="subcategory-link">Hair Care</a></li>
+                    <li><a href="#" class="subcategory-link">Health Supplements</a></li>
+                </ul>
+            </li>
+            <li class="category-item">
+                <a href="#" class="category-link" data-category="electronics">
+                    <span><i class="fas fa-laptop category-icon"></i>Electronics</span>
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+                <ul class="subcategory-list">
+                    <li><a href="#" class="subcategory-link">Mobile Phones</a></li>
+                    <li><a href="#" class="subcategory-link">Computers</a></li>
+                    <li><a href="#" class="subcategory-link">Electronics Accessories</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        // Toggle category sidebar
+        document.getElementById('categoryToggle').addEventListener('click', function() {
+            document.getElementById('categorySidebar').classList.add('show');
+            document.getElementById('sidebarOverlay').classList.add('show');
+        });
+
+        // Close category sidebar
+        document.getElementById('closeSidebar').addEventListener('click', function() {
+            document.getElementById('categorySidebar').classList.remove('show');
+            document.getElementById('sidebarOverlay').classList.remove('show');
+        });
+
+        // Close sidebar when clicking overlay
+        document.getElementById('sidebarOverlay').addEventListener('click', function() {
+            document.getElementById('categorySidebar').classList.remove('show');
+            this.classList.remove('show');
+        });
+
+        // Toggle subcategories
+        document.querySelectorAll('.category-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const item = this.parentElement;
+                const sublist = item.querySelector('.subcategory-list');
+                sublist.classList.toggle('show');
+                
+                // Rotate chevron icon
+                const chevron = this.querySelector('.fa-chevron-right');
+                if (chevron) {
+                    chevron.classList.toggle('rotate-90');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

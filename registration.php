@@ -1,36 +1,44 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require __DIR__ . '/vendor/autoload.php';
 $page = "Registration";
 if(isset($_POST['reg'])){
 $db = new MysqliDb();
-if($_POST['pass1'] == $_POST['pass2']){
-    $data = [
-        'name'=> $db->escape($_POST['firstname'])." ". $db->escape($_POST['lastname']),
+if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reg'])){
+  if($_POST['pass1'] != $_POST['pass2']){
+    $message = "Passwords do not match";
+  }
+  else{
+$data = [
+        'first_name'=> $db->escape($_POST['firstname']),
+        'last_name'=> $db->escape($_POST['lastname']),        
         'email'=> $db->escape($_POST['email']),
+        'phone'=> $db->escape($_POST['phone']),
         'password' => password_hash($_POST['pass1'],PASSWORD_DEFAULT),
-        'role' => "1"
+        'role' => "customer"
     ];
     if($db->insert("users",$data)){
+      $_SESSION['message'] = "Registration successful!!";
         header("location:login.php");
+        exit;
     }
     else{
         $message = "Regitration failed!!";
     }
+  }  
 }
+
 
 }
 ?>
 
 <?php require __DIR__ . '/components/header.php';?>
 
-</head>
-<body>
-<div class="container">
-<?php require __DIR__ . '/components/menubar.php';?>
 
-<h1>registration page</h1>
-<?php require __DIR__ . '/components/dismissalert.php';?>
-<!--  -->
+<!-- content start  -->
+ <h1>Registration</h1>
 <form class="row g-3 needs-validation" novalidate method="post" action="<?= $_SERVER['PHP_SELF'] ?>">
   <div class="col-md-4 form-floating">
   <input type="text" class="form-control" name="firstname" id="firstname" value="" required placeholder="first name">
@@ -48,16 +56,14 @@ if($_POST['pass1'] == $_POST['pass2']){
       Looks good!
     </div>
   </div>
-  <div class="col-md-4 form-floating">
+<!--   <div class="col-md-4 form-floating">
     <input type="text" class="form-control" id="username" name="username" aria-describedby="inputGroupPrepend" required placeholder="user name">
       <label for="username" class="form-label">Username</label>
       <div class="invalid-feedback">
         Please choose a username.
-      </div>
-
-    
-  </div>
-  <div class="col-md-6 form-floating">
+      </div>    
+  </div> -->
+  <div class="col-md-4 form-floating">
     
     <input type="email" class="form-control" id="email" name="email" required placeholder="yourname@domain.com">
     <label for="email" class="form-label">Email</label>
@@ -68,20 +74,28 @@ if($_POST['pass1'] == $_POST['pass2']){
       Email Valid!!
     </div>
   </div>
-  <div class="col-md-3 form-floating">    
+    <div class="col-md-4 form-floating">    
+    <input type="text" minlength="10" class="form-control" id="phone" name="phone" required placeholder="01XXXXXXXXX">
+    <label for="pass2" class="form-label">Phone Number</label>
+    <div class="invalid-feedback">
+      Please provide a valid phone number
+    </div>
+  </div>
+  <div class="col-md-4 form-floating">    
     <input type="password" minlength="5" class="form-control" id="pass1" name="pass1" required placeholder="password">
     <label for="pass1" class="form-label">Password</label>
     <div class="invalid-feedback">
       Please provide a valid password.
     </div>
   </div>
-  <div class="col-md-3 form-floating">    
+  <div class="col-md-4 form-floating">    
     <input type="password" minlength="5" class="form-control" id="pass2" name="pass2" required placeholder="retype password">
     <label for="pass2" class="form-label">Retype Password</label>
     <div class="invalid-feedback">
       Please provide a valid length password.
     </div>
   </div>
+
   <div class="col-12">
     <div class="form-check">
       
@@ -98,11 +112,10 @@ if($_POST['pass1'] == $_POST['pass2']){
     <button class="btn btn-primary" type="submit" name="reg" value="Sign Up">Register</button>
   </div>
 </form>
-<!--  -->
+<!-- content end -->
 <?php
 // echo testfunc();
 ?>
-</div>
 <script>
 
 </script>

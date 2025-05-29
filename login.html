@@ -1,22 +1,14 @@
-<?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= settings()['companyname'] ?> - <?= $page ?></title>
-    <link rel="stylesheet" href="<?= settings()['homepage'] ?>assets/css/bootstrap.min.css">
-    <script src="<?= settings()['homepage'] ?>assets/js/bootstrap.bundle.min.js"></script>
+    <title>Family Haat Bazaar - Login</title>
+    <link rel="stylesheet" href="http://localhost/ROUND64/PHP/Family-Haat-Bazar/assets/css/bootstrap.min.css">
+    <script src="http://localhost/ROUND64/PHP/Family-Haat-Bazar/assets/js/bootstrap.bundle.min.js"></script>
     <!-- Add Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-<link rel="stylesheet" href="<?= settings()['homepage'] ?>assets/css/styles.css">
-<link rel="stylesheet" href="<?= settings()['homepage'] ?>assets/css/footer.css">
-<link rel="stylesheet" href="<?= settings()['homepage'] ?>assets/assets/owl.carousel.min.css">
-
+<link rel="stylesheet" href="http://localhost/ROUND64/PHP/Family-Haat-Bazar/assets/css/styles.css">
 </head>
 <body>
     <div class="container">
@@ -50,7 +42,7 @@ if (session_status() === PHP_SESSION_NONE) {
                 
                 <div class="auth-section">
                     <span class="user-icon">👤</span>
-                    <span><a href="login.php">Sign In</a> / <a href="registration.php">Sign up</a></span>
+                    <span>Sign In / Sign up</span>
                 </div>
             </div>
         </div>
@@ -181,7 +173,95 @@ if (session_status() === PHP_SESSION_NONE) {
             </li>
         </ul>
     </div>
-    <!-- Main Content -->
-    <div class="main-content">
-        <?php require __DIR__ . '/dismissalert.php';?>
-        <?php require __DIR__ . '/sessiondata.php';?>
+    <!--  main content start-->
+<div class="main-content">
+<h1>Login page</h1>
+
+<form class="row g-3 needs-validation" novalidate method="post" action="/ROUND64/PHP/Family-Haat-Bazar/login.php">
+
+  <div class="col-md-12 form-floating">
+    
+    <input type="email" class="form-control" id="email" name="email" required placeholder="yourname@domain.com">
+    <label for="email" class="form-label">Email</label>
+    <div class="invalid-feedback">
+      Please provide a valid email.
+    </div>
+    <div class="valid-feedback">
+      Email Valid!!
+    </div>
+  </div>
+  <div class="col-md-12 form-floating">    
+    <input type="password" minlength="5" class="form-control" id="pass1" name="pass1" required placeholder="password">
+    <label for="pass1" class="form-label">Password</label>
+    <div class="invalid-feedback">
+      Please provide a valid password.
+    </div>
+  </div>
+  <div class="col-12">
+    <button class="btn btn-primary" type="submit" name="login" value="Sign In">Login </button>
+  </div>
+</form>
+</div>
+<!-- main content end -->
+<script>
+
+</script>
+</div><!-- end of container-->
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+(() => {
+  'use strict'
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  const forms = document.querySelectorAll('.needs-validation')
+
+  // Loop over them and prevent submission
+  Array.from(forms).forEach(form => {
+    form.addEventListener('submit', event => {
+      if (!form.checkValidity()) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+
+      form.classList.add('was-validated')
+    }, false)
+  })
+})()
+</script>
+<script>
+        // Toggle category sidebar
+        document.getElementById('categoryToggle').addEventListener('click', function() {
+            document.getElementById('categorySidebar').classList.add('show');
+            document.getElementById('sidebarOverlay').classList.add('show');
+        });
+
+        // Close category sidebar
+        document.getElementById('closeSidebar').addEventListener('click', function() {
+            document.getElementById('categorySidebar').classList.remove('show');
+            document.getElementById('sidebarOverlay').classList.remove('show');
+        });
+
+        // Close sidebar when clicking overlay
+        document.getElementById('sidebarOverlay').addEventListener('click', function() {
+            document.getElementById('categorySidebar').classList.remove('show');
+            this.classList.remove('show');
+        });
+
+        // Toggle subcategories
+        document.querySelectorAll('.category-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const item = this.parentElement;
+                const sublist = item.querySelector('.subcategory-list');
+                sublist.classList.toggle('show');
+                
+                // Rotate chevron icon
+                const chevron = this.querySelector('.fa-chevron-right');
+                if (chevron) {
+                    chevron.classList.toggle('rotate-90');
+                }
+            });
+        });
+    </script>
+</body>
+</html>    

@@ -38,14 +38,8 @@ if(isset($_POST['login'])){
 
 <?php require __DIR__ . '/components/header.php';?>
 
-</head>
-<body>
-  <h1><?= config('test.course') ?></h1>
-<div class="container">
-<?php require __DIR__ . '/components/menubar.php';?>
+<!-- content start -->
 <h1>Login page</h1>
-<?php require __DIR__ . '/components/dismissalert.php';?>
-<!--  -->
 <form class="row g-3 needs-validation" novalidate method="post" action="<?= $_SERVER['PHP_SELF'] ?>">
 
   <div class="col-md-12 form-floating">
@@ -70,11 +64,10 @@ if(isset($_POST['login'])){
     <button class="btn btn-primary" type="submit" name="login" value="Sign In">Login </button>
   </div>
 </form>
-<!--  -->
+<!-- content end -->
 <?php
 // echo testfunc();
 ?>
-</div>
 <script>
 
 </script>

@@ -2,7 +2,7 @@
 if (!function_exists('settings')) {
     function settings()
     {
-       $root = "http://192.168.54.81/ROUND64/PHP/Family-Haat-Bazar/"; 
+       $root = "D:\xampp\htdocs\Family-Haat-Bazar-main"; 
         return [
             'root'  => $root,
             'companyname'=> 'Family Haat Bazaar',

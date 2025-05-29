@@ -1,5 +1,65 @@
-</div><!-- main content end -->
-</div><!-- end of container-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopEase - Footer</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        .footer {
+            background-color: #121212;
+            color: #ffffff;
+            padding: 40px 0 20px;
+        }
+        .footer a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .footer a:hover {
+            color: #ffffff;
+            text-decoration: none;
+        }
+        .footer h5 {
+            color: #ffffff;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        .footer h6 {
+            color: #ffffff;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        .footer ul li {
+            margin-bottom: 10px;
+        }
+        .social-links a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background-color: #343a40;
+            color: #ffffff !important;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+        .social-links a:hover {
+            background-color: #007bff;
+            transform: translateY(-3px);
+        }
+        .copyright {
+            border-top: 1px solid #343a40;
+            padding-top: 20px;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
@@ -68,81 +128,7 @@
         </div>
     </footer>
 
-<script src="<?= settings()['homepage'] ?>assets/js/jquery-3.7.1.min.js"></script>
-<script src="<?= settings()['homepage'] ?>assets/owl.carousel.min.js"></script>
-<script>
-    // Example starter JavaScript for disabling form submissions if there are invalid fields
-(() => {
-  'use strict'
-
-  // Fetch all the forms we want to apply custom Bootstrap validation styles to
-  const forms = document.querySelectorAll('.needs-validation')
-
-  // Loop over them and prevent submission
-  Array.from(forms).forEach(form => {
-    form.addEventListener('submit', event => {
-      if (!form.checkValidity()) {
-        event.preventDefault()
-        event.stopPropagation()
-      }
-
-      form.classList.add('was-validated')
-    }, false)
-  })
-})()
-</script>
-<script>
-        // Toggle category sidebar
-        document.getElementById('categoryToggle').addEventListener('click', function() {
-            document.getElementById('categorySidebar').classList.add('show');
-            document.getElementById('sidebarOverlay').classList.add('show');
-        });
-
-        // Close category sidebar
-        document.getElementById('closeSidebar').addEventListener('click', function() {
-            document.getElementById('categorySidebar').classList.remove('show');
-            document.getElementById('sidebarOverlay').classList.remove('show');
-        });
-
-        // Close sidebar when clicking overlay
-        document.getElementById('sidebarOverlay').addEventListener('click', function() {
-            document.getElementById('categorySidebar').classList.remove('show');
-            this.classList.remove('show');
-        });
-
-        // Toggle subcategories
-        document.querySelectorAll('.category-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const item = this.parentElement;
-                const sublist = item.querySelector('.subcategory-list');
-                sublist.classList.toggle('show');
-                
-                // Rotate chevron icon
-                const chevron = this.querySelector('.fa-chevron-right');
-                if (chevron) {
-                    chevron.classList.toggle('rotate-90');
-                }
-            });
-        });
-    </script>
-    <script>
-      $('.owl-carousel').owlCarousel({
-    loop:true,
-    margin:10,
-    nav:true,
-    responsive:{
-        0:{
-            items:1
-        },
-        600:{
-            items:3
-        },
-        1000:{
-            items:5
-        }
-    }
-})
-    </script>
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
