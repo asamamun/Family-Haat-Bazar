@@ -14,7 +14,7 @@ require __DIR__ . '/../vendor/autoload.php';
             <div id="layoutSidenav_content">
                 <main>
                     <!-- changed content -->
-
+<!-- TODO: subcategory CRUD with AJAX -->
                     <!-- changed content  ends-->
                 </main>
 <!-- footer -->
