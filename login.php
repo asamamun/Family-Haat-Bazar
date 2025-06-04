@@ -16,12 +16,15 @@ if(isset($_POST['login'])){
             $_SESSION['role'] = $row['role'];
             if($row['role'] == "admin"){
                 header('Location:admin/');
+                exit;
             }
             elseif($row['role'] == "customer"){
                 header('Location:index.php');
+                exit;
             }
             else{
-                header('Location:index.php');  
+                header('Location:index.php'); 
+                exit; 
             }
 
         }
@@ -44,7 +47,7 @@ if(isset($_POST['login'])){
 
   <div class="col-md-12 form-floating">
     
-    <input type="email" class="form-control" id="email" name="email" required placeholder="yourname@domain.com">
+    <input type="email" value="admin@gmail.com" class="form-control" id="email" name="email" required placeholder="yourname@domain.com">
     <label for="email" class="form-label">Email</label>
     <div class="invalid-feedback">
       Please provide a valid email.
@@ -54,7 +57,7 @@ if(isset($_POST['login'])){
     </div>
   </div>
   <div class="col-md-12 form-floating">    
-    <input type="password" minlength="5" class="form-control" id="pass1" name="pass1" required placeholder="password">
+    <input type="password" value="12345" minlength="5" class="form-control" id="pass1" name="pass1" required placeholder="password">
     <label for="pass1" class="form-label">Password</label>
     <div class="invalid-feedback">
       Please provide a valid password.
@@ -68,8 +71,6 @@ if(isset($_POST['login'])){
 <?php
 // echo testfunc();
 ?>
-<script>
 
-</script>
 <?php require __DIR__ . '/components/footer.php';?>
     

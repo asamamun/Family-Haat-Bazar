@@ -1,5 +1,5 @@
 <hr>
-<a href="index.php">Home</a> |
+<a href="index.php">ShopEase</a> |
 
 <?php
 if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == 'true'){

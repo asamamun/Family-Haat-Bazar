@@ -15,7 +15,7 @@ $data = [
         'first_name'=> $db->escape($_POST['firstname']),
         'last_name'=> $db->escape($_POST['lastname']),        
         'email'=> $db->escape($_POST['email']),
-        'phone'=> $db->escape($_POST['phone']),
+        // 'phone'=> $db->escape($_POST['phone']),
         'password' => password_hash($_POST['pass1'],PASSWORD_DEFAULT),
         'role' => "customer"
     ];
@@ -74,13 +74,13 @@ $data = [
       Email Valid!!
     </div>
   </div>
-    <div class="col-md-4 form-floating">    
+    <!-- <div class="col-md-4 form-floating">    
     <input type="text" minlength="10" class="form-control" id="phone" name="phone" required placeholder="01XXXXXXXXX">
     <label for="pass2" class="form-label">Phone Number</label>
     <div class="invalid-feedback">
       Please provide a valid phone number
     </div>
-  </div>
+  </div> -->
   <div class="col-md-4 form-floating">    
     <input type="password" minlength="5" class="form-control" id="pass1" name="pass1" required placeholder="password">
     <label for="pass1" class="form-label">Password</label>

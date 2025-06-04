@@ -24,7 +24,7 @@ if (session_status() === PHP_SESSION_NONE) {
         <!-- Top Bar - Prussian Blue -->
         <div class="top-bar">
             <div class="logo-section">
-                <div class="logo"><a href="index.html">ShopEase</a></div>
+                <div class="logo"><a href="index.php">ShopEase</a></div>
             </div>
             
             <div class="delivery-location">
@@ -38,9 +38,9 @@ if (session_status() === PHP_SESSION_NONE) {
             </div>
             
             <div class="right-section">
-                <a href="#" class="app-download">
+                <a href="#" class="app-download" title="Download App Now">
                     <span class="app-icon">📱</span>
-                    <span>Download App Now</span>
+                    <span>Download App Now</span>                   
                 </a>
                 
                 <select class="language-selector">
@@ -48,10 +48,27 @@ if (session_status() === PHP_SESSION_NONE) {
                     <option>English</option>
                 </select>
                 
-                <div class="auth-section">
-                    <span class="user-icon">👤</span>
-                    <span><a href="login.php">Sign In</a> / <a href="registration.php">Sign up</a></span>
-                </div>
+                <div class="auth-section">                    
+<?php
+if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == 'true') {
+    if ($_SESSION['role'] == 'admin') {
+        echo '<span><a title="Dashboard" href="admin/index.php">        
+        <span class="dashboard-icon">📊</span>
+        </a></span>';
+        //logout
+        echo '<span><a title="Logout" href="logout.php">      
+        <span class="logout-icon">🚪</span>
+        </a></span>';
+
+    }
+    else {
+        echo '<span><a href="logout.php">Logout</a></span>';
+    }
+} else {
+    echo '<span><a href="login.php">Sign In</a> / <a href="registration.php">Sign up</a></span>';
+}
+?>
+</div>
             </div>
         </div>
         
@@ -65,9 +82,11 @@ if (session_status() === PHP_SESSION_NONE) {
                     </div>
                     
                     <div class="nav-links">
-                        <a href="index.html">Home</a>
-                        <a href="hot-deals.html">Hot Deals</a>
-                        <a href="brands.html">Brands</a>
+                        <!-- <a href="index.html">Home</a> -->
+                        <!-- <a href="hot-deals.html">Hot Deals</a> -->
+                        <a href="hot-deals.php">Hot Deals</a>
+                        
+                        <a href="brands.php">Brands</a>
                     </div>
                 </div>
                 <div class="nav-right">
@@ -76,9 +95,9 @@ if (session_status() === PHP_SESSION_NONE) {
                 <div class="nav-right">
                     <a href="#" class="nav-right-item">
                         <span class="icon">🛒</span>
-                        <span>Cart</span>
+                        <span><a href="cart.php"></a></span>
                     </a>
-                    <a href="#" class="nav-right-item">
+                    <!-- <a href="#" class="nav-right-item">
                         <span class="icon">📦</span>
                         <span>Orders</span>
                     </a>
@@ -89,7 +108,7 @@ if (session_status() === PHP_SESSION_NONE) {
                     <a href="#" class="nav-right-item">
                         <span class="icon">❓</span>
                         <span>Help line</span>
-                    </a>
+                    </a> -->
                 </div>
             </div>
         </div>
