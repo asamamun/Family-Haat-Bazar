@@ -16,5 +16,7 @@
             "email": "asamamun.web@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "intervention/image": "^3.11"
+    }
 }

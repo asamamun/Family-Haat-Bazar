@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 03, 2025 at 09:27 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Generation Time: Jun 04, 2025 at 01:42 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -322,6 +322,16 @@ CREATE TABLE `categories` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `categories`
+--
+
+INSERT INTO `categories` (`id`, `name`, `slug`, `description`, `image`, `is_active`, `sort_order`, `created_at`, `updated_at`) VALUES
+(3, 'Garments', 'garments', 'asdf asdf asdf sdafd', '683fd68263935_1749014146.jpg', 1, 0, '2025-06-04 05:15:46', '2025-06-04 05:15:46'),
+(4, 'Automobiles', 'automobiles', 'sadfsdfd fd', '683fd7a09ccce_1749014432.jpg', 1, 0, '2025-06-04 05:20:32', '2025-06-04 05:20:32'),
+(5, 'Electronics', 'electroniocs', 'd fasdfsd sdfds fdsf df', '683fe16c12acf_1749016940.jpg', 1, 0, '2025-06-04 06:02:20', '2025-06-04 06:02:20'),
+(6, 'kids', 'kids item', 'sdf sdf sdf d f', '683fe25a77b34_1749017178.jpg', 1, 0, '2025-06-04 06:06:18', '2025-06-04 06:06:18');
 
 -- --------------------------------------------------------
 
@@ -644,16 +654,16 @@ CREATE TABLE `settings` (
 --
 
 INSERT INTO `settings` (`id`, `key_name`, `value`, `description`, `created_at`, `updated_at`) VALUES
-(1, 'store_name', 'My Store', 'Store name', '2025-05-26 04:50:43', '2025-05-26 04:50:43'),
-(2, 'currency', 'BDT', 'Default currency', '2025-05-26 04:50:43', '2025-05-26 04:50:43'),
-(3, 'tax_rate', '0.00', 'Default tax rate percentage', '2025-05-26 04:50:43', '2025-05-26 04:50:43'),
-(4, 'low_stock_threshold', '5', 'Default low stock threshold', '2025-05-26 04:50:43', '2025-05-26 04:50:43'),
-(5, 'bkash_merchant_number', '', 'bKash merchant number', '2025-05-26 04:50:43', '2025-05-26 04:50:43'),
-(6, 'nogod_merchant_id', '', 'Nogod merchant ID', '2025-05-26 04:50:43', '2025-05-26 04:50:43'),
-(7, 'inventory_method', 'FIFO', 'Inventory costing method: FIFO, LIFO, or WEIGHTED_AVERAGE', '2025-05-26 04:50:43', '2025-05-26 04:50:43'),
-(8, 'auto_price_update', '0', 'Automatically update selling prices when cost changes (0=No, 1=Yes)', '2025-05-26 04:50:43', '2025-05-26 04:50:43'),
-(9, 'default_markup_percentage', '20.00', 'Default markup percentage for cost-plus pricing', '2025-05-26 04:50:43', '2025-05-26 04:50:43'),
-(10, 'price_update_threshold', '5.00', 'Minimum cost change percentage to trigger price update', '2025-05-26 04:50:43', '2025-05-26 04:50:43');
+(1, 'store_name', 'My Store', 'Store name', '2025-05-25 06:24:17', '2025-05-25 06:24:17'),
+(2, 'currency', 'BDT', 'Default currency', '2025-05-25 06:24:17', '2025-05-25 06:24:17'),
+(3, 'tax_rate', '0.00', 'Default tax rate percentage', '2025-05-25 06:24:17', '2025-05-25 06:24:17'),
+(4, 'low_stock_threshold', '5', 'Default low stock threshold', '2025-05-25 06:24:17', '2025-05-25 06:24:17'),
+(5, 'bkash_merchant_number', '', 'bKash merchant number', '2025-05-25 06:24:17', '2025-05-25 06:24:17'),
+(6, 'nogod_merchant_id', '', 'Nogod merchant ID', '2025-05-25 06:24:17', '2025-05-25 06:24:17'),
+(7, 'inventory_method', 'FIFO', 'Inventory costing method: FIFO, LIFO, or WEIGHTED_AVERAGE', '2025-05-25 06:24:17', '2025-05-25 06:24:17'),
+(8, 'auto_price_update', '0', 'Automatically update selling prices when cost changes (0=No, 1=Yes)', '2025-05-25 06:24:17', '2025-05-25 06:24:17'),
+(9, 'default_markup_percentage', '20.00', 'Default markup percentage for cost-plus pricing', '2025-05-25 06:24:17', '2025-05-25 06:24:17'),
+(10, 'price_update_threshold', '5.00', 'Minimum cost change percentage to trigger price update', '2025-05-25 06:24:17', '2025-05-25 06:24:17');
 
 -- --------------------------------------------------------
 
@@ -716,6 +726,14 @@ CREATE TABLE `subcategories` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `subcategories`
+--
+
+INSERT INTO `subcategories` (`id`, `category_id`, `name`, `slug`, `description`, `image`, `is_active`, `sort_order`, `created_at`, `updated_at`) VALUES
+(1, 4, 'Bike', 'bike', 'some description', '683fea9013d87_1749019280.jpg', 1, 2, '2025-06-04 06:41:20', '2025-06-04 06:41:20'),
+(2, 5, 'iPhone', 'iphone', 'sdf sdkfjhds fksdfh dff df ', '683feaca6c372_1749019338.png', 1, 3, '2025-06-04 06:42:18', '2025-06-04 06:42:18');
+
 -- --------------------------------------------------------
 
 --
@@ -736,6 +754,17 @@ CREATE TABLE `users` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `phone`, `password`, `role`, `is_active`, `email_verified_at`, `remember_token`, `created_at`, `updated_at`) VALUES
+(2, 'abu', 'mamun', 'abu@gmail.com', '1234567891', '$2y$10$8ftv4lKvYyTwtTyVDy.yn.PvZEa2hgtSkkqi6z20p8.mDAbULmZz2', 'admin', 1, NULL, NULL, '2025-05-29 06:31:31', '2025-05-29 06:31:31'),
+(3, 'test', 'test', 'test@gmail.com', '1234234324532545', '$2y$10$DIeJxdW5gPryY1XKMWJXo.L9wBQs1ZczqJi0jGtQEzicDR21qxdzm', 'customer', 1, NULL, NULL, '2025-05-29 06:35:58', '2025-05-29 06:35:58'),
+(4, 'test2', 'test2', 'test2@gmail.com', '9834759485745', '$2y$10$j//ku.FH91gJYlE40WPD../7TMM0VQ/VdvhRqbmjx2I3or6Y4sUcC', 'customer', 1, NULL, NULL, '2025-05-29 06:38:33', '2025-05-29 06:38:33'),
+(5, 'Ishaq Ahmed', 'Shojib', 'ishaqhossain98@gmail.com', '01783629582', '$2y$10$08ERC8FLVEdmzQrClgxXau0MK0fopyqqNGuUUqk.38RzpKTGREndi', 'customer', 1, NULL, NULL, '2025-05-29 06:45:22', '2025-05-29 06:45:22'),
+(7, 'admin', 'admin', 'admin@gmail.com', NULL, '$2y$10$kyKkl7SXSsXE1IEzdbapGOS90AgPdzzIGzx/veB/lXOlZTz0gpUmC', 'admin', 1, NULL, NULL, '2025-06-04 04:59:25', '2025-06-04 04:59:35');
 
 -- --------------------------------------------------------
 
@@ -946,7 +975,7 @@ ALTER TABLE `cart_items`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `coupons`
@@ -1036,13 +1065,13 @@ ALTER TABLE `stock_movements`
 -- AUTO_INCREMENT for table `subcategories`
 --
 ALTER TABLE `subcategories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Constraints for dumped tables
