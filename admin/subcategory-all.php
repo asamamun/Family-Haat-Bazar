@@ -4,154 +4,162 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 require __DIR__ . '/../vendor/autoload.php';
 ?>
-<?php require __DIR__.'/components/header.php'; ?>
+<?php require __DIR__ . '/components/header.php'; ?>
 
-    </head>
-    <body class="sb-nav-fixed">
-    <?php require __DIR__.'/components/navbar.php'; ?>
-        <div id="layoutSidenav">
-        <?php require __DIR__.'/components/sidebar.php'; ?>
+</head>
+
+<body class="sb-nav-fixed">
+    <?php require __DIR__ . '/components/navbar.php'; ?>
+    <div id="layoutSidenav">
+        <main>
+            <?php require __DIR__ . '/components/sidebar.php'; ?>
             <div id="layoutSidenav_content">
-                <main>
-                    <!-- changed content -->
-<!-- TODO: subcategory CRUD with AJAX -->
- <!--  -->
- <!--  -->
- <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Subcategories Management</h5>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#subcategoryModal" onclick="openAddModal()">
-                            <i class="fas fa-plus"></i> Add New Subcategory
-                        </button>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table id="subcategoriesTable" class="table table-striped table-hover">
-                                <thead class="table-dark">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Image</th>
-                                        <th>Name</th>
-                                        <th>Category</th>
-                                        <th>Slug</th>
-                                        <th>Description</th>
-                                        <th>Status</th>
-                                        <th>Sort Order</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Data will be loaded via AJAX -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Subcategory Modal -->
-    <div class="modal fade" id="subcategoryModal" tabindex="-1" aria-labelledby="subcategoryModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="subcategoryModalLabel">Add New Subcategory</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form id="subcategoryForm" enctype="multipart/form-data">
-                    <div class="modal-body">
-                        <input type="hidden" id="subcategory_id" name="subcategory_id">
-                        
-                        <div class="form-group">
-                            <label for="category_id" class="form-label">Category *</label>
-                            <select class="form-select" id="category_id" name="category_id" required>
-                                <option value="">Select Category</option>
-                                <!-- Categories will be loaded via AJAX -->
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="name" class="form-label">Name *</label>
-                            <input type="text" class="form-control" id="name" name="name" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="slug" class="form-label">Slug *</label>
-                            <input type="text" class="form-control" id="slug" name="slug" required>
-                            <small class="form-text text-muted">URL-friendly version of the name</small>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="description" class="form-label">Description</label>
-                            <textarea class="form-control" id="description" name="description" rows="3"></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="image" class="form-label">Image</label>
-                            <input type="file" class="form-control" id="image" name="image" accept="image/*">
-                            <div id="imagePreview" class="preview-container" style="display: none;">
-                                <img id="previewImg" class="preview-image" src="" alt="Preview">
+                <!-- changed content -->
+                <!-- TODO: subcategory CRUD with AJAX -->
+                <!--  -->
+                <!--  -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Subcategories Management</h5>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#subcategoryModal" onclick="openAddModal()">
+                                    <i class="fas fa-plus"></i> Add New Subcategory
+                                </button>
                             </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="sort_order" class="form-label">Sort Order</label>
-                            <input type="number" class="form-control" id="sort_order" name="sort_order" value="0">
-                        </div>
-
-                        <div class="form-group">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="is_active" name="is_active" checked>
-                                <label class="form-check-label" for="is_active">
-                                    Active
-                                </label>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="subcategoriesTable" class="table table-striped table-hover">
+                                        <thead class="table-dark">
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Image</th>
+                                                <th>Name</th>
+                                                <th>Category</th>
+                                                <th>Slug</th>
+                                                <th>Description</th>
+                                                <th>Status</th>
+                                                <th>Sort Order</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Data will be loaded via AJAX -->
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary" id="saveBtn">Save Subcategory</button>
-                    </div>
-                </form>
+                </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Delete Confirmation Modal -->
-    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to delete this subcategory?</p>
-                    <p class="text-danger"><strong>This action cannot be undone!</strong></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
+            <!-- Subcategory Modal -->
+            <div class="modal fade" id="subcategoryModal" tabindex="-1" aria-labelledby="subcategoryModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="subcategoryModalLabel">Add New Subcategory</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form id="subcategoryForm" enctype="multipart/form-data">
+                            <div class="modal-body">
+                                <input type="hidden" id="subcategory_id" name="subcategory_id">
+
+                                <div class="form-group">
+                                    <label for="category_id" class="form-label">Category *</label>
+                                    <select class="form-select" id="category_id" name="category_id" required>
+                                        <option value="">Select Category</option>
+                                        <!-- Categories will be loaded via AJAX -->
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="name" class="form-label">Name *</label>
+                                    <input type="text" class="form-control" id="name" name="name" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="slug" class="form-label">Slug *</label>
+                                    <input type="text" class="form-control" id="slug" name="slug" required>
+                                    <small class="form-text text-muted">URL-friendly version of the name</small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="description" class="form-label">Description</label>
+                                    <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="image" class="form-label">Image</label>
+                                    <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                                    <div id="imagePreview" class="preview-container" style="display: none;">
+                                        <img id="previewImg" class="preview-image" src="" alt="Preview">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="sort_order" class="form-label">Sort Order</label>
+                                    <input type="number" class="form-control" id="sort_order" name="sort_order" value="0">
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="is_active" name="is_active" checked>
+                                        <label class="form-check-label" for="is_active">
+                                            Active
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-primary" id="saveBtn">Save Subcategory</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
+
+            <!-- Delete Confirmation Modal -->
+            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to delete this subcategory?</p>
+                            <p class="text-danger"><strong>This action cannot be undone!</strong></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--  -->
+            <!--  -->
+            <!-- changed content  ends-->
+
+            <!-- footer -->
+            <?php require __DIR__ . '/components/footer.php'; ?>
+
+        </main>
     </div>
- <!--  -->
- <!--  -->
-                    <!-- changed content  ends-->
-                </main>
-<!-- footer -->
-<?php require __DIR__.'/components/footer.php'; ?>
-            </div>
-        </div>
-        <script src="<?= settings()['adminpage'] ?>assets/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="<?= settings()['adminpage'] ?>assets/js/scripts.js"></script>
-        <script src="<?= settings()['adminpage'] ?>assets/js/jquery-3.7.1.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/dataTables.bootstrap5.min.js"></script>
+    <script src="<?= settings()['adminpage'] ?>assets/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="<?= settings()['adminpage'] ?>assets/js/scripts.js"></script>
+    <script src="<?= settings()['adminpage'] ?>assets/js/jquery-3.7.1.min.js"></script>
+<!--     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/dataTables.bootstrap5.min.js"></script> -->
+
+ 
+<script src="https://cdn.datatables.net/v/bs5/dt-2.3.2/datatables.min.js" integrity="sha384-rL0MBj9uZEDNQEfrmF51TAYo90+AinpwWp2+duU1VDW/RG7flzbPjbqEI3hlSRUv" crossorigin="anonymous"></script>
+
+
     <script>
         $(document).ready(function() {
             // Initialize DataTable
@@ -159,23 +167,32 @@ require __DIR__ . '/../vendor/autoload.php';
                 "ajax": {
                     "url": "subcategory-ajax.php",
                     "type": "POST",
-                    "data": { action: 'fetch' }
+                    "data": {
+                        action: 'fetch'
+                    }
                 },
-                "columns": [
-                    { "data": "id" },
-                    { 
+                "columns": [{
+                        "data": "id"
+                    },
+                    {
                         "data": "image",
                         "render": function(data, type, row) {
                             if (data) {
-                                return '<img src="<?= settings()['root'] ?>assets/subcategories/' + data + '" class="image-preview" alt="Image">';
+                                return '<img src="<?= settings()['root'] ?>assets/subcategories/' + data + '" class="image-preview" alt="Image" style="max-width: 100px; max-height: 100px;">';
                             }
                             return '<span class="text-muted">No image</span>';
                         }
                     },
-                    { "data": "name" },
-                    { "data": "category_name" },
-                    { "data": "slug" },
-                    { 
+                    {
+                        "data": "name"
+                    },
+                    {
+                        "data": "category_name"
+                    },
+                    {
+                        "data": "slug"
+                    },
+                    {
                         "data": "description",
                         "render": function(data, type, row) {
                             if (data && data.length > 50) {
@@ -184,28 +201,32 @@ require __DIR__ . '/../vendor/autoload.php';
                             return data || '';
                         }
                     },
-                    { 
+                    {
                         "data": "is_active",
                         "render": function(data, type, row) {
                             return data == 1 ? '<span class="badge bg-success">Active</span>' : '<span class="badge bg-danger">Inactive</span>';
                         }
                     },
-                    { "data": "sort_order" },
+                    {
+                        "data": "sort_order"
+                    },
                     {
                         "data": null,
                         "render": function(data, type, row) {
                             return '<div class="table-actions">' +
-                                   '<button class="btn btn-sm btn-info me-1" onclick="editSubcategory(' + row.id + ')" title="Edit">' +
-                                   '<i class="fas fa-edit"></i></button>' +
-                                   '<button class="btn btn-sm btn-danger" onclick="deleteSubcategory(' + row.id + ')" title="Delete">' +
-                                   '<i class="fas fa-trash"></i></button>' +
-                                   '</div>';
+                                '<button class="btn btn-sm btn-info me-1" onclick="editSubcategory(' + row.id + ')" title="Edit">' +
+                                '<i class="fas fa-edit"></i></button>' +
+                                '<button class="btn btn-sm btn-danger" onclick="deleteSubcategory(' + row.id + ')" title="Delete">' +
+                                '<i class="fas fa-trash"></i></button>' +
+                                '</div>';
                         }
                     }
                 ],
                 "responsive": true,
                 "pageLength": 10,
-                "order": [[0, "desc"]]
+                "order": [
+                    [0, "desc"]
+                ]
             });
 
             // Load categories for dropdown
@@ -227,7 +248,7 @@ require __DIR__ . '/../vendor/autoload.php';
                 if (file) {
                     var reader = new FileReader();
                     reader.onload = function(e) {
-                        $('#previewImg').attr('src', e.target.result);
+                        $('#previewImg').attr('src', e.target.result).attr("width", "100");
                         $('#imagePreview').show();
                     };
                     reader.readAsDataURL(file);
@@ -240,6 +261,7 @@ require __DIR__ . '/../vendor/autoload.php';
             $('#subcategoryForm').on('submit', function(e) {
                 e.preventDefault();
                 var formData = new FormData(this);
+                // Determine action: if subcategory_id has a value, it's an update
                 var action = $('#subcategory_id').val() ? 'update' : 'create';
                 formData.append('action', action);
 
@@ -311,7 +333,9 @@ require __DIR__ . '/../vendor/autoload.php';
             $.ajax({
                 url: 'subcategory-ajax.php',
                 type: 'POST',
-                data: { action: 'get_categories' },
+                data: {
+                    action: 'get_categories'
+                },
                 success: function(response) {
                     if (response.success) {
                         var options = '<option value="">Select Category</option>';
@@ -350,14 +374,14 @@ require __DIR__ . '/../vendor/autoload.php';
                         $('#description').val(data.description);
                         $('#sort_order').val(data.sort_order);
                         $('#is_active').prop('checked', data.is_active == 1);
-                        
+
                         if (data.image) {
-                            $('#previewImg').attr('src', 'assets/subcategories/' + data.image);
+                            $('#previewImg').attr('src', '<?= settings()['root'] ?>' + 'assets/subcategories/' + data.image).attr("width", "100");
                             $('#imagePreview').show();
                         } else {
                             $('#imagePreview').hide();
                         }
-                        
+
                         $('#subcategoryModalLabel').text('Edit Subcategory');
                         $('#subcategoryModal').modal('show');
                     } else {
@@ -369,21 +393,22 @@ require __DIR__ . '/../vendor/autoload.php';
 
         function showAlert(type, message) {
             var alertHtml = '<div class="alert alert-' + type + ' alert-dismissible fade show" role="alert">' +
-                           message +
-                           '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
-                           '</div>';
-            
+                message +
+                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                '</div>';
+
             // Remove existing alerts
             $('.alert').remove();
-            
+
             // Add new alert at the top of the card body
             $('.card-body').prepend(alertHtml);
-            
+
             // Auto-dismiss after 5 seconds
             setTimeout(function() {
                 $('.alert').fadeOut();
             }, 5000);
         }
     </script>
-    </body>
+</body>
+
 </html>

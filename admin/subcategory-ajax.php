@@ -2,7 +2,8 @@
 require_once '../vendor/autoload.php';
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
-$manager = new ImageManager(new Driver());
+
+
 header('Content-Type: application/json');
 
 // Include composer autoloader (adjust path as needed)
@@ -147,8 +148,9 @@ function updateSubcategory($db) {
             $newImageName = handleImageUpload($_FILES['image']);
             if ($newImageName) {
                 // Delete old image if it exists
-                if ($currentImage && file_exists("assets/subcategories/$currentImage")) {
-                    unlink("assets/subcategories/$currentImage");
+                $path = settings()['physical_path'] . "assets/subcategories/$currentImage";
+                if ($currentImage && file_exists($path)) {
+                    unlink($path);
                 }
                 $imageName = $newImageName;
             }
@@ -198,9 +200,10 @@ function deleteSubcategory($db) {
         $result = $db->delete('subcategories');
         
         if ($result) {
+            $path = settings()['physical_path'] . "assets/subcategories/{$subcategory['image']}";
             // Delete associated image file
-            if ($subcategory && $subcategory['image'] && file_exists("assets/subcategories/{$subcategory['image']}")) {
-                unlink("assets/subcategories/{$subcategory['image']}");
+            if ($subcategory && $subcategory['image'] && file_exists($path)) {
+                unlink($path);
             }
             echo json_encode(['success' => true, 'message' => 'Subcategory deleted successfully']);
         } else {
@@ -276,8 +279,8 @@ function handleImageUpload($file) {
     // Move uploaded file
     if (move_uploaded_file($file['tmp_name'], $filepath)) {
         //resize image
+        $manager = new ImageManager(new Driver());
         $filepath = realpath($filepath);
-
         $image = $manager->read($filepath);
         $image->resize(400, 400, function ($constraint) {
         $constraint->aspectRatio();
@@ -287,7 +290,7 @@ function handleImageUpload($file) {
     // Apply watermark
     $watermarkPath = realpath(settings()['physical_path'] . '\admin\assets\watermark.png');
     if (file_exists($watermarkPath)) {
-        $image->insert($watermarkPath, 'bottom-right', 10, 10); // Position: bottom-right with 10px offset
+        $image->place($watermarkPath, 'center', 0, 0, 30); // Position: bottom-right with 10px offset
     }
 
     // Save the image with compression (quality: 85%)
