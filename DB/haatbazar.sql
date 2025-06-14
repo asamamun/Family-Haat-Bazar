@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 04, 2025 at 01:42 PM
+-- Generation Time: Jun 14, 2025 at 01:39 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -331,7 +331,9 @@ INSERT INTO `categories` (`id`, `name`, `slug`, `description`, `image`, `is_acti
 (3, 'Garments', 'garments', 'asdf asdf asdf sdafd', '683fd68263935_1749014146.jpg', 1, 0, '2025-06-04 05:15:46', '2025-06-04 05:15:46'),
 (4, 'Automobiles', 'automobiles', 'sadfsdfd fd', '683fd7a09ccce_1749014432.jpg', 1, 0, '2025-06-04 05:20:32', '2025-06-04 05:20:32'),
 (5, 'Electronics', 'electroniocs', 'd fasdfsd sdfds fdsf df', '683fe16c12acf_1749016940.jpg', 1, 0, '2025-06-04 06:02:20', '2025-06-04 06:02:20'),
-(6, 'kids', 'kids item', 'sdf sdf sdf d f', '683fe25a77b34_1749017178.jpg', 1, 0, '2025-06-04 06:06:18', '2025-06-04 06:06:18');
+(6, 'kids', 'kids item', 'sdf sdf sdf d f', '683fe25a77b34_1749017178.jpg', 1, 0, '2025-06-04 06:06:18', '2025-06-04 06:06:18'),
+(7, 'Cattle', 'cattle', 'asdfdsf', '684d1e18a671f_1749884440.png', 1, 0, '2025-06-14 07:00:40', '2025-06-14 07:00:40'),
+(8, 'sdfgdfsgdfg', 'gfdgsdfgsfd', 'gdfsgvsdfgfdg', '684d256a6fc3a_1749886314.jpg', 1, 0, '2025-06-14 07:31:54', '2025-06-14 07:31:54');
 
 -- --------------------------------------------------------
 
@@ -731,8 +733,10 @@ CREATE TABLE `subcategories` (
 --
 
 INSERT INTO `subcategories` (`id`, `category_id`, `name`, `slug`, `description`, `image`, `is_active`, `sort_order`, `created_at`, `updated_at`) VALUES
-(1, 4, 'Bike', 'bike', 'some description', '683fea9013d87_1749019280.jpg', 1, 2, '2025-06-04 06:41:20', '2025-06-04 06:41:20'),
-(2, 5, 'iPhone', 'iphone', 'sdf sdkfjhds fksdfh dff df ', '683feaca6c372_1749019338.png', 1, 3, '2025-06-04 06:42:18', '2025-06-04 06:42:18');
+(6, 4, 'aaaa', 'aaaa', 'asfdsf sdf', '684cfbb868d76_1749875640.jpg', 1, 2, '2025-06-14 04:34:01', '2025-06-14 04:34:01'),
+(7, 4, 'toys bike', 'toys-bike', 'sadf sdf sdfd sdfs f d123', '684d01c760e0a_1749877191.jpg', 1, 1, '2025-06-14 04:58:30', '2025-06-14 04:59:51'),
+(8, 5, 'Mobile phone', 'mobile-phone', 'dsf dsf sdfds fds sdf ', '684d1f3cbe978_1749884732.jpg', 1, 8, '2025-06-14 06:50:04', '2025-06-14 07:05:33'),
+(12, 7, 'goru1', 'goru1', 'sadfdsafdsf', '684d1eb2bff59_1749884594.jpg', 1, 0, '2025-06-14 07:03:15', '2025-06-14 07:03:15');
 
 -- --------------------------------------------------------
 
@@ -975,7 +979,7 @@ ALTER TABLE `cart_items`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `coupons`
@@ -1065,7 +1069,7 @@ ALTER TABLE `stock_movements`
 -- AUTO_INCREMENT for table `subcategories`
 --
 ALTER TABLE `subcategories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `users`

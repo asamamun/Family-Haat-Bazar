@@ -253,6 +253,7 @@ function getCategories($db) {
 }
 
 function handleImageUpload($file) {
+    
     $uploadDir = settings()['physical_path'] . '/assets/subcategories/';
     
     // Create directory if it doesn't exist
@@ -278,14 +279,12 @@ function handleImageUpload($file) {
     
     // Move uploaded file
     if (move_uploaded_file($file['tmp_name'], $filepath)) {
-        //resize image
+        //resize image        
         $manager = new ImageManager(new Driver());
         $filepath = realpath($filepath);
         $image = $manager->read($filepath);
-        $image->resize(400, 400, function ($constraint) {
-        $constraint->aspectRatio();
-        $constraint->upsize();
-    });
+        $image->scale(width: 400);
+
 
     // Apply watermark
     $watermarkPath = realpath(settings()['physical_path'] . '\admin\assets\watermark.png');
