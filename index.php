@@ -15,18 +15,18 @@ $page = "Home";
 <h1 style="text-align:center; color:red;">Welcome to ShopEase</h1>
 <div><span style="font-family:sansherif">Our hot products</span></div>
 <div class="owl-carousel owl-theme">
-    <div class="item"><h4><img src="assets/images/green-tea.jpg" alt="green-tea"></h4><span>Green Tea</span></div>
-    <div class="item"><h4><img src="assets/images/halim-mix.jpg" alt="halim-mix"</h4></div>
-    <div class="item"><h4><img src="assets/images/apple.jpg" alt=""</h4></div>
-    <div class="item"><h4><img src="assets/images/Aam.jpg" alt=""</h4></div>
-    <div class="item"><h4><img src="assets/images/Dalim.jpg" alt="green-tea"</h4></div>
-    <div class="item"><h4><img src="assets/images/banana.jpg" alt="green-tea"</h4></div>
-    <div class="item"><h4><img src="assets/images/greenapple.jpg" alt="green-tea"</h4></div>
-    <div class="item"><h4><img src="assets/images/Guava.jpg" alt="green-tea"</h4></div>
-    <div class="item"><h4><img src="assets/images/Malta.jpg" alt="green-tea"</h4></div>
-    <div class="item"><h4><img src="assets/images/Naspati.jpg" alt="green-tea"0</h4></div>
-    <div class="item"><h4><img src="assets/images/pepe.jpg" alt="green-tea"1</h4></div>
-    <div class="item"><h4><img src="assets/images/pineapple.jpg" alt="green-tea"2</h4></div>
+    <div class="item"><h4><img src="assets/images/fruits/green-tea.jpg" alt="green-tea"></h4><span>Green Tea</span></div>
+    <div class="item"><h4><img src="assets/images/fruits/halim-mix.jpg" alt="halim-mix"</h4></div>
+    <div class="item"><h4><img src="assets/images/fruits/apple.jpg" alt=""</h4></div>
+    <div class="item"><h4><img src="assets/images/fruits/Aam.jpg" alt=""</h4></div>
+    <div class="item"><h4><img src="assets/images/fruits/Dalim.jpg" alt="green-tea"</h4></div>
+    <div class="item"><h4><img src="assets/images/fruits/banana.jpg" alt="green-tea"</h4></div>
+    <div class="item"><h4><img src="assets/images/fruits/greenapple.jpg" alt="green-tea"</h4></div>
+    <div class="item"><h4><img src="assets/images/fruits/Guava.jpg" alt="green-tea"</h4></div>
+    <div class="item"><h4><img src="assets/images/fruits/Malta.jpg" alt="green-tea"</h4></div>
+    <div class="item"><h4><img src="assets/images/fruits/Naspati.jpg" alt="green-tea"0</h4></div>
+    <div class="item"><h4><img src="assets/images/fruits/pepe.jpg" alt="green-tea"1</h4></div>
+    <div class="item"><h4><img src="assets/images/fruits/pineapple.jpg" alt="green-tea"2</h4></div>
 </div>
 <!-- content end -->
  <!-- Feature Products -->
@@ -93,7 +93,7 @@ $page = "Home";
             
             products.forEach((product, index) => {
                 const productCard = `
-                    <div class="col-xl-1 col-lg-2 col-md-3 col-sm-4 col-6 mb-3">
+                    <div class="col-3 mb-3">
                         <div class="card product-card h-100 shadow-sm">
                             <img src="${product.image}" class="card-img-top product-image" alt="${product.name}">
                             <div class="card-body d-flex flex-column p-2">

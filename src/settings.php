@@ -12,8 +12,8 @@ if (!function_exists('settings')) {
             'hostname'=> 'localhost',
             'user'=> 'root',
             'password'=> '',
-            'database'=> 'haatbazar',
-            'physical_path' => 'D:\xampp8240\htdocs\ROUND64\PHP\ShopEase\\'
+            'database'=> 'haatbazar',            
+            'physical_path' => 'D:\xampp8240\htdocs\ROUND64\PHP\ShopEase'
         ];
     }
 }

@@ -43,30 +43,93 @@ if(isset($_POST['login'])){
 
 <!-- content start -->
 <h1>Login page</h1>
-<form class="row g-3 needs-validation" novalidate method="post" action="<?= $_SERVER['PHP_SELF'] ?>">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login Page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .login-container {
+      max-width: 400px;
+      margin: 80px auto;
+      padding: 30px;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
 
-  <div class="col-md-12 form-floating">
-    
-    <input type="email" value="admin@gmail.com" class="form-control" id="email" name="email" required placeholder="yourname@domain.com">
-    <label for="email" class="form-label">Email</label>
-    <div class="invalid-feedback">
-      Please provide a valid email.
-    </div>
-    <div class="valid-feedback">
-      Email Valid!!
-    </div>
+  <div class="login-container">
+    <h2 class="text-center mb-4">Login</h2>
+
+    <form class="needs-validation" novalidate method="post" action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>">
+      
+      <div class="form-floating mb-3">
+        <input 
+          type="email" 
+          class="form-control" 
+          id="email" 
+          name="email" 
+          placeholder="yourname@example.com" 
+          required 
+          value="admin@gmail.com">
+        <label for="email">Email address</label>
+        <div class="invalid-feedback">
+          Please enter a valid email address.
+        </div>
+      </div>
+
+      <div class="form-floating mb-4">
+        <input 
+          type="password" 
+          class="form-control" 
+          id="pass1" 
+          name="pass1" 
+          placeholder="Password" 
+          required 
+          minlength="5"
+          value="12345">
+        <label for="pass1">Password</label>
+        <div class="invalid-feedback">
+          Please enter a password (min 5 characters).
+        </div>
+      </div>
+
+      <div class="d-grid">
+        <button type="submit" name="login" class="btn btn-primary">
+          Login
+        </button>
+      </div>
+
+    </form>
   </div>
-  <div class="col-md-12 form-floating">    
-    <input type="password" value="12345" minlength="5" class="form-control" id="pass1" name="pass1" required placeholder="password">
-    <label for="pass1" class="form-label">Password</label>
-    <div class="invalid-feedback">
-      Please provide a valid password.
-    </div>
-  </div>
-  <div class="col-12">
-    <button class="btn btn-primary" type="submit" name="login" value="Sign In">Login </button>
-  </div>
-</form>
+
+  <script>
+    // Bootstrap validation script
+    (function () {
+      'use strict';
+      const forms = document.querySelectorAll('.needs-validation');
+      Array.from(forms).forEach(form => {
+        form.addEventListener('submit', function (event) {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    })();
+  </script>
+</body>
+</html>
+
 <!-- content end -->
 <?php
 // echo testfunc();

@@ -132,7 +132,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == 'true') {
                     <i class="fas fa-chevron-right"></i>
                 </a>
                 <ul class="subcategory-list">
-                    <li><a href="#" class="subcategory-link">Fresh Fruits</a></li>
+                    <li><a href="fresh-fruits.php" class="subcategory-link">Fresh Fruits</a></li>
                     <li><a href="#" class="subcategory-link">Vegetables</a></li>
                     <li><a href="#" class="subcategory-link">Snacks & Cookies</a></li>
                     <li><a href="#" class="subcategory-link">Beverages</a></li>

@@ -392,7 +392,14 @@ require __DIR__ . '/../vendor/autoload.php';
         }
 
         function showAlert(type, message) {
-            var alertHtml = '<div class="alert alert-' + type + ' alert-dismissible fade show" role="alert">' +
+            Swal.fire({
+                            position: "top-end",
+                            icon: type,
+                            title: message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+            /* var alertHtml = '<div class="alert alert-' + type + ' alert-dismissible fade show" role="alert">' +
                 message +
                 '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
                 '</div>';
@@ -406,7 +413,7 @@ require __DIR__ . '/../vendor/autoload.php';
             // Auto-dismiss after 5 seconds
             setTimeout(function() {
                 $('.alert').fadeOut();
-            }, 5000);
+            }, 5000); */
         }
     </script>
 </body>

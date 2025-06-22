@@ -17,17 +17,29 @@ if (!isset($_SESSION['cart'])) {
 
 // Sample products
 $products = [
-    ['id' => 1, 'name' => 'Aam', 'caption' => 'Aam Premium Quality', 'price' => 362, 'image' => 'assets/images/Aam.jpg', 'weight' => '1kg'],
-    ['id' => 2, 'name' => 'Apple', 'caption' => 'Apple Fuji Premium', 'price' => 362, 'image' => 'assets/images/apple.jpg', 'weight' => '1kg'],
-    ['id' => 3, 'name' => 'banana', 'caption' => 'Banana', 'price' => 362, 'image' => 'assets/images/banana.jpg', 'weight' => '1kg'],
-    ['id' => 4, 'name' => 'Product 4', 'caption' => 'Generic Product Caption', 'price' => 362, 'image' => 'assets/images/Dalim.jpg', 'weight' => '1kg'],
-    ['id' => 5, 'name' => 'Product 5', 'caption' => 'Generic Product Caption', 'price' => 362, 'image' => 'assets/images/greenapple.jpg', 'weight' => '1kg'],
-    ['id' => 6, 'name' => 'Product 6', 'caption' => 'Generic Product Caption', 'price' => 362, 'image' => 'assets/images/green-tea.jpg', 'weight' => '1kg'],
-    ['id' => 7, 'name' => 'Product 7', 'caption' => 'Generic Product Caption', 'price' => 362, 'image' => 'assets/images/green-tea.jpg', 'weight' => '1kg'],
-    ['id' => 8, 'name' => 'Product 8', 'caption' => 'Generic Product Caption', 'price' => 362, 'image' => 'assets/images/green-tea.jpg', 'weight' => '1kg'],
-    ['id' => 9, 'name' => 'Product 9', 'caption' => 'Generic Product Caption', 'price' => 362, 'image' => 'assets/images/green-tea.jpg', 'weight' => '1kg'],
-    ['id' => 10, 'name' => 'Product 10', 'caption' => 'Generic Product Caption', 'price' => 362, 'image' => 'assets/images/green-tea.jpg', 'weight' => '1kg'],
-    ['id' => 11, 'name' => 'Product 11', 'caption' => 'Generic Product Caption', 'price' => 362, 'image' => 'assets/images/green-tea.jpg', 'weight' => '1kg']
+    ['id' => 1, 'name' => 'Soyabean Oil', 'caption' => 'Fresh 5 Liter Soyabean Oil', 'price' => 895, 'image' => 'assets/images/mixproduct/fresh-soyabean-oil.jpg', 'weight' => '5L'],
+    ['id' => 2, 'name' => 'Shampoo', 'caption' => 'Treseme Shampoo with Keratine', 'price' => 540, 'image' => 'assets/images/mixproduct/treseme-shampoo.jpg', 'weight' => '580ml'],
+    ['id' => 3, 'name' => 'Aam', 'caption' => 'Aam Premium Quality', 'price' => 362, 'image' => 'assets/images/fruits/Aam.jpg', 'weight' => '1kg'],
+    ['id' => 4, 'name' => 'Apple', 'caption' => 'Apple Fuji Premium', 'price' => 362, 'image' => 'assets/images/fruits/apple.jpg', 'weight' => '1kg'],
+    ['id' => 5, 'name' => 'banana', 'caption' => 'Banana', 'price' => 362, 'image' => 'assets/images/fruits/banana.jpg', 'weight' => '1kg'],
+    ['id' => 6, 'name' => 'Dalim', 'caption' => 'Generic Product Caption', 'price' => 362, 'image' => 'assets/images/fruits/Dalim.jpg', 'weight' => '1kg'],
+    ['id' => 7, 'name' => 'Product 7', 'caption' => 'Generic Product Caption', 'price' => 362, 'image' => 'assets/images/fruits/greenapple.jpg', 'weight' => '1kg'],
+    ['id' => 8, 'name' => 'Product 8', 'caption' => 'Generic Product Caption', 'price' => 362, 'image' => 'assets/images/fruits/guava.jpg', 'weight' => '1kg'],
+    ['id' => 9, 'name' => 'Product 9', 'caption' => 'Generic Product Caption', 'price' => 362, 'image' => 'assets/images/fruits/halim-mix.jpg', 'weight' => '1kg'],
+    ['id' => 10, 'name' => 'Product 10', 'caption' => 'Generic Product Caption', 'price' => 362, 'image' => 'assets/images/mixproduct/maccoffe.jpg', 'weight' => '1kg'],
+    ['id' => 11, 'name' => 'Product 11', 'caption' => 'Generic Product Caption', 'price' => 362, 'image' => 'assets/images/mixproduct/olympic-pizza-cracker.jpg', 'weight' => '1kg'],
+    ['id' => 12, 'name' => 'Product 12', 'caption' => 'Generic Product Caption', 'price' => 362, 'image' => 'assets/images/mixproduct/fresh-masala-tea.jpg', 'weight' => '1kg'],
+    ['id' => 13, 'name' => 'Product 13', 'caption' => 'Generic Product Caption', 'price' => 362, 'image' => 'assets/images/mixproduct/ispahani-tea.jpg', 'weight' => '1kg'],
+    ['id' => 14, 'name' => 'Product 14', 'caption' => 'Generic Product Caption', 'price' => 362, 'image' => 'assets/images/mixproduct/aci-pure-chinigura-rice.jpg', 'weight' => '1kg'],
+    ['id' => 15, 'name' => 'Product 15', 'caption' => 'Generic Product Caption', 'price' => 362, 'image' => 'assets/images/mixproduct/fresh-chinigura-rice.jpg', 'weight' => '1kg'],
+    ['id' => 16, 'name' => 'Product 16', 'caption' => 'Generic Product Caption', 'price' => 362, 'image' => 'assets/images/mixproduct/aci-pure-toast.jpg', 'weight' => '1kg'],
+    ['id' => 17, 'name' => 'Product 17', 'caption' => 'Generic Product Caption', 'price' => 362, 'image' => 'assets/images/mixproduct/pusti-soyabean-oil.jpg', 'weight' => '1kg'],
+    ['id' => 18, 'name' => 'Product 18', 'caption' => 'Generic Product Caption', 'price' => 362, 'image' => 'assets/images/mixproduct/pusti-deshi-daal.jpg', 'weight' => '1kg'],
+    ['id' => 19, 'name' => 'Product 19', 'caption' => 'Generic Product Caption', 'price' => 362, 'image' => 'assets/images/mixproduct/piyaj-deshi.jpg', 'weight' => '1kg'],
+    ['id' => 20, 'name' => 'Product 20', 'caption' => 'Generic Product Caption', 'price' => 362, 'image' => 'assets/images/mixproduct/bashmati-rice.jpg', 'weight' => '1kg'],    
+    ['id' => 21, 'name' => 'Product 21', 'caption' => 'Generic Product Caption', 'price' => 362, 'image' => 'assets/images/mixproduct/broiler-chicken.jpg', 'weight' => '1kg'],   
+    ['id' => 22, 'name' => 'Product 22', 'caption' => 'Generic Product Caption', 'price' => 362, 'image' => 'assets/images/mixproduct/khashir-Mangsho.jpg', 'weight' => '1kg'],
+
 ];
 
 
@@ -110,7 +122,7 @@ function getTotalItems() {
   <div class="row">
     <div class="col-12 d-flex justify-content-center">
       <!-- <div class="p-1" style="padding-left: 0 !important;"> -->
-        <img src="assets/images/hot-deals.png">
+        <img src="assets/images/fruits/hot-deals.png">
       </div>
     </div>
   </div>
