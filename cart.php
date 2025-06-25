@@ -12,23 +12,110 @@ $page = "Home";
 ?>
 <?php require __DIR__ . '/components/header.php';?>
 <!-- content start -->
-<div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center">
-        <h1 class="h3 fw-bold text-dark">Cart</h1>
-        <div class="position-relative">
-            <button class="btn btn-primary px-4 py-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#cartSidebar" aria-controls="cartSidebar">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
-                    <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                </svg>
-                Cart
-                <?php if (getTotalItems() > 0): ?>
-                    <span class="badge bg-danger rounded-pill position-absolute top-0 end-0"><?php echo getTotalItems(); ?></span>
-                <?php endif; ?>
-            </button>
-        </div>
-    </div>
+<div class="container">
+    <h2 class="text-center my-4">Your Cart</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th>Total</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="cartTable">
+           
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-right">Grand Total</td>
+                <td id="grandTotal">0.00</td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+    
 </div>
 <!-- content end -->
 <?php require __DIR__ . '/components/footer.php'; 
 $db->disconnect();
 ?>
+<script>
+    $(document).ready(function() {
+        function populateItems(items) {
+            $("#cartTable").html("");
+            items.forEach(item => {
+                $("#cartTable").append(`
+                    <tr>
+                        <td>${item.name}</td>
+                        <td> <input type="number" class="form-control form-control-sm qty-input" data-id="${item.id}" value="${item.quantity}" min="1"></td>
+                        <td>${item.price}</td>
+                        <td>${ (item.quantity * item.price).toFixed(2) }</td> 
+                        <td><button class="btn btn-danger btn-sm remove-item" data-id="${item.id}">Remove</button></td>
+                    </tr>
+                `);
+            });
+        }
+        let cart = new Cart();
+        $("#cartCount").text(cart.getTotalItems());
+        $("#grandTotal").text(cart.getTotalPrice());
+        let allitems = cart.getSummary();
+        populateItems(allitems.items);
+/*         allitems.items.forEach(item => {
+            $("#cartTable").append(`
+                <tr>
+                    <td>${item.name}</td>
+                    <td> <input type="number" class="form-control form-control-sm qty-input" value="${item.quantity}" min="1"></td>
+                    <td>${item.price}</td>
+                    <td>${ (item.quantity * item.price).toFixed(2) }</td> 
+                    <td><button class="btn btn-danger btn-sm remove-item" data-id="${item.id}">Remove</button></td>
+                </tr>
+            `);
+        }); */
+        //remove item
+        $("#cartTable").on("click",".remove-item", function() {
+            let id = $(this).data('id');
+            let items = cart.removeItem(id);
+            console.log(items);
+            $("#grandTotal").text(cart.getTotalPrice());
+            $("#cartCount").text(cart.getTotalItems());
+            $("#cartTable").html("");
+            populateItems(items);
+/*             items.forEach(item => {
+                $("#cartTable").append(`
+                    <tr>
+                        <td>${item.name}</td>
+                        <td> <input type="number" class="form-control form-control-sm qty-input" data-id="${item.id}" value="${item.quantity}" min="1"></td>
+                        <td>${item.price}</td>
+                        <td>${ (item.quantity * item.price).toFixed(2) }</td> 
+                        <td><button class="btn btn-danger btn-sm remove-item" data-id="${item.id}">Remove</button></td>
+                    </tr>
+                `);
+            }); */
+        });
+        //quantity change
+        $("#cartTable").on("change",".qty-input", function() {
+            let id = $(this).data('id');
+            let quantity = $(this).val();
+            let items = cart.editItem(id, quantity);
+            $("#grandTotal").text(cart.getTotalPrice());
+            $("#cartCount").text(cart.getTotalItems());
+            $("#cartTable").html("");
+            populateItems(items);
+/*             items.forEach(item => {
+                $("#cartTable").append(`
+                    <tr>
+                        <td>${item.name}</td>
+                        <td> <input type="number" class="form-control form-control-sm qty-input" value="${item.quantity}" min="1"></td>
+                        <td>${item.price}</td>
+                        <td>${ (item.quantity * item.price).toFixed(2) }</td> 
+                        <td><button class="btn btn-danger btn-sm remove-item" data-id="${item.id}">Remove</button></td>
+                    </tr>
+                `);
+            }); */
+        });
+    });
+</script>
+</body>
+</html>

@@ -70,6 +70,7 @@
 
 <script src="<?= settings()['homepage'] ?>assets/js/jquery-3.7.1.min.js"></script>
 <script src="<?= settings()['homepage'] ?>assets/owl.carousel.min.js"></script>
+<script src="<?= settings()['homepage'] ?>assets/js/cart.js"></script>
 <script>
     // Example starter JavaScript for disabling form submissions if there are invalid fields
 (() => {
@@ -144,6 +145,3 @@
     }
 })
     </script>
-    
-</body>
-</html>

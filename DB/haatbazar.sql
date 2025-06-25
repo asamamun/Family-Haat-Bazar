@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 14, 2025 at 01:39 PM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Generation Time: Jun 24, 2025 at 07:56 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -293,6 +293,30 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `brands`
+--
+
+CREATE TABLE `brands` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `logo` blob DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `brands`
+--
+
+INSERT INTO `brands` (`id`, `name`, `logo`, `created_at`) VALUES
+(1, 'ACI', 0x363835613230323332363463375f313735303733363933312e6a7067, '2025-06-23 23:48:34'),
+(2, 'Akij', 0x363835613230343062383031375f313735303733363936302e6a7067, '2025-06-23 23:49:06'),
+(3, 'mgi', 0x363835613230356563303865305f313735303733363939302e6a7067, '2025-06-23 23:49:20'),
+(4, 'Pran', 0x363835613230373466343233315f313735303733373031322e6a7067, '2025-06-23 23:49:50'),
+(5, 'Pusti', 0x363835613230383764626639625f313735303733373033312e6a7067, '2025-06-23 23:50:13');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `cart_items`
 --
 
@@ -558,8 +582,35 @@ CREATE TABLE `products` (
   `weight` decimal(8,2) DEFAULT NULL,
   `dimensions` varchar(100) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `brand` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `products`
+--
+
+INSERT INTO `products` (`id`, `category_id`, `subcategory_id`, `name`, `slug`, `description`, `short_description`, `sku`, `barcode`, `selling_price`, `cost_price`, `markup_percentage`, `pricing_method`, `auto_update_price`, `stock_quantity`, `min_stock_level`, `image`, `is_hot_item`, `is_active`, `weight`, `dimensions`, `created_at`, `updated_at`, `brand`) VALUES
+(1, 3, NULL, 'Cotton T-Shirt', 'cotton-t-shirt', 'Comfortable cotton T-shirt.', 'Soft and breathable cotton T-shirt.', 'TSH-001', '1234567890123', 15.99, 8.00, 99.88, 'manual', 0, 50, 5, 'tshirt1.jpg', 1, 1, 0.20, '30x20x1 cm', '2025-06-22 06:00:00', '2025-06-24 04:56:18', ''),
+(2, 3, NULL, 'Denim Jacket', 'denim-jacket', 'Stylish denim jacket.', 'Classic blue denim jacket.', 'JKT-002', '1234567890124', 45.99, 30.00, 53.30, 'cost_plus', 0, 30, 5, 'denimjacket.jpg', 0, 1, 0.50, '40x30x2 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(3, 4, 6, 'Electric Scooter', 'electric-scooter', 'Eco-friendly electric scooter.', 'Fast and foldable scooter.', 'SCO-001', '1234567890125', 299.99, 200.00, 50.00, 'manual', 0, 20, 3, 'escooter.jpg', 1, 1, 10.00, '100x50x30 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(4, 4, 7, 'Toy Motorcycle', 'toy-motorcycle', 'Realistic toy motorcycle.', 'Battery-powered ride-on toy.', 'TOY-001', '1234567890126', 89.99, 50.00, 80.00, 'cost_plus', 0, 15, 2, 'toymotor.jpg', 0, 1, 2.00, '50x20x15 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(5, 5, 8, 'Smartphone XYZ', 'smartphone-xyz', 'Latest smartphone model.', 'High-performance smartphone.', 'PHN-001', '1234567890127', 699.99, 500.00, 40.00, 'market_based', 1, 25, 5, 'smartphone.jpg', 1, 1, 0.15, '15x7x0.8 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(6, 5, 8, 'Wireless Earbuds', 'wireless-earbuds', 'True wireless earbuds.', 'Crystal-clear audio earbuds.', 'EAR-001', '1234567890128', 79.99, 40.00, 99.98, 'manual', 0, 40, 5, 'earbuds.jpg', 0, 1, 0.05, '5x5x2 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(7, 6, NULL, 'Baby Stroller', 'baby-stroller', 'Lightweight baby stroller.', 'Foldable and durable stroller.', 'STR-001', '1234567890129', 129.99, 80.00, 62.49, 'cost_plus', 0, 10, 2, 'stroller.jpg', 1, 1, 5.00, '80x50x100 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(8, 6, NULL, 'Plush Teddy Bear', 'plush-teddy-bear', 'Soft plush teddy bear.', 'Cuddly toy for kids.', 'TOY-002', '1234567890130', 19.99, 10.00, 99.90, 'manual', 0, 60, 10, 'teddybear.jpg', 0, 1, 0.30, '20x15x10 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(9, 7, 12, 'Holstein Cow', 'holstein-cow', 'Healthy dairy cow.', 'High-yield milk cow.', 'COW-001', '1234567890131', 1500.00, 1200.00, 25.00, 'market_based', 0, 5, 1, 'holstein.jpg', 1, 1, 500.00, NULL, '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(10, 7, 12, 'Jersey Cow', 'jersey-cow', 'Premium jersey cow.', 'Efficient dairy cow.', 'COW-002', '1234567890132', 1400.00, 1100.00, 27.27, 'manual', 0, 3, 1, 'jersey.jpg', 0, 1, 450.00, NULL, '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(11, 3, NULL, 'Silk Saree', 'silk-saree', 'Elegant silk saree.', 'Traditional handwoven saree.', 'SAR-001', '1234567890133', 99.99, 60.00, 66.65, 'cost_plus', 0, 20, 3, 'saree.jpg', 1, 1, 0.40, '150x50x0.5 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(12, 4, 6, 'Car Cleaning Kit', 'car-cleaning-kit', 'Complete car cleaning kit.', 'All-in-one car care.', 'CLK-001', '1234567890134', 29.99, 15.00, 99.93, 'manual', 0, 35, 5, 'cleaningkit.jpg', 0, 1, 1.00, '30x20x10 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(13, 5, 8, 'LED TV 55\"', 'led-tv-55', '55-inch 4K LED TV.', 'Immersive viewing experience.', 'TV-001', '1234567890135', 499.99, 350.00, 42.85, 'market_based', 1, 15, 3, 'ledtv.jpg', 1, 1, 15.00, '120x80x10 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(14, 6, NULL, 'Wooden Puzzle', 'wooden-puzzle', 'Educational wooden puzzle.', 'Fun learning toy.', 'PUZ-001', '1234567890136', 14.99, 8.00, 87.38, 'cost_plus', 0, 50, 8, 'puzzle.jpg', 0, 1, 0.25, '20x20x1 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(15, 7, 12, 'Angus Bull', 'angus-bull', 'Strong Angus bull.', 'Premium beef cattle.', 'BUL-001', '1234567890137', 2000.00, 1600.00, 25.00, 'manual', 0, 2, 1, 'angus.jpg', 1, 1, 600.00, NULL, '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(16, 3, NULL, 'Leather Belt', 'leather-belt', 'Genuine leather belt.', 'Durable and stylish belt.', 'BLT-001', '1234567890138', 24.99, 12.00, 99.92, 'cost_plus', 0, 45, 5, 'belt.jpg', 0, 1, 0.10, '100x5x0.5 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(17, 4, 7, 'Remote Control Car', 'remote-control-car', 'Fast RC car.', 'Exciting remote control toy.', 'RCC-001', '1234567890139', 49.99, 25.00, 99.96, 'manual', 0, 25, 4, 'rccar.jpg', 1, 1, 1.50, '30x15x10 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(18, 5, 8, 'Laptop 15\"', 'laptop-15', 'High-performance 15-inch laptop.', 'Sleek and powerful laptop.', 'LAP-001', '1234567890140', 999.99, 700.00, 42.86, 'market_based', 1, 10, 2, 'laptop.jpg', 1, 1, 2.00, '35x25x2 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(19, 6, NULL, 'Diaper Bag', 'diaper-bag', 'Spacious diaper bag.', 'Multi-pocket baby bag.', 'BAG-001', '1234567890141', 39.99, 20.00, 99.95, 'cost_plus', 0, 30, 5, 'diaperbag.jpg', 0, 1, 0.80, '40x30x20 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(20, 7, 12, 'Goat', 'goat', 'Healthy dairy goat.', 'High-quality milk goat.', 'GOT-001', '1234567890142', 300.00, 200.00, 50.00, 'manual', 0, 8, 2, 'goat.jpg', 0, 1, 30.00, NULL, '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL);
 
 -- --------------------------------------------------------
 
@@ -768,7 +819,8 @@ INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `phone`, `passwor
 (3, 'test', 'test', 'test@gmail.com', '1234234324532545', '$2y$10$DIeJxdW5gPryY1XKMWJXo.L9wBQs1ZczqJi0jGtQEzicDR21qxdzm', 'customer', 1, NULL, NULL, '2025-05-29 06:35:58', '2025-05-29 06:35:58'),
 (4, 'test2', 'test2', 'test2@gmail.com', '9834759485745', '$2y$10$j//ku.FH91gJYlE40WPD../7TMM0VQ/VdvhRqbmjx2I3or6Y4sUcC', 'customer', 1, NULL, NULL, '2025-05-29 06:38:33', '2025-05-29 06:38:33'),
 (5, 'Ishaq Ahmed', 'Shojib', 'ishaqhossain98@gmail.com', '01783629582', '$2y$10$08ERC8FLVEdmzQrClgxXau0MK0fopyqqNGuUUqk.38RzpKTGREndi', 'customer', 1, NULL, NULL, '2025-05-29 06:45:22', '2025-05-29 06:45:22'),
-(7, 'admin', 'admin', 'admin@gmail.com', NULL, '$2y$10$kyKkl7SXSsXE1IEzdbapGOS90AgPdzzIGzx/veB/lXOlZTz0gpUmC', 'admin', 1, NULL, NULL, '2025-06-04 04:59:25', '2025-06-04 04:59:35');
+(7, 'admin', 'admin', 'admin@gmail.com', NULL, '$2y$10$kyKkl7SXSsXE1IEzdbapGOS90AgPdzzIGzx/veB/lXOlZTz0gpUmC', 'admin', 1, NULL, NULL, '2025-06-04 04:59:25', '2025-06-04 04:59:35'),
+(8, 'Kuddus', 'MIa', 'kuddus@gmail.com', NULL, '$2y$10$BTYIxagqON67VAbUMPD9RuFekOwKiooBxAd5duu5m8FP0iqNscPHW', 'customer', 1, NULL, NULL, '2025-06-24 04:46:57', '2025-06-24 04:46:57');
 
 -- --------------------------------------------------------
 
@@ -800,6 +852,12 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `brands`
+--
+ALTER TABLE `brands`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `cart_items`
@@ -970,6 +1028,12 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `brands`
+--
+ALTER TABLE `brands`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `cart_items`
 --
 ALTER TABLE `cart_items`
@@ -1021,7 +1085,7 @@ ALTER TABLE `payment_transactions`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `product_pricing_history`
@@ -1075,7 +1139,7 @@ ALTER TABLE `subcategories`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Constraints for dumped tables

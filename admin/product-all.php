@@ -5,6 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
 require __DIR__ . '/../vendor/autoload.php';
 $db = new MysqliDb();
 $categories = $db->get('categories', null, ['id', 'name']);
+$brands = $db->get('brands', null, ['id', 'name']);
 /* var_dump($categories);
 exit; */
 ?>
@@ -42,6 +43,7 @@ exit; */
                                                 <th>Name</th>
                                                 <th>Category</th>
                                                 <th>Subcategory</th>
+                                                <th>Brand</th>
                                                 <th>Slug</th>
                                                 <th>Description</th>
                                                 <th>Short Description</th>
@@ -72,7 +74,7 @@ exit; */
                 </div>
             </div>
 
-            <!-- Subcategory Modal -->
+            <!-- product Modal -->
             <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
@@ -110,6 +112,17 @@ exit; */
                                     <label for="subcategory" class="form-label">Subcategory</label>
                                     <select class="form-select" id="subcategory" name="subcategory" required>
                                         <option value="">Select Subcategory</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="brand" class="form-label">Brand</label>
+                                    <select class="form-select" id="brand" name="brand" required>
+                                        <option value="">Select Brand</option>
+                                        <?php                                        
+                                        foreach ($brands as $brand):
+                                        ?>
+                                            <option value="<?= $brand['id'] ?>"><?= $brand['name'] ?></option>
+                                        <?php endforeach; ?>
                                     </select>
                                 </div>
                                 <div class="mb-3">
@@ -178,9 +191,9 @@ exit; */
                                 </div>
                                 <div class="mb-3">
                                     <label for="active" class="form-label">Active</label>
-                                    <select class="form-select" id="active" name="active" required>
+                                    <select class="form-select" id="is_active" name="active" required>
                                         <option value="">Select Active</option>
-                                        <option value="1">Yes</option>
+                                        <option value="1" selected>Yes</option>
                                         <option value="0">No</option>
                                     </select>
                                 </div>
@@ -272,6 +285,9 @@ exit; */
                     },
                     {
                         "data": "subcategory_name"
+                    },
+                    {"data": "brand_name"
+
                     },
                     {
                         "data": "slug"
@@ -395,10 +411,11 @@ exit; */
                 var formData = new FormData(this);
                 // Determine action: if subcategory_id has a value, it's an update
                 var action = $('#product_id').val() ? 'update' : 'create';
+                console.log(action);
                 formData.append('action', action);
 
                 // Convert checkbox to int
-                formData.set('is_active', $('#is_active').is(':checked') ? 1 : 0);
+                formData.set('is_active', $('#is_active').val() ?? 0 );
 
                 $.ajax({
                     url: 'product-ajax.php',
@@ -423,7 +440,7 @@ exit; */
                         showAlert('danger', 'An error occurred. Please try again.');
                     },
                     complete: function() {
-                        $('#saveBtn').prop('disabled', false).text('Save Subcategory');
+                        $('#saveBtn').prop('disabled', false).text('Save Product');
                     }
                 });
             });
@@ -552,21 +569,7 @@ exit; */
                             showConfirmButton: false,
                             timer: 1500
                         });
-            /* var alertHtml = '<div class="alert alert-' + type + ' alert-dismissible fade show" role="alert">' +
-                message +
-                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
-                '</div>';
-
-            // Remove existing alerts
-            $('.alert').remove();
-
-            // Add new alert at the top of the card body
-            $('.card-body').prepend(alertHtml);
-
-            // Auto-dismiss after 5 seconds
-            setTimeout(function() {
-                $('.alert').fadeOut();
-            }, 5000); */
+            
         }
     </script>
 </body>

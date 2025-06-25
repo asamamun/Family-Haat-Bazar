@@ -2,7 +2,7 @@
 if (!function_exists('settings')) {
     function settings()
     {
-       $root = "http://localhost/ROUND64/PHP/ShopEase/"; 
+       $root = "http://localhost/ROUND64/PHP/ShopEase-24-6-25/"; 
         return [
             'root'  => $root,
             'companyname'=> 'ShopEase',
@@ -13,7 +13,7 @@ if (!function_exists('settings')) {
             'user'=> 'root',
             'password'=> '',
             'database'=> 'haatbazar',            
-            'physical_path' => 'D:\xampp8240\htdocs\ROUND64\PHP\ShopEase'
+            'physical_path' => 'D:\xampp8240\htdocs\ROUND64\PHP\ShopEase-24-6-25'
         ];
     }
 }

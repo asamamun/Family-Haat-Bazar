@@ -93,22 +93,11 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == 'true') {
                     <marquee>Free Shipping on Orders Over ৳1000!</marquee>
                 </div>
                 <div class="nav-right">
-                    <a href="#" class="nav-right-item">
+                    <a href="cart.php" class="nav-right-item">
                         <span class="icon">🛒</span>
-                        <span><a href="cart.php"></a></span>
+                        (<span id="cartCount">0</span>)
                     </a>
-                    <!-- <a href="#" class="nav-right-item">
-                        <span class="icon">📦</span>
-                        <span>Orders</span>
-                    </a>
-                    <a href="#" class="nav-right-item">
-                        <span class="icon">🏪</span>
-                        <span>Our outlets</span>
-                    </a>
-                    <a href="#" class="nav-right-item">
-                        <span class="icon">❓</span>
-                        <span>Help line</span>
-                    </a> -->
+                    
                 </div>
             </div>
         </div>
