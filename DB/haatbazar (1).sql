@@ -1,0 +1,1269 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Jun 26, 2025 at 09:18 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `haatbazar`
+--
+
+DELIMITER $$
+--
+-- Procedures
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CalculateWeightedAverageCost` (IN `product_id_param` INT)   BEGIN
+    DECLARE total_cost DECIMAL(15,2) DEFAULT 0;
+    DECLARE total_quantity INT DEFAULT 0;
+    DECLARE new_avg_cost DECIMAL(10,2) DEFAULT 0;
+    
+    -- Calculate weighted average from active batches
+    SELECT 
+        COALESCE(SUM(cost_price * quantity_available), 0),
+        COALESCE(SUM(quantity_available), 0)
+    INTO total_cost, total_quantity
+    FROM stock_batches 
+    WHERE product_id = product_id_param 
+    AND is_active = TRUE 
+    AND quantity_available > 0;
+    
+    -- Calculate new average cost
+    IF total_quantity > 0 THEN
+        SET new_avg_cost = total_cost / total_quantity;
+        
+        -- Update product cost price
+        UPDATE products 
+        SET cost_price = new_avg_cost,
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = product_id_param;
+        
+        -- Check if auto price update is enabled for this product
+        CALL UpdateSellingPriceIfEnabled(product_id_param, new_avg_cost);
+    END IF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ProcessStockReceipt` (IN `product_id_param` INT, IN `quantity_param` INT, IN `cost_price_param` DECIMAL(10,2), IN `batch_number_param` VARCHAR(100), IN `purchase_order_item_id_param` INT, IN `user_id_param` INT)   BEGIN
+    DECLARE batch_id_val INT;
+    
+    -- Create new stock batch
+    INSERT INTO stock_batches (
+        product_id, 
+        batch_number, 
+        purchase_order_item_id,
+        cost_price, 
+        quantity_available, 
+        received_date
+    ) VALUES (
+        product_id_param, 
+        batch_number_param,
+        purchase_order_item_id_param,
+        cost_price_param, 
+        quantity_param, 
+        CURDATE()
+    );
+    
+    SET batch_id_val = LAST_INSERT_ID();
+    
+    -- Record stock movement
+    INSERT INTO stock_movements (
+        product_id, 
+        batch_id,
+        movement_type, 
+        quantity, 
+        cost_price,
+        total_cost,
+        reference_type, 
+        reference_id,
+        created_by
+    ) VALUES (
+        product_id_param, 
+        batch_id_val,
+        'IN', 
+        quantity_param, 
+        cost_price_param,
+        quantity_param * cost_price_param,
+        'PURCHASE', 
+        purchase_order_item_id_param,
+        user_id_param
+    );
+    
+    -- Update product stock quantity
+    UPDATE products 
+    SET stock_quantity = stock_quantity + quantity_param,
+        updated_at = CURRENT_TIMESTAMP
+    WHERE id = product_id_param;
+    
+    -- Recalculate weighted average cost
+    CALL CalculateWeightedAverageCost(product_id_param);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ProcessStockSale` (IN `product_id_param` INT, IN `quantity_param` INT, IN `order_id_param` INT, IN `user_id_param` INT)   BEGIN
+    DECLARE remaining_qty INT DEFAULT quantity_param;
+    DECLARE batch_qty INT;
+    DECLARE batch_id_val INT;
+    DECLARE batch_cost DECIMAL(10,2);
+    DECLARE done INT DEFAULT FALSE;
+    
+    -- Cursor for FIFO stock batches
+    DECLARE batch_cursor CURSOR FOR
+        SELECT id, quantity_available, cost_price
+        FROM stock_batches
+        WHERE product_id = product_id_param 
+        AND quantity_available > 0
+        AND is_active = TRUE
+        ORDER BY received_date ASC, id ASC;
+    
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    
+    OPEN batch_cursor;
+    
+    batch_loop: LOOP
+        FETCH batch_cursor INTO batch_id_val, batch_qty, batch_cost;
+        
+        IF done OR remaining_qty <= 0 THEN
+            LEAVE batch_loop;
+        END IF;
+        
+        IF batch_qty >= remaining_qty THEN
+            -- This batch can fulfill remaining quantity
+            UPDATE stock_batches 
+            SET quantity_available = quantity_available - remaining_qty,
+                quantity_sold = quantity_sold + remaining_qty
+            WHERE id = batch_id_val;
+            
+            -- Record stock movement
+            INSERT INTO stock_movements (
+                product_id, 
+                batch_id,
+                movement_type, 
+                quantity, 
+                cost_price,
+                total_cost,
+                reference_type, 
+                reference_id,
+                created_by
+            ) VALUES (
+                product_id_param, 
+                batch_id_val,
+                'OUT', 
+                remaining_qty, 
+                batch_cost,
+                remaining_qty * batch_cost,
+                'SALE', 
+                order_id_param,
+                user_id_param
+            );
+            
+            SET remaining_qty = 0;
+        ELSE
+            -- Use entire batch and continue
+            UPDATE stock_batches 
+            SET quantity_available = 0,
+                quantity_sold = quantity_sold + batch_qty,
+                is_active = FALSE
+            WHERE id = batch_id_val;
+            
+            -- Record stock movement
+            INSERT INTO stock_movements (
+                product_id, 
+                batch_id,
+                movement_type, 
+                quantity, 
+                cost_price,
+                total_cost,
+                reference_type, 
+                reference_id,
+                created_by
+            ) VALUES (
+                product_id_param, 
+                batch_id_val,
+                'OUT', 
+                batch_qty, 
+                batch_cost,
+                batch_qty * batch_cost,
+                'SALE', 
+                order_id_param,
+                user_id_param
+            );
+            
+            SET remaining_qty = remaining_qty - batch_qty;
+        END IF;
+    END LOOP;
+    
+    CLOSE batch_cursor;
+    
+    -- Update product stock quantity
+    UPDATE products 
+    SET stock_quantity = stock_quantity - (quantity_param - remaining_qty),
+        updated_at = CURRENT_TIMESTAMP
+    WHERE id = product_id_param;
+    
+    -- Recalculate weighted average cost
+    CALL CalculateWeightedAverageCost(product_id_param);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateSellingPriceIfEnabled` (IN `product_id_param` INT, IN `new_cost_price` DECIMAL(10,2))   BEGIN
+    DECLARE current_selling_price DECIMAL(10,2);
+    DECLARE current_cost_price DECIMAL(10,2);
+    DECLARE markup_percent DECIMAL(5,2);
+    DECLARE new_selling_price DECIMAL(10,2);
+    DECLARE cost_change_percent DECIMAL(5,2);
+    DECLARE price_threshold DECIMAL(5,2);
+    DECLARE auto_update_enabled BOOLEAN DEFAULT FALSE;
+    DECLARE pricing_method_val VARCHAR(20);
+    
+    -- Get product pricing info
+    SELECT 
+        selling_price, 
+        cost_price, 
+        markup_percentage, 
+        auto_update_price,
+        pricing_method
+    INTO 
+        current_selling_price, 
+        current_cost_price, 
+        markup_percent, 
+        auto_update_enabled,
+        pricing_method_val
+    FROM products 
+    WHERE id = product_id_param;
+    
+    -- Get price update threshold from settings
+    SELECT CAST(value AS DECIMAL(5,2)) INTO price_threshold
+    FROM settings 
+    WHERE key_name = 'price_update_threshold';
+    
+    -- Calculate cost change percentage
+    IF current_cost_price > 0 THEN
+        SET cost_change_percent = ABS((new_cost_price - current_cost_price) / current_cost_price * 100);
+    ELSE
+        SET cost_change_percent = 100; -- Force update if no previous cost
+    END IF;
+    
+    -- Update selling price if conditions are met
+    IF auto_update_enabled = TRUE 
+       AND pricing_method_val = 'cost_plus'
+       AND cost_change_percent >= price_threshold 
+       AND markup_percent > 0 THEN
+        
+        SET new_selling_price = new_cost_price * (1 + markup_percent / 100);
+        
+        -- Insert pricing history record
+        INSERT INTO product_pricing_history (
+            product_id, 
+            old_selling_price, 
+            new_selling_price, 
+            old_cost_price, 
+            new_cost_price, 
+            reason, 
+            margin_percentage
+        ) VALUES (
+            product_id_param, 
+            current_selling_price, 
+            new_selling_price, 
+            current_cost_price, 
+            new_cost_price, 
+            'cost_change', 
+            markup_percent
+        );
+        
+        -- Update product selling price
+        UPDATE products 
+        SET selling_price = new_selling_price,
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = product_id_param;
+    END IF;
+END$$
+
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `brands`
+--
+
+CREATE TABLE `brands` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `logo` blob DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `brands`
+--
+
+INSERT INTO `brands` (`id`, `name`, `logo`, `created_at`) VALUES
+(1, 'ACI', 0x363835613230323332363463375f313735303733363933312e6a7067, '2025-06-23 23:48:34'),
+(2, 'Akij', 0x363835613230343062383031375f313735303733363936302e6a7067, '2025-06-23 23:49:06'),
+(3, 'mgi', 0x363835613230356563303865305f313735303733363939302e6a7067, '2025-06-23 23:49:20'),
+(4, 'Pran', 0x363835613230373466343233315f313735303733373031322e6a7067, '2025-06-23 23:49:50'),
+(5, 'Pusti', 0x363835613230383764626639625f313735303733373033312e6a7067, '2025-06-23 23:50:13');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cart_items`
+--
+
+CREATE TABLE `cart_items` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `categories`
+--
+
+CREATE TABLE `categories` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `slug` varchar(100) NOT NULL,
+  `description` text DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  `sort_order` int(11) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `categories`
+--
+
+INSERT INTO `categories` (`id`, `name`, `slug`, `description`, `image`, `is_active`, `sort_order`, `created_at`, `updated_at`) VALUES
+(3, 'Garments', 'garments', 'asdf asdf asdf sdafd', '683fd68263935_1749014146.jpg', 1, 0, '2025-06-04 05:15:46', '2025-06-04 05:15:46'),
+(4, 'Automobiles', 'automobiles', 'sadfsdfd fd', '683fd7a09ccce_1749014432.jpg', 1, 0, '2025-06-04 05:20:32', '2025-06-04 05:20:32'),
+(5, 'Electronics', 'electroniocs', 'd fasdfsd sdfds fdsf df', '683fe16c12acf_1749016940.jpg', 1, 0, '2025-06-04 06:02:20', '2025-06-04 06:02:20'),
+(6, 'kids', 'kids item', 'sdf sdf sdf d f', '683fe25a77b34_1749017178.jpg', 1, 0, '2025-06-04 06:06:18', '2025-06-04 06:06:18'),
+(7, 'Cattle', 'cattle', 'asdfdsf', '684d1e18a671f_1749884440.png', 1, 0, '2025-06-14 07:00:40', '2025-06-14 07:00:40'),
+(8, 'sdfgdfsgdfg', 'gfdgsdfgsfd', 'gdfsgvsdfgfdg', '684d256a6fc3a_1749886314.jpg', 1, 0, '2025-06-14 07:31:54', '2025-06-14 07:31:54'),
+(9, 'Jhuma', 'jhuma', 'jhuma', '685b79dab87fe_1750825434.jpg', 1, 0, '2025-06-25 04:23:54', '2025-06-25 04:23:54');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `coupons`
+--
+
+CREATE TABLE `coupons` (
+  `id` int(11) NOT NULL,
+  `code` varchar(50) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `description` text DEFAULT NULL,
+  `type` enum('fixed','percentage') NOT NULL,
+  `value` decimal(10,2) NOT NULL,
+  `minimum_amount` decimal(10,2) DEFAULT 0.00,
+  `maximum_discount` decimal(10,2) DEFAULT NULL,
+  `usage_limit` int(11) DEFAULT NULL,
+  `used_count` int(11) DEFAULT 0,
+  `valid_from` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `valid_until` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `coupon_usage`
+--
+
+CREATE TABLE `coupon_usage` (
+  `id` int(11) NOT NULL,
+  `coupon_id` int(11) NOT NULL,
+  `order_id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `discount_amount` decimal(10,2) NOT NULL,
+  `used_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `customer_addresses`
+--
+
+CREATE TABLE `customer_addresses` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `type` enum('billing','shipping') DEFAULT 'shipping',
+  `first_name` varchar(50) NOT NULL,
+  `last_name` varchar(50) NOT NULL,
+  `company` varchar(100) DEFAULT NULL,
+  `address_line_1` varchar(200) NOT NULL,
+  `address_line_2` varchar(200) DEFAULT NULL,
+  `city` varchar(100) NOT NULL,
+  `state` varchar(100) DEFAULT NULL,
+  `postal_code` varchar(20) DEFAULT NULL,
+  `country` varchar(100) DEFAULT 'Bangladesh',
+  `phone` varchar(20) DEFAULT NULL,
+  `is_default` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `daily_sales_summary`
+-- (See below for the actual view)
+--
+CREATE TABLE `daily_sales_summary` (
+`sale_date` date
+,`total_orders` bigint(21)
+,`total_sales` decimal(32,2)
+,`average_order_value` decimal(14,6)
+,`order_type` enum('online','pos')
+);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `low_stock_products`
+-- (See below for the actual view)
+--
+CREATE TABLE `low_stock_products` (
+`id` int(11)
+,`name` varchar(200)
+,`sku` varchar(100)
+,`stock_quantity` int(11)
+,`min_stock_level` int(11)
+,`category_name` varchar(100)
+,`subcategory_name` varchar(100)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `monthly_sales_summary`
+-- (See below for the actual view)
+--
+CREATE TABLE `monthly_sales_summary` (
+`sale_year` int(4)
+,`sale_month` int(2)
+,`total_orders` bigint(21)
+,`total_sales` decimal(32,2)
+,`average_order_value` decimal(14,6)
+,`order_type` enum('online','pos')
+);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orders`
+--
+
+CREATE TABLE `orders` (
+  `id` int(11) NOT NULL,
+  `order_number` varchar(50) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `order_type` enum('online','pos') NOT NULL,
+  `status` enum('pending','processing','shipped','delivered','cancelled','refunded') DEFAULT 'pending',
+  `payment_status` enum('pending','paid','failed','refunded') DEFAULT 'pending',
+  `payment_method` enum('bkash','nogod','cash') NOT NULL,
+  `transaction_id` varchar(100) DEFAULT NULL,
+  `subtotal` decimal(10,2) NOT NULL,
+  `discount_amount` decimal(10,2) DEFAULT 0.00,
+  `coupon_id` int(11) DEFAULT NULL,
+  `tax_amount` decimal(10,2) DEFAULT 0.00,
+  `shipping_amount` decimal(10,2) DEFAULT 0.00,
+  `total_amount` decimal(10,2) NOT NULL,
+  `currency` varchar(3) DEFAULT 'BDT',
+  `notes` text DEFAULT NULL,
+  `billing_first_name` varchar(50) DEFAULT NULL,
+  `billing_last_name` varchar(50) DEFAULT NULL,
+  `billing_company` varchar(100) DEFAULT NULL,
+  `billing_address_line_1` varchar(200) DEFAULT NULL,
+  `billing_address_line_2` varchar(200) DEFAULT NULL,
+  `billing_city` varchar(100) DEFAULT NULL,
+  `billing_state` varchar(100) DEFAULT NULL,
+  `billing_postal_code` varchar(20) DEFAULT NULL,
+  `billing_country` varchar(100) DEFAULT NULL,
+  `billing_phone` varchar(20) DEFAULT NULL,
+  `shipping_first_name` varchar(50) DEFAULT NULL,
+  `shipping_last_name` varchar(50) DEFAULT NULL,
+  `shipping_company` varchar(100) DEFAULT NULL,
+  `shipping_address_line_1` varchar(200) DEFAULT NULL,
+  `shipping_address_line_2` varchar(200) DEFAULT NULL,
+  `shipping_city` varchar(100) DEFAULT NULL,
+  `shipping_state` varchar(100) DEFAULT NULL,
+  `shipping_postal_code` varchar(20) DEFAULT NULL,
+  `shipping_country` varchar(100) DEFAULT NULL,
+  `shipping_phone` varchar(20) DEFAULT NULL,
+  `processed_by` int(11) DEFAULT NULL,
+  `processed_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `order_number`, `user_id`, `order_type`, `status`, `payment_status`, `payment_method`, `transaction_id`, `subtotal`, `discount_amount`, `coupon_id`, `tax_amount`, `shipping_amount`, `total_amount`, `currency`, `notes`, `billing_first_name`, `billing_last_name`, `billing_company`, `billing_address_line_1`, `billing_address_line_2`, `billing_city`, `billing_state`, `billing_postal_code`, `billing_country`, `billing_phone`, `shipping_first_name`, `shipping_last_name`, `shipping_company`, `shipping_address_line_1`, `shipping_address_line_2`, `shipping_city`, `shipping_state`, `shipping_postal_code`, `shipping_country`, `shipping_phone`, `processed_by`, `processed_at`, `created_at`, `updated_at`) VALUES
+(1, 'ORD-1750919793-6815', NULL, 'online', 'pending', 'pending', 'cash', NULL, 715.98, 0.00, NULL, 53.70, 0.00, 769.68, 'BDT', 'vbngf', 'fgh', 'vbnf', 'nfgng', 'nfgn', 'ggf', 'vbn', 'fgn', 'vbn', 'fgnvb', 'n', 'fgh', 'vbnf', 'nfgng', 'nfgn', 'ggf', 'vbn', 'fgn', 'vbn', 'fgnvb', 'n', NULL, NULL, '2025-06-26 02:36:33', '2025-06-26 02:36:33'),
+(2, 'ORD-1750920032-8019', NULL, 'online', 'pending', 'pending', 'cash', NULL, 761.97, 0.00, NULL, 114.30, 0.00, 876.27, 'BDT', 'lets see!', 'kuddus', 'boyati', 'xyz co', 'mirpur', 'dhaka', 'dhaka', 'Bangladesh', '1204', 'Bangladesh', '123456', 'kuddus', 'boyati', 'xyz co', 'mirpur', 'dhaka', 'dhaka', 'Bangladesh', '1204', 'Bangladesh', '123456', NULL, NULL, '2025-06-26 02:40:32', '2025-06-26 02:40:32'),
+(3, 'ORD-1750920651-5496', NULL, 'online', 'pending', 'pending', 'cash', NULL, 2049.97, 0.00, NULL, 153.75, 0.00, 2203.72, 'BDT', 'Product chira-fata dile khobor ache', 'Imteaz', 'khan', 'taz co.ltd.', 'East Kazipara', 'Kazipara', 'Mirpur', 'Dhaka', '1216', 'Bangladesh', '01877226699', 'Imteaz', 'khan', 'taz co.ltd.', 'East Kazipara', 'Kazipara', 'Mirpur', 'Dhaka', '1216', 'Bangladesh', '01877226699', NULL, NULL, '2025-06-26 02:50:51', '2025-06-26 02:50:51'),
+(4, 'ORD-1750920663-2648', NULL, 'online', 'pending', 'pending', 'cash', NULL, 2049.97, 0.00, NULL, 153.75, 0.00, 2203.72, 'BDT', 'Product chira-fata dile khobor ache', 'Imteaz', 'khan', 'taz co.ltd.', 'East Kazipara', 'Kazipara', 'Mirpur', 'Dhaka', '1216', 'Bangladesh', '01877226699', 'Imteaz', 'khan', 'taz co.ltd.', 'East Kazipara', 'Kazipara', 'Mirpur', 'Dhaka', '1216', 'Bangladesh', '01877226699', NULL, NULL, '2025-06-26 02:51:03', '2025-06-26 02:51:03');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_items`
+--
+
+CREATE TABLE `order_items` (
+  `id` int(11) NOT NULL,
+  `order_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `product_name` varchar(200) NOT NULL,
+  `product_sku` varchar(100) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `unit_price` decimal(10,2) NOT NULL,
+  `total_price` decimal(10,2) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `order_items`
+--
+
+INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `product_name`, `product_sku`, `quantity`, `unit_price`, `total_price`, `created_at`) VALUES
+(1, 1, 5, 'Smartphone XYZ', 'PHN-001', 1, 699.99, 699.99, '2025-06-26 02:36:33'),
+(2, 1, 1, 'Cotton T-Shirt', 'TSH-001', 1, 15.99, 15.99, '2025-06-26 02:36:33'),
+(3, 2, 5, 'Smartphone XYZ', 'PHN-001', 1, 699.99, 699.99, '2025-06-26 02:40:32'),
+(4, 2, 1, 'Cotton T-Shirt', 'TSH-001', 1, 15.99, 15.99, '2025-06-26 02:40:32'),
+(5, 2, 2, 'Denim Jacket', 'JKT-002', 1, 45.99, 45.99, '2025-06-26 02:40:32'),
+(6, 3, 18, 'Laptop 15\"', 'LAP-001', 2, 999.99, 1999.98, '2025-06-26 02:50:51'),
+(7, 3, 17, 'Remote Control Car', 'RCC-001', 1, 49.99, 49.99, '2025-06-26 02:50:51'),
+(8, 4, 18, 'Laptop 15\"', 'LAP-001', 2, 999.99, 1999.98, '2025-06-26 02:51:03'),
+(9, 4, 17, 'Remote Control Car', 'RCC-001', 1, 49.99, 49.99, '2025-06-26 02:51:03');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payment_transactions`
+--
+
+CREATE TABLE `payment_transactions` (
+  `id` int(11) NOT NULL,
+  `order_id` int(11) NOT NULL,
+  `transaction_id` varchar(100) NOT NULL,
+  `payment_method` enum('bkash','nogod','cash') NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `status` enum('pending','success','failed','cancelled') DEFAULT 'pending',
+  `gateway_response` text DEFAULT NULL,
+  `processed_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `payment_transactions`
+--
+
+INSERT INTO `payment_transactions` (`id`, `order_id`, `transaction_id`, `payment_method`, `amount`, `status`, `gateway_response`, `processed_at`, `created_at`) VALUES
+(1, 1, 'ORD-1750919793-6815', 'cash', 769.68, 'pending', NULL, NULL, '2025-06-26 02:36:33'),
+(2, 2, 'ORD-1750920032-8019', 'cash', 876.27, 'pending', NULL, NULL, '2025-06-26 02:40:32'),
+(3, 3, 'ORD-1750920651-5496', 'cash', 2203.72, 'pending', NULL, NULL, '2025-06-26 02:50:51'),
+(4, 4, 'ORD-1750920663-2648', 'cash', 2203.72, 'pending', NULL, NULL, '2025-06-26 02:51:03');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `products`
+--
+
+CREATE TABLE `products` (
+  `id` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL,
+  `subcategory_id` int(11) DEFAULT NULL,
+  `name` varchar(200) NOT NULL,
+  `slug` varchar(200) NOT NULL,
+  `description` text DEFAULT NULL,
+  `short_description` varchar(500) DEFAULT NULL,
+  `sku` varchar(100) NOT NULL,
+  `barcode` varchar(100) DEFAULT NULL,
+  `selling_price` decimal(10,2) NOT NULL,
+  `cost_price` decimal(10,2) DEFAULT NULL,
+  `markup_percentage` decimal(5,2) DEFAULT 0.00,
+  `pricing_method` enum('manual','cost_plus','market_based') DEFAULT 'manual',
+  `auto_update_price` tinyint(1) DEFAULT 0,
+  `stock_quantity` int(11) DEFAULT 0,
+  `min_stock_level` int(11) DEFAULT 5,
+  `image` varchar(255) DEFAULT NULL,
+  `is_hot_item` tinyint(1) DEFAULT 0,
+  `is_active` tinyint(1) DEFAULT 1,
+  `weight` decimal(8,2) DEFAULT NULL,
+  `dimensions` varchar(100) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `brand` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `products`
+--
+
+INSERT INTO `products` (`id`, `category_id`, `subcategory_id`, `name`, `slug`, `description`, `short_description`, `sku`, `barcode`, `selling_price`, `cost_price`, `markup_percentage`, `pricing_method`, `auto_update_price`, `stock_quantity`, `min_stock_level`, `image`, `is_hot_item`, `is_active`, `weight`, `dimensions`, `created_at`, `updated_at`, `brand`) VALUES
+(1, 3, NULL, 'Cotton T-Shirt', 'cotton-t-shirt', 'Comfortable cotton T-shirt.', 'Soft and breathable cotton T-shirt.', 'TSH-001', '1234567890123', 15.99, 8.00, 99.88, 'manual', 0, 50, 5, 'tshirt1.jpg', 1, 1, 0.20, '30x20x1 cm', '2025-06-22 06:00:00', '2025-06-26 06:40:32', ''),
+(2, 3, NULL, 'Denim Jacket', 'denim-jacket', 'Stylish denim jacket.', 'Classic blue denim jacket.', 'JKT-002', '1234567890124', 45.99, 30.00, 53.30, 'cost_plus', 0, 30, 5, 'denimjacket.jpg', 0, 1, 0.50, '40x30x2 cm', '2025-06-22 06:00:00', '2025-06-26 06:40:32', NULL),
+(3, 4, 6, 'Electric Scooter', 'electric-scooter', 'Eco-friendly electric scooter.', 'Fast and foldable scooter.', 'SCO-001', '1234567890125', 299.99, 200.00, 50.00, 'manual', 0, 20, 3, 'escooter.jpg', 1, 1, 10.00, '100x50x30 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(4, 4, 7, 'Toy Motorcycle', 'toy-motorcycle', 'Realistic toy motorcycle.', 'Battery-powered ride-on toy.', 'TOY-001', '1234567890126', 89.99, 50.00, 80.00, 'cost_plus', 0, 15, 2, 'toymotor.jpg', 0, 1, 2.00, '50x20x15 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(5, 5, 8, 'Smartphone XYZ', 'smartphone-xyz', 'Latest smartphone model.', 'High-performance smartphone.', 'PHN-001', '1234567890127', 699.99, 500.00, 40.00, 'market_based', 1, 25, 5, 'smartphone.jpg', 1, 1, 0.15, '15x7x0.8 cm', '2025-06-22 06:00:00', '2025-06-26 06:40:32', NULL),
+(6, 5, 8, 'Wireless Earbuds', 'wireless-earbuds', 'True wireless earbuds.', 'Crystal-clear audio earbuds.', 'EAR-001', '1234567890128', 79.99, 40.00, 99.98, 'manual', 0, 40, 5, 'earbuds.jpg', 0, 1, 0.05, '5x5x2 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(7, 6, NULL, 'Baby Stroller', 'baby-stroller', 'Lightweight baby stroller.', 'Foldable and durable stroller.', 'STR-001', '1234567890129', 129.99, 80.00, 62.49, 'cost_plus', 0, 10, 2, 'stroller.jpg', 1, 1, 5.00, '80x50x100 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(8, 6, NULL, 'Plush Teddy Bear', 'plush-teddy-bear', 'Soft plush teddy bear.', 'Cuddly toy for kids.', 'TOY-002', '1234567890130', 19.99, 10.00, 99.90, 'manual', 0, 60, 10, 'teddybear.jpg', 0, 1, 0.30, '20x15x10 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(9, 7, 12, 'Holstein Cow', 'holstein-cow', 'Healthy dairy cow.', 'High-yield milk cow.', 'COW-001', '1234567890131', 1500.00, 1200.00, 25.00, 'market_based', 0, 5, 1, 'holstein.jpg', 1, 1, 500.00, NULL, '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(10, 7, 12, 'Jersey Cow', 'jersey-cow', 'Premium jersey cow.', 'Efficient dairy cow.', 'COW-002', '1234567890132', 1400.00, 1100.00, 27.27, 'manual', 0, 3, 1, 'jersey.jpg', 0, 1, 450.00, NULL, '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(11, 3, NULL, 'Silk Saree', 'silk-saree', 'Elegant silk saree.', 'Traditional handwoven saree.', 'SAR-001', '1234567890133', 99.99, 60.00, 66.65, 'cost_plus', 0, 20, 3, 'saree.jpg', 1, 1, 0.40, '150x50x0.5 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(12, 4, 6, 'Car Cleaning Kit', 'car-cleaning-kit', 'Complete car cleaning kit.', 'All-in-one car care.', 'CLK-001', '1234567890134', 29.99, 15.00, 99.93, 'manual', 0, 35, 5, 'cleaningkit.jpg', 0, 1, 1.00, '30x20x10 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(13, 5, 8, 'LED TV 55\"', 'led-tv-55', '55-inch 4K LED TV.', 'Immersive viewing experience.', 'TV-001', '1234567890135', 499.99, 350.00, 42.85, 'market_based', 1, 15, 3, 'ledtv.jpg', 1, 1, 15.00, '120x80x10 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(14, 6, NULL, 'Wooden Puzzle', 'wooden-puzzle', 'Educational wooden puzzle.', 'Fun learning toy.', 'PUZ-001', '1234567890136', 14.99, 8.00, 87.38, 'cost_plus', 0, 50, 8, 'puzzle.jpg', 0, 1, 0.25, '20x20x1 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(15, 7, 12, 'Angus Bull', 'angus-bull', 'Strong Angus bull.', 'Premium beef cattle.', 'BUL-001', '1234567890137', 2000.00, 1600.00, 25.00, 'manual', 0, 2, 1, 'angus.jpg', 1, 1, 600.00, NULL, '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(16, 3, NULL, 'Leather Belt', 'leather-belt', 'Genuine leather belt.', 'Durable and stylish belt.', 'BLT-001', '1234567890138', 24.99, 12.00, 99.92, 'cost_plus', 0, 45, 5, 'belt.jpg', 0, 1, 0.10, '100x5x0.5 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(17, 4, 7, 'Remote Control Car', 'remote-control-car', 'Fast RC car.', 'Exciting remote control toy.', 'RCC-001', '1234567890139', 49.99, 25.00, 99.96, 'manual', 0, 25, 4, 'rccar.jpg', 1, 1, 1.50, '30x15x10 cm', '2025-06-22 06:00:00', '2025-06-26 06:51:03', NULL),
+(18, 5, 8, 'Laptop 15\"', 'laptop-15', 'High-performance 15-inch laptop.', 'Sleek and powerful laptop.', 'LAP-001', '1234567890140', 999.99, 700.00, 42.86, 'market_based', 1, 10, 2, 'laptop.jpg', 1, 1, 2.00, '35x25x2 cm', '2025-06-22 06:00:00', '2025-06-26 06:51:03', NULL),
+(19, 6, NULL, 'Diaper Bag', 'diaper-bag', 'Spacious diaper bag.', 'Multi-pocket baby bag.', 'BAG-001', '1234567890141', 39.99, 20.00, 99.95, 'cost_plus', 0, 30, 5, 'diaperbag.jpg', 0, 1, 0.80, '40x30x20 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(20, 7, 12, 'Goat', 'goat', 'Healthy dairy goat.', 'High-quality milk goat.', 'GOT-001', '1234567890142', 300.00, 200.00, 50.00, 'manual', 0, 8, 2, 'goat.jpg', 0, 1, 30.00, NULL, '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_pricing_history`
+--
+
+CREATE TABLE `product_pricing_history` (
+  `id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `old_selling_price` decimal(10,2) DEFAULT NULL,
+  `new_selling_price` decimal(10,2) NOT NULL,
+  `old_cost_price` decimal(10,2) DEFAULT NULL,
+  `new_cost_price` decimal(10,2) DEFAULT NULL,
+  `reason` enum('cost_change','manual_update','promotion','markup_change') NOT NULL,
+  `margin_percentage` decimal(5,2) DEFAULT NULL,
+  `changed_by` int(11) DEFAULT NULL,
+  `effective_date` timestamp NOT NULL DEFAULT current_timestamp(),
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `purchase_orders`
+--
+
+CREATE TABLE `purchase_orders` (
+  `id` int(11) NOT NULL,
+  `po_number` varchar(50) NOT NULL,
+  `supplier_name` varchar(200) DEFAULT NULL,
+  `supplier_contact` varchar(100) DEFAULT NULL,
+  `status` enum('pending','received','partial','cancelled') DEFAULT 'pending',
+  `total_amount` decimal(12,2) DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  `ordered_date` date DEFAULT NULL,
+  `received_date` date DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `purchase_order_items`
+--
+
+CREATE TABLE `purchase_order_items` (
+  `id` int(11) NOT NULL,
+  `purchase_order_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `quantity_ordered` int(11) NOT NULL,
+  `quantity_received` int(11) DEFAULT 0,
+  `cost_price` decimal(10,2) NOT NULL,
+  `total_cost` decimal(12,2) NOT NULL,
+  `expiry_date` date DEFAULT NULL,
+  `batch_number` varchar(100) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `report_cache`
+--
+
+CREATE TABLE `report_cache` (
+  `id` int(11) NOT NULL,
+  `report_type` varchar(50) NOT NULL,
+  `report_key` varchar(100) NOT NULL,
+  `data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`data`)),
+  `generated_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `expires_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `settings`
+--
+
+CREATE TABLE `settings` (
+  `id` int(11) NOT NULL,
+  `key_name` varchar(100) NOT NULL,
+  `value` text DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `settings`
+--
+
+INSERT INTO `settings` (`id`, `key_name`, `value`, `description`, `created_at`, `updated_at`) VALUES
+(1, 'store_name', 'My Store', 'Store name', '2025-05-25 06:24:17', '2025-05-25 06:24:17'),
+(2, 'currency', 'BDT', 'Default currency', '2025-05-25 06:24:17', '2025-05-25 06:24:17'),
+(3, 'tax_rate', '0.00', 'Default tax rate percentage', '2025-05-25 06:24:17', '2025-05-25 06:24:17'),
+(4, 'low_stock_threshold', '5', 'Default low stock threshold', '2025-05-25 06:24:17', '2025-05-25 06:24:17'),
+(5, 'bkash_merchant_number', '', 'bKash merchant number', '2025-05-25 06:24:17', '2025-05-25 06:24:17'),
+(6, 'nogod_merchant_id', '', 'Nogod merchant ID', '2025-05-25 06:24:17', '2025-05-25 06:24:17'),
+(7, 'inventory_method', 'FIFO', 'Inventory costing method: FIFO, LIFO, or WEIGHTED_AVERAGE', '2025-05-25 06:24:17', '2025-05-25 06:24:17'),
+(8, 'auto_price_update', '0', 'Automatically update selling prices when cost changes (0=No, 1=Yes)', '2025-05-25 06:24:17', '2025-05-25 06:24:17'),
+(9, 'default_markup_percentage', '20.00', 'Default markup percentage for cost-plus pricing', '2025-05-25 06:24:17', '2025-05-25 06:24:17'),
+(10, 'price_update_threshold', '5.00', 'Minimum cost change percentage to trigger price update', '2025-05-25 06:24:17', '2025-05-25 06:24:17');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `stock_batches`
+--
+
+CREATE TABLE `stock_batches` (
+  `id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `batch_number` varchar(100) DEFAULT NULL,
+  `purchase_order_item_id` int(11) DEFAULT NULL,
+  `cost_price` decimal(10,2) NOT NULL,
+  `quantity_available` int(11) NOT NULL,
+  `quantity_sold` int(11) DEFAULT 0,
+  `expiry_date` date DEFAULT NULL,
+  `received_date` date NOT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `stock_movements`
+--
+
+CREATE TABLE `stock_movements` (
+  `id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `batch_id` int(11) DEFAULT NULL,
+  `movement_type` enum('IN','OUT','ADJUSTMENT') NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `cost_price` decimal(10,2) DEFAULT NULL,
+  `total_cost` decimal(12,2) DEFAULT NULL,
+  `reference_type` enum('PURCHASE','SALE','ADJUSTMENT','RETURN','TRANSFER') NOT NULL,
+  `reference_id` int(11) DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `subcategories`
+--
+
+CREATE TABLE `subcategories` (
+  `id` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `slug` varchar(100) NOT NULL,
+  `description` text DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  `sort_order` int(11) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `subcategories`
+--
+
+INSERT INTO `subcategories` (`id`, `category_id`, `name`, `slug`, `description`, `image`, `is_active`, `sort_order`, `created_at`, `updated_at`) VALUES
+(6, 4, 'aaaa', 'aaaa', 'asfdsf sdf', '684cfbb868d76_1749875640.jpg', 1, 2, '2025-06-14 04:34:01', '2025-06-14 04:34:01'),
+(7, 4, 'toys bike', 'toys-bike', 'sadf sdf sdfd sdfs f d123', '684d01c760e0a_1749877191.jpg', 1, 1, '2025-06-14 04:58:30', '2025-06-14 04:59:51'),
+(8, 5, 'Mobile phone', 'mobile-phone', 'dsf dsf sdfds fds sdf ', '684d1f3cbe978_1749884732.jpg', 1, 8, '2025-06-14 06:50:04', '2025-06-14 07:05:33'),
+(12, 7, 'goru1', 'goru1', 'sadfdsafdsf', '684d1eb2bff59_1749884594.jpg', 1, 0, '2025-06-14 07:03:15', '2025-06-14 07:03:15'),
+(14, 9, 'Toxic', 'toxic', 'toxic', '685b7a0824538_1750825480.jpg', 1, 0, '2025-06-25 04:24:42', '2025-06-25 04:24:42');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `first_name` varchar(50) NOT NULL,
+  `last_name` varchar(50) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
+  `role` enum('admin','cashier','customer') DEFAULT 'customer',
+  `is_active` tinyint(1) DEFAULT 1,
+  `email_verified_at` timestamp NULL DEFAULT NULL,
+  `remember_token` varchar(100) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `phone`, `password`, `role`, `is_active`, `email_verified_at`, `remember_token`, `created_at`, `updated_at`) VALUES
+(2, 'abu', 'mamun', 'abu@gmail.com', '1234567891', '$2y$10$8ftv4lKvYyTwtTyVDy.yn.PvZEa2hgtSkkqi6z20p8.mDAbULmZz2', 'admin', 1, NULL, NULL, '2025-05-29 06:31:31', '2025-05-29 06:31:31'),
+(3, 'test', 'test', 'test@gmail.com', '1234234324532545', '$2y$10$DIeJxdW5gPryY1XKMWJXo.L9wBQs1ZczqJi0jGtQEzicDR21qxdzm', 'customer', 1, NULL, NULL, '2025-05-29 06:35:58', '2025-05-29 06:35:58'),
+(4, 'test2', 'test2', 'test2@gmail.com', '9834759485745', '$2y$10$j//ku.FH91gJYlE40WPD../7TMM0VQ/VdvhRqbmjx2I3or6Y4sUcC', 'customer', 1, NULL, NULL, '2025-05-29 06:38:33', '2025-05-29 06:38:33'),
+(5, 'Ishaq Ahmed', 'Shojib', 'ishaqhossain98@gmail.com', '01783629582', '$2y$10$08ERC8FLVEdmzQrClgxXau0MK0fopyqqNGuUUqk.38RzpKTGREndi', 'customer', 1, NULL, NULL, '2025-05-29 06:45:22', '2025-05-29 06:45:22'),
+(7, 'admin', 'admin', 'admin@gmail.com', NULL, '$2y$10$kyKkl7SXSsXE1IEzdbapGOS90AgPdzzIGzx/veB/lXOlZTz0gpUmC', 'admin', 1, NULL, NULL, '2025-06-04 04:59:25', '2025-06-04 04:59:35'),
+(8, 'Kuddus', 'MIa', 'kuddus@gmail.com', NULL, '$2y$10$BTYIxagqON67VAbUMPD9RuFekOwKiooBxAd5duu5m8FP0iqNscPHW', 'customer', 1, NULL, NULL, '2025-06-24 04:46:57', '2025-06-24 04:46:57');
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `daily_sales_summary`
+--
+DROP TABLE IF EXISTS `daily_sales_summary`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `daily_sales_summary`  AS SELECT cast(`orders`.`created_at` as date) AS `sale_date`, count(0) AS `total_orders`, sum(`orders`.`total_amount`) AS `total_sales`, avg(`orders`.`total_amount`) AS `average_order_value`, `orders`.`order_type` AS `order_type` FROM `orders` WHERE `orders`.`payment_status` = 'paid' GROUP BY cast(`orders`.`created_at` as date), `orders`.`order_type` ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `low_stock_products`
+--
+DROP TABLE IF EXISTS `low_stock_products`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `low_stock_products`  AS SELECT `p`.`id` AS `id`, `p`.`name` AS `name`, `p`.`sku` AS `sku`, `p`.`stock_quantity` AS `stock_quantity`, `p`.`min_stock_level` AS `min_stock_level`, `c`.`name` AS `category_name`, `sc`.`name` AS `subcategory_name` FROM ((`products` `p` left join `categories` `c` on(`p`.`category_id` = `c`.`id`)) left join `subcategories` `sc` on(`p`.`subcategory_id` = `sc`.`id`)) WHERE `p`.`stock_quantity` <= `p`.`min_stock_level` AND `p`.`is_active` = 1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `monthly_sales_summary`
+--
+DROP TABLE IF EXISTS `monthly_sales_summary`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `monthly_sales_summary`  AS SELECT year(`orders`.`created_at`) AS `sale_year`, month(`orders`.`created_at`) AS `sale_month`, count(0) AS `total_orders`, sum(`orders`.`total_amount`) AS `total_sales`, avg(`orders`.`total_amount`) AS `average_order_value`, `orders`.`order_type` AS `order_type` FROM `orders` WHERE `orders`.`payment_status` = 'paid' GROUP BY year(`orders`.`created_at`), month(`orders`.`created_at`), `orders`.`order_type` ;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `brands`
+--
+ALTER TABLE `brands`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `cart_items`
+--
+ALTER TABLE `cart_items`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_user_product` (`user_id`,`product_id`),
+  ADD KEY `product_id` (`product_id`);
+
+--
+-- Indexes for table `categories`
+--
+ALTER TABLE `categories`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `slug` (`slug`);
+
+--
+-- Indexes for table `coupons`
+--
+ALTER TABLE `coupons`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `code` (`code`),
+  ADD KEY `idx_code` (`code`),
+  ADD KEY `idx_validity` (`valid_from`,`valid_until`);
+
+--
+-- Indexes for table `coupon_usage`
+--
+ALTER TABLE `coupon_usage`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_coupon_order` (`coupon_id`,`order_id`),
+  ADD KEY `order_id` (`order_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `customer_addresses`
+--
+ALTER TABLE `customer_addresses`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `order_number` (`order_number`),
+  ADD KEY `coupon_id` (`coupon_id`),
+  ADD KEY `processed_by` (`processed_by`),
+  ADD KEY `idx_order_number` (`order_number`),
+  ADD KEY `idx_user_orders` (`user_id`),
+  ADD KEY `idx_order_date` (`created_at`),
+  ADD KEY `idx_order_type` (`order_type`),
+  ADD KEY `idx_payment_status` (`payment_status`),
+  ADD KEY `idx_orders_date_type` (`created_at`,`order_type`),
+  ADD KEY `idx_orders_payment` (`payment_method`,`payment_status`);
+
+--
+-- Indexes for table `order_items`
+--
+ALTER TABLE `order_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `product_id` (`product_id`),
+  ADD KEY `idx_order_items` (`order_id`);
+
+--
+-- Indexes for table `payment_transactions`
+--
+ALTER TABLE `payment_transactions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `order_id` (`order_id`),
+  ADD KEY `idx_transaction_id` (`transaction_id`),
+  ADD KEY `idx_payment_method` (`payment_method`);
+
+--
+-- Indexes for table `products`
+--
+ALTER TABLE `products`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `slug` (`slug`),
+  ADD UNIQUE KEY `sku` (`sku`),
+  ADD UNIQUE KEY `barcode` (`barcode`),
+  ADD KEY `idx_sku` (`sku`),
+  ADD KEY `idx_barcode` (`barcode`),
+  ADD KEY `idx_hot_items` (`is_hot_item`),
+  ADD KEY `idx_stock` (`stock_quantity`),
+  ADD KEY `idx_pricing` (`pricing_method`,`auto_update_price`),
+  ADD KEY `idx_products_category` (`category_id`,`is_active`),
+  ADD KEY `idx_products_subcategory` (`subcategory_id`,`is_active`),
+  ADD KEY `idx_stock_low` (`stock_quantity`,`min_stock_level`);
+
+--
+-- Indexes for table `product_pricing_history`
+--
+ALTER TABLE `product_pricing_history`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_product_pricing` (`product_id`,`effective_date`),
+  ADD KEY `idx_changed_by` (`changed_by`);
+
+--
+-- Indexes for table `purchase_orders`
+--
+ALTER TABLE `purchase_orders`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `po_number` (`po_number`),
+  ADD KEY `idx_po_number` (`po_number`),
+  ADD KEY `idx_created_by` (`created_by`);
+
+--
+-- Indexes for table `purchase_order_items`
+--
+ALTER TABLE `purchase_order_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `purchase_order_id` (`purchase_order_id`),
+  ADD KEY `product_id` (`product_id`);
+
+--
+-- Indexes for table `report_cache`
+--
+ALTER TABLE `report_cache`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_report` (`report_type`,`report_key`);
+
+--
+-- Indexes for table `settings`
+--
+ALTER TABLE `settings`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `key_name` (`key_name`);
+
+--
+-- Indexes for table `stock_batches`
+--
+ALTER TABLE `stock_batches`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `purchase_order_item_id` (`purchase_order_item_id`),
+  ADD KEY `idx_product_batch` (`product_id`,`is_active`),
+  ADD KEY `idx_fifo_order` (`product_id`,`received_date`,`id`);
+
+--
+-- Indexes for table `stock_movements`
+--
+ALTER TABLE `stock_movements`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_product_movement` (`product_id`,`created_at`),
+  ADD KEY `idx_batch_id` (`batch_id`),
+  ADD KEY `idx_created_by` (`created_by`);
+
+--
+-- Indexes for table `subcategories`
+--
+ALTER TABLE `subcategories`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `slug` (`slug`),
+  ADD KEY `category_id` (`category_id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`),
+  ADD KEY `idx_email` (`email`),
+  ADD KEY `idx_role` (`role`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `brands`
+--
+ALTER TABLE `brands`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `cart_items`
+--
+ALTER TABLE `cart_items`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `categories`
+--
+ALTER TABLE `categories`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `coupons`
+--
+ALTER TABLE `coupons`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `coupon_usage`
+--
+ALTER TABLE `coupon_usage`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `customer_addresses`
+--
+ALTER TABLE `customer_addresses`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `order_items`
+--
+ALTER TABLE `order_items`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `payment_transactions`
+--
+ALTER TABLE `payment_transactions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `products`
+--
+ALTER TABLE `products`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+
+--
+-- AUTO_INCREMENT for table `product_pricing_history`
+--
+ALTER TABLE `product_pricing_history`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `purchase_orders`
+--
+ALTER TABLE `purchase_orders`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `purchase_order_items`
+--
+ALTER TABLE `purchase_order_items`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `report_cache`
+--
+ALTER TABLE `report_cache`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `settings`
+--
+ALTER TABLE `settings`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `stock_batches`
+--
+ALTER TABLE `stock_batches`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `stock_movements`
+--
+ALTER TABLE `stock_movements`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `subcategories`
+--
+ALTER TABLE `subcategories`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `cart_items`
+--
+ALTER TABLE `cart_items`
+  ADD CONSTRAINT `cart_items_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `cart_items_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `coupon_usage`
+--
+ALTER TABLE `coupon_usage`
+  ADD CONSTRAINT `coupon_usage_ibfk_1` FOREIGN KEY (`coupon_id`) REFERENCES `coupons` (`id`),
+  ADD CONSTRAINT `coupon_usage_ibfk_2` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
+  ADD CONSTRAINT `coupon_usage_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `customer_addresses`
+--
+ALTER TABLE `customer_addresses`
+  ADD CONSTRAINT `customer_addresses_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `orders`
+--
+ALTER TABLE `orders`
+  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`coupon_id`) REFERENCES `coupons` (`id`),
+  ADD CONSTRAINT `orders_ibfk_3` FOREIGN KEY (`processed_by`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `order_items`
+--
+ALTER TABLE `order_items`
+  ADD CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `order_items_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
+
+--
+-- Constraints for table `payment_transactions`
+--
+ALTER TABLE `payment_transactions`
+  ADD CONSTRAINT `payment_transactions_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`);
+
+--
+-- Constraints for table `products`
+--
+ALTER TABLE `products`
+  ADD CONSTRAINT `products_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`),
+  ADD CONSTRAINT `products_ibfk_2` FOREIGN KEY (`subcategory_id`) REFERENCES `subcategories` (`id`);
+
+--
+-- Constraints for table `product_pricing_history`
+--
+ALTER TABLE `product_pricing_history`
+  ADD CONSTRAINT `product_pricing_history_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
+
+--
+-- Constraints for table `purchase_order_items`
+--
+ALTER TABLE `purchase_order_items`
+  ADD CONSTRAINT `purchase_order_items_ibfk_1` FOREIGN KEY (`purchase_order_id`) REFERENCES `purchase_orders` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `purchase_order_items_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
+
+--
+-- Constraints for table `stock_batches`
+--
+ALTER TABLE `stock_batches`
+  ADD CONSTRAINT `stock_batches_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`),
+  ADD CONSTRAINT `stock_batches_ibfk_2` FOREIGN KEY (`purchase_order_item_id`) REFERENCES `purchase_order_items` (`id`);
+
+--
+-- Constraints for table `stock_movements`
+--
+ALTER TABLE `stock_movements`
+  ADD CONSTRAINT `stock_movements_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
+
+--
+-- Constraints for table `subcategories`
+--
+ALTER TABLE `subcategories`
+  ADD CONSTRAINT `subcategories_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

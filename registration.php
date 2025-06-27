@@ -38,17 +38,17 @@ $data = [
 
 
 <!-- content start  -->
- <h1>Registration</h1>
- <!DOCTYPE html>
+ 
+ <!-- <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Registration Page</title>
+  <title></title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> -->
   <style>
     body {
-      background-color: #f8f9fa;
+      background-color:rgb(229, 238, 234);
     }
     .register-container {
       max-width: 800px;
@@ -63,7 +63,7 @@ $data = [
 <body>
 
 <div class="register-container">
-  <h2 class="text-center mb-4">Registration</h2>
+  <h2 class="text-align:center mb-4 ">Registration</h2>
 
   <form class="row g-3 needs-validation" novalidate method="post" action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>">
 

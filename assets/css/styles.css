@@ -29,14 +29,14 @@
         
         /* Top Bar - Prussian Blue (#003153) */
         .top-bar {
-            background-color: #003153;
+            background-color: #03925b;
             color: white;
             padding: 10px 5%;
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 10px;
         }
         
         .logo {
@@ -68,7 +68,7 @@
         .search-btn {
             padding: 8px 15px;
             border: none;
-            background-color: #d4db0ec4;
+            background-color: #d3edff;
             border-radius: 0 4px 4px 0;
             cursor: pointer;
         }
@@ -88,8 +88,9 @@
         
         /* Bottom Navigation - Azure Blue (#007FFF) */
         .bottom-nav {
-            background-color: #007FFF;
+            background-color: #03925b;
             color: white;
+            gap: 10px;
         }
         
         /* Category Sidebar Styles */
@@ -99,7 +100,7 @@
             left: -350px;
             width: 350px;
             height: 100vh;
-            background: white;
+            background: rgb(233, 253, 239);
             z-index: 1050;
             transition: left 0.3s ease;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
@@ -111,7 +112,7 @@
         }
 
         .sidebar-header {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            background: linear-gradient(135deg, #1ec757, #20752b);
             color: white;
             padding: 20px;
             display: flex;
@@ -155,15 +156,15 @@
             align-items: center;
             justify-content: space-between;
             padding: 15px 20px;
-            color: #1e293b;
+            color: #030303;
             transition: all 0.3s ease;
             font-weight: 500;
             background: white;
         }
 
         .category-link:hover {
-            background: #f8fafc;
-            color: #2563eb;
+            background: #5eac73;
+            color: #fafcfb;
             padding-left: 25px;
         }
 
@@ -171,7 +172,7 @@
             margin-right: 12px;
             width: 20px;
             text-align: center;
-            color: #2563eb;
+            color: #2c4932;
         }
 
         .subcategory-list {
@@ -196,7 +197,7 @@
 
         .subcategory-link:hover {
             background: white;
-            color: #2563eb;
+            color: #50ac67;
             padding-left: 55px;
         }
 
@@ -256,7 +257,7 @@
         }
         
         .nav-links a:hover {
-            text-decoration: underline;
+            text-decoration: none;
         }
         
         /* Nav Right - with 30px space from nav-left */

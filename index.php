@@ -11,8 +11,9 @@ $products = $db->get('products');
 // exit;
 ?>
 <?php require __DIR__ . '/components/header.php';?>
+<br>
 <!-- content start -->
-<h1 style="text-align:center; color:red;">Welcome to ShopEase</h1>
+<h1 style="text-align:center; font-weight:bold; color:red; ">Welcome to ShopEase</h1>
 <div><span style="font-family:sansherif">Our hot products</span></div>
 <div class="owl-carousel owl-theme">
     <div class="item"><h4><img src="assets/images/fruits/green-tea.jpg" alt="green-tea"></h4><span>Green Tea</span></div>

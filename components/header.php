@@ -16,6 +16,7 @@ if (session_status() === PHP_SESSION_NONE) {
 <link rel="stylesheet" href="<?= settings()['homepage'] ?>assets/css/styles.css">
 <link rel="stylesheet" href="<?= settings()['homepage'] ?>assets/css/footer.css">
 <link rel="stylesheet" href="<?= settings()['homepage'] ?>assets/assets/owl.carousel.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
 <body>
@@ -38,37 +39,38 @@ if (session_status() === PHP_SESSION_NONE) {
             </div>
             
             <div class="right-section">
-                <a href="#" class="app-download" title="Download App Now">
-                    <span class="app-icon">📱</span>
-                    <span>Download App Now</span>                   
-                </a>
-                
                 <select class="language-selector">
                     <option>বাংলা</option>
                     <option>English</option>
                 </select>
                 
+                <a href="#" class="app-download" title="Download App Now">
+                    <span class="app-icon">📱</span>
+                    <span >Download App Now</span>                   
+                </a>
+                
+                
                 <div class="auth-section">                    
-<?php
-if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == 'true') {
-    if ($_SESSION['role'] == 'admin') {
-        echo '<span><a title="Dashboard" href="admin/index.php">        
-        <span class="dashboard-icon">📊</span>
-        </a></span>';
-        //logout
-        echo '<span><a title="Logout" href="logout.php">      
-        <span class="logout-icon">🚪</span>
-        </a></span>';
+                <?php
+                    if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == 'true') {
+                 if ($_SESSION['role'] == 'admin') {
+                    echo '<span><a title="Dashboard" href="admin/index.php">        
+                        <span class="dashboard-icon">📊</span>
+                        </a></span>';
+                     //logout
+                    echo '<span><a title="Logout" href="logout.php">      
+                        <span class="logout-icon">🚪</span>
+                        </a></span>';
 
-    }
-    else {
-        echo '<span><a href="logout.php">Logout</a></span>';
-    }
-} else {
-    echo '<span><a href="login.php">Sign In</a> / <a href="registration.php">Sign up</a></span>';
-}
-?>
-</div>
+                        }
+                    else {
+                    echo '<span><a class="btn btn-light" href="logout.php">Logout</a></span>';
+                        }
+                    } else {
+                    echo '<span><a class="btn btn-light" href="login.php">Sign In</a>  <a class="btn btn-light" href="registration.php">Sign up</a></span>';
+                    }
+                ?>
+                </div>
             </div>
         </div>
         
@@ -82,11 +84,11 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == 'true') {
                     </div>
                     
                     <div class="nav-links">
-                        <!-- <a href="index.html">Home</a> -->
-                        <!-- <a href="hot-deals.html">Hot Deals</a> -->
-                        <a href="hot-deals.php">Hot Deals</a>
-                        
-                        <a href="brands.php">Brands</a>
+                        <ul>
+                            <li class="btn btn-outline-light"><a href="hot-deals.php">Hot Deals</a></li>
+                            <li class="btn btn-outline-light"><a href="brands.php">Brands</a></li>
+                        </ul>
+    
                     </div>
                 </div>
                 <div class="nav-right">
@@ -97,7 +99,10 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == 'true') {
                         <span class="icon">🛒</span>
                         (<span id="cartCount">0</span>)
                     </a>
-                    
+                    <button class="nav-right-item btn btn-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
+                        🛒 (<span id="cartCountButton">0</span>)
+                    </button>
+
                 </div>
             </div>
         </div>
@@ -189,6 +194,18 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == 'true') {
             </li>
         </ul>
     </div>
+    <!-- Off canves for cart -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart" aria-labelledby="offcanvasCartLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasCartLabel">Your Cart</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body" id="cartContent">
+    <!-- You can load cart content dynamically here using PHP or JS -->
+    <?php include 'cart-preview.php'; // create this file for cart content preview ?>
+  </div>
+</div>
+
     <!-- Main Content -->
     <div class="main-content">
         <?php require __DIR__ . '/dismissalert.php';?>
