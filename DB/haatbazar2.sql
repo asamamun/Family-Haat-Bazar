@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 26, 2025 at 09:18 AM
+-- Generation Time: Jun 24, 2025 at 07:56 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -357,8 +357,7 @@ INSERT INTO `categories` (`id`, `name`, `slug`, `description`, `image`, `is_acti
 (5, 'Electronics', 'electroniocs', 'd fasdfsd sdfds fdsf df', '683fe16c12acf_1749016940.jpg', 1, 0, '2025-06-04 06:02:20', '2025-06-04 06:02:20'),
 (6, 'kids', 'kids item', 'sdf sdf sdf d f', '683fe25a77b34_1749017178.jpg', 1, 0, '2025-06-04 06:06:18', '2025-06-04 06:06:18'),
 (7, 'Cattle', 'cattle', 'asdfdsf', '684d1e18a671f_1749884440.png', 1, 0, '2025-06-14 07:00:40', '2025-06-14 07:00:40'),
-(8, 'sdfgdfsgdfg', 'gfdgsdfgsfd', 'gdfsgvsdfgfdg', '684d256a6fc3a_1749886314.jpg', 1, 0, '2025-06-14 07:31:54', '2025-06-14 07:31:54'),
-(9, 'Jhuma', 'jhuma', 'jhuma', '685b79dab87fe_1750825434.jpg', 1, 0, '2025-06-25 04:23:54', '2025-06-25 04:23:54');
+(8, 'sdfgdfsgdfg', 'gfdgsdfgsfd', 'gdfsgvsdfgfdg', '684d256a6fc3a_1749886314.jpg', 1, 0, '2025-06-14 07:31:54', '2025-06-14 07:31:54');
 
 -- --------------------------------------------------------
 
@@ -518,16 +517,6 @@ CREATE TABLE `orders` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `orders`
---
-
-INSERT INTO `orders` (`id`, `order_number`, `user_id`, `order_type`, `status`, `payment_status`, `payment_method`, `transaction_id`, `subtotal`, `discount_amount`, `coupon_id`, `tax_amount`, `shipping_amount`, `total_amount`, `currency`, `notes`, `billing_first_name`, `billing_last_name`, `billing_company`, `billing_address_line_1`, `billing_address_line_2`, `billing_city`, `billing_state`, `billing_postal_code`, `billing_country`, `billing_phone`, `shipping_first_name`, `shipping_last_name`, `shipping_company`, `shipping_address_line_1`, `shipping_address_line_2`, `shipping_city`, `shipping_state`, `shipping_postal_code`, `shipping_country`, `shipping_phone`, `processed_by`, `processed_at`, `created_at`, `updated_at`) VALUES
-(1, 'ORD-1750919793-6815', NULL, 'online', 'pending', 'pending', 'cash', NULL, 715.98, 0.00, NULL, 53.70, 0.00, 769.68, 'BDT', 'vbngf', 'fgh', 'vbnf', 'nfgng', 'nfgn', 'ggf', 'vbn', 'fgn', 'vbn', 'fgnvb', 'n', 'fgh', 'vbnf', 'nfgng', 'nfgn', 'ggf', 'vbn', 'fgn', 'vbn', 'fgnvb', 'n', NULL, NULL, '2025-06-26 02:36:33', '2025-06-26 02:36:33'),
-(2, 'ORD-1750920032-8019', NULL, 'online', 'pending', 'pending', 'cash', NULL, 761.97, 0.00, NULL, 114.30, 0.00, 876.27, 'BDT', 'lets see!', 'kuddus', 'boyati', 'xyz co', 'mirpur', 'dhaka', 'dhaka', 'Bangladesh', '1204', 'Bangladesh', '123456', 'kuddus', 'boyati', 'xyz co', 'mirpur', 'dhaka', 'dhaka', 'Bangladesh', '1204', 'Bangladesh', '123456', NULL, NULL, '2025-06-26 02:40:32', '2025-06-26 02:40:32'),
-(3, 'ORD-1750920651-5496', NULL, 'online', 'pending', 'pending', 'cash', NULL, 2049.97, 0.00, NULL, 153.75, 0.00, 2203.72, 'BDT', 'Product chira-fata dile khobor ache', 'Imteaz', 'khan', 'taz co.ltd.', 'East Kazipara', 'Kazipara', 'Mirpur', 'Dhaka', '1216', 'Bangladesh', '01877226699', 'Imteaz', 'khan', 'taz co.ltd.', 'East Kazipara', 'Kazipara', 'Mirpur', 'Dhaka', '1216', 'Bangladesh', '01877226699', NULL, NULL, '2025-06-26 02:50:51', '2025-06-26 02:50:51'),
-(4, 'ORD-1750920663-2648', NULL, 'online', 'pending', 'pending', 'cash', NULL, 2049.97, 0.00, NULL, 153.75, 0.00, 2203.72, 'BDT', 'Product chira-fata dile khobor ache', 'Imteaz', 'khan', 'taz co.ltd.', 'East Kazipara', 'Kazipara', 'Mirpur', 'Dhaka', '1216', 'Bangladesh', '01877226699', 'Imteaz', 'khan', 'taz co.ltd.', 'East Kazipara', 'Kazipara', 'Mirpur', 'Dhaka', '1216', 'Bangladesh', '01877226699', NULL, NULL, '2025-06-26 02:51:03', '2025-06-26 02:51:03');
-
 -- --------------------------------------------------------
 
 --
@@ -546,21 +535,6 @@ CREATE TABLE `order_items` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `order_items`
---
-
-INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `product_name`, `product_sku`, `quantity`, `unit_price`, `total_price`, `created_at`) VALUES
-(1, 1, 5, 'Smartphone XYZ', 'PHN-001', 1, 699.99, 699.99, '2025-06-26 02:36:33'),
-(2, 1, 1, 'Cotton T-Shirt', 'TSH-001', 1, 15.99, 15.99, '2025-06-26 02:36:33'),
-(3, 2, 5, 'Smartphone XYZ', 'PHN-001', 1, 699.99, 699.99, '2025-06-26 02:40:32'),
-(4, 2, 1, 'Cotton T-Shirt', 'TSH-001', 1, 15.99, 15.99, '2025-06-26 02:40:32'),
-(5, 2, 2, 'Denim Jacket', 'JKT-002', 1, 45.99, 45.99, '2025-06-26 02:40:32'),
-(6, 3, 18, 'Laptop 15\"', 'LAP-001', 2, 999.99, 1999.98, '2025-06-26 02:50:51'),
-(7, 3, 17, 'Remote Control Car', 'RCC-001', 1, 49.99, 49.99, '2025-06-26 02:50:51'),
-(8, 4, 18, 'Laptop 15\"', 'LAP-001', 2, 999.99, 1999.98, '2025-06-26 02:51:03'),
-(9, 4, 17, 'Remote Control Car', 'RCC-001', 1, 49.99, 49.99, '2025-06-26 02:51:03');
-
 -- --------------------------------------------------------
 
 --
@@ -578,16 +552,6 @@ CREATE TABLE `payment_transactions` (
   `processed_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `payment_transactions`
---
-
-INSERT INTO `payment_transactions` (`id`, `order_id`, `transaction_id`, `payment_method`, `amount`, `status`, `gateway_response`, `processed_at`, `created_at`) VALUES
-(1, 1, 'ORD-1750919793-6815', 'cash', 769.68, 'pending', NULL, NULL, '2025-06-26 02:36:33'),
-(2, 2, 'ORD-1750920032-8019', 'cash', 876.27, 'pending', NULL, NULL, '2025-06-26 02:40:32'),
-(3, 3, 'ORD-1750920651-5496', 'cash', 2203.72, 'pending', NULL, NULL, '2025-06-26 02:50:51'),
-(4, 4, 'ORD-1750920663-2648', 'cash', 2203.72, 'pending', NULL, NULL, '2025-06-26 02:51:03');
 
 -- --------------------------------------------------------
 
@@ -627,11 +591,11 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `category_id`, `subcategory_id`, `name`, `slug`, `description`, `short_description`, `sku`, `barcode`, `selling_price`, `cost_price`, `markup_percentage`, `pricing_method`, `auto_update_price`, `stock_quantity`, `min_stock_level`, `image`, `is_hot_item`, `is_active`, `weight`, `dimensions`, `created_at`, `updated_at`, `brand`) VALUES
-(1, 3, NULL, 'Cotton T-Shirt', 'cotton-t-shirt', 'Comfortable cotton T-shirt.', 'Soft and breathable cotton T-shirt.', 'TSH-001', '1234567890123', 15.99, 8.00, 99.88, 'manual', 0, 50, 5, 'tshirt1.jpg', 1, 1, 0.20, '30x20x1 cm', '2025-06-22 06:00:00', '2025-06-26 06:40:32', ''),
-(2, 3, NULL, 'Denim Jacket', 'denim-jacket', 'Stylish denim jacket.', 'Classic blue denim jacket.', 'JKT-002', '1234567890124', 45.99, 30.00, 53.30, 'cost_plus', 0, 30, 5, 'denimjacket.jpg', 0, 1, 0.50, '40x30x2 cm', '2025-06-22 06:00:00', '2025-06-26 06:40:32', NULL),
+(1, 3, NULL, 'Cotton T-Shirt', 'cotton-t-shirt', 'Comfortable cotton T-shirt.', 'Soft and breathable cotton T-shirt.', 'TSH-001', '1234567890123', 15.99, 8.00, 99.88, 'manual', 0, 50, 5, 'tshirt1.jpg', 1, 1, 0.20, '30x20x1 cm', '2025-06-22 06:00:00', '2025-06-24 04:56:18', ''),
+(2, 3, NULL, 'Denim Jacket', 'denim-jacket', 'Stylish denim jacket.', 'Classic blue denim jacket.', 'JKT-002', '1234567890124', 45.99, 30.00, 53.30, 'cost_plus', 0, 30, 5, 'denimjacket.jpg', 0, 1, 0.50, '40x30x2 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
 (3, 4, 6, 'Electric Scooter', 'electric-scooter', 'Eco-friendly electric scooter.', 'Fast and foldable scooter.', 'SCO-001', '1234567890125', 299.99, 200.00, 50.00, 'manual', 0, 20, 3, 'escooter.jpg', 1, 1, 10.00, '100x50x30 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
 (4, 4, 7, 'Toy Motorcycle', 'toy-motorcycle', 'Realistic toy motorcycle.', 'Battery-powered ride-on toy.', 'TOY-001', '1234567890126', 89.99, 50.00, 80.00, 'cost_plus', 0, 15, 2, 'toymotor.jpg', 0, 1, 2.00, '50x20x15 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
-(5, 5, 8, 'Smartphone XYZ', 'smartphone-xyz', 'Latest smartphone model.', 'High-performance smartphone.', 'PHN-001', '1234567890127', 699.99, 500.00, 40.00, 'market_based', 1, 25, 5, 'smartphone.jpg', 1, 1, 0.15, '15x7x0.8 cm', '2025-06-22 06:00:00', '2025-06-26 06:40:32', NULL),
+(5, 5, 8, 'Smartphone XYZ', 'smartphone-xyz', 'Latest smartphone model.', 'High-performance smartphone.', 'PHN-001', '1234567890127', 699.99, 500.00, 40.00, 'market_based', 1, 25, 5, 'smartphone.jpg', 1, 1, 0.15, '15x7x0.8 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
 (6, 5, 8, 'Wireless Earbuds', 'wireless-earbuds', 'True wireless earbuds.', 'Crystal-clear audio earbuds.', 'EAR-001', '1234567890128', 79.99, 40.00, 99.98, 'manual', 0, 40, 5, 'earbuds.jpg', 0, 1, 0.05, '5x5x2 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
 (7, 6, NULL, 'Baby Stroller', 'baby-stroller', 'Lightweight baby stroller.', 'Foldable and durable stroller.', 'STR-001', '1234567890129', 129.99, 80.00, 62.49, 'cost_plus', 0, 10, 2, 'stroller.jpg', 1, 1, 5.00, '80x50x100 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
 (8, 6, NULL, 'Plush Teddy Bear', 'plush-teddy-bear', 'Soft plush teddy bear.', 'Cuddly toy for kids.', 'TOY-002', '1234567890130', 19.99, 10.00, 99.90, 'manual', 0, 60, 10, 'teddybear.jpg', 0, 1, 0.30, '20x15x10 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
@@ -643,8 +607,8 @@ INSERT INTO `products` (`id`, `category_id`, `subcategory_id`, `name`, `slug`, `
 (14, 6, NULL, 'Wooden Puzzle', 'wooden-puzzle', 'Educational wooden puzzle.', 'Fun learning toy.', 'PUZ-001', '1234567890136', 14.99, 8.00, 87.38, 'cost_plus', 0, 50, 8, 'puzzle.jpg', 0, 1, 0.25, '20x20x1 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
 (15, 7, 12, 'Angus Bull', 'angus-bull', 'Strong Angus bull.', 'Premium beef cattle.', 'BUL-001', '1234567890137', 2000.00, 1600.00, 25.00, 'manual', 0, 2, 1, 'angus.jpg', 1, 1, 600.00, NULL, '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
 (16, 3, NULL, 'Leather Belt', 'leather-belt', 'Genuine leather belt.', 'Durable and stylish belt.', 'BLT-001', '1234567890138', 24.99, 12.00, 99.92, 'cost_plus', 0, 45, 5, 'belt.jpg', 0, 1, 0.10, '100x5x0.5 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
-(17, 4, 7, 'Remote Control Car', 'remote-control-car', 'Fast RC car.', 'Exciting remote control toy.', 'RCC-001', '1234567890139', 49.99, 25.00, 99.96, 'manual', 0, 25, 4, 'rccar.jpg', 1, 1, 1.50, '30x15x10 cm', '2025-06-22 06:00:00', '2025-06-26 06:51:03', NULL),
-(18, 5, 8, 'Laptop 15\"', 'laptop-15', 'High-performance 15-inch laptop.', 'Sleek and powerful laptop.', 'LAP-001', '1234567890140', 999.99, 700.00, 42.86, 'market_based', 1, 10, 2, 'laptop.jpg', 1, 1, 2.00, '35x25x2 cm', '2025-06-22 06:00:00', '2025-06-26 06:51:03', NULL),
+(17, 4, 7, 'Remote Control Car', 'remote-control-car', 'Fast RC car.', 'Exciting remote control toy.', 'RCC-001', '1234567890139', 49.99, 25.00, 99.96, 'manual', 0, 25, 4, 'rccar.jpg', 1, 1, 1.50, '30x15x10 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
+(18, 5, 8, 'Laptop 15\"', 'laptop-15', 'High-performance 15-inch laptop.', 'Sleek and powerful laptop.', 'LAP-001', '1234567890140', 999.99, 700.00, 42.86, 'market_based', 1, 10, 2, 'laptop.jpg', 1, 1, 2.00, '35x25x2 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
 (19, 6, NULL, 'Diaper Bag', 'diaper-bag', 'Spacious diaper bag.', 'Multi-pocket baby bag.', 'BAG-001', '1234567890141', 39.99, 20.00, 99.95, 'cost_plus', 0, 30, 5, 'diaperbag.jpg', 0, 1, 0.80, '40x30x20 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
 (20, 7, 12, 'Goat', 'goat', 'Healthy dairy goat.', 'High-quality milk goat.', 'GOT-001', '1234567890142', 300.00, 200.00, 50.00, 'manual', 0, 8, 2, 'goat.jpg', 0, 1, 30.00, NULL, '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL);
 
@@ -823,8 +787,7 @@ INSERT INTO `subcategories` (`id`, `category_id`, `name`, `slug`, `description`,
 (6, 4, 'aaaa', 'aaaa', 'asfdsf sdf', '684cfbb868d76_1749875640.jpg', 1, 2, '2025-06-14 04:34:01', '2025-06-14 04:34:01'),
 (7, 4, 'toys bike', 'toys-bike', 'sadf sdf sdfd sdfs f d123', '684d01c760e0a_1749877191.jpg', 1, 1, '2025-06-14 04:58:30', '2025-06-14 04:59:51'),
 (8, 5, 'Mobile phone', 'mobile-phone', 'dsf dsf sdfds fds sdf ', '684d1f3cbe978_1749884732.jpg', 1, 8, '2025-06-14 06:50:04', '2025-06-14 07:05:33'),
-(12, 7, 'goru1', 'goru1', 'sadfdsafdsf', '684d1eb2bff59_1749884594.jpg', 1, 0, '2025-06-14 07:03:15', '2025-06-14 07:03:15'),
-(14, 9, 'Toxic', 'toxic', 'toxic', '685b7a0824538_1750825480.jpg', 1, 0, '2025-06-25 04:24:42', '2025-06-25 04:24:42');
+(12, 7, 'goru1', 'goru1', 'sadfdsafdsf', '684d1eb2bff59_1749884594.jpg', 1, 0, '2025-06-14 07:03:15', '2025-06-14 07:03:15');
 
 -- --------------------------------------------------------
 
@@ -1080,7 +1043,7 @@ ALTER TABLE `cart_items`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `coupons`
@@ -1104,19 +1067,19 @@ ALTER TABLE `customer_addresses`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `payment_transactions`
 --
 ALTER TABLE `payment_transactions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -1170,7 +1133,7 @@ ALTER TABLE `stock_movements`
 -- AUTO_INCREMENT for table `subcategories`
 --
 ALTER TABLE `subcategories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `users`

@@ -27,12 +27,14 @@ if (session_status() === PHP_SESSION_NONE) {
             <div class="logo-section">
                 <div class="logo"><a href="index.php">ShopEase</a></div>
             </div>
-            
+
+            <!-- delivery location -->
             <div class="delivery-location">
                 <span class="delivery-icon">🚚</span>
                 <span>Select your delivery location</span>
             </div>
             
+            <!-- search -->
             <div class="search-container">
                 <input type="text" class="search-bar" placeholder="Search your products">
                 <button class="search-btn">🔍</button>
@@ -49,17 +51,18 @@ if (session_status() === PHP_SESSION_NONE) {
                     <span >Download App Now</span>                   
                 </a>
                 
-                
+                <!-- Login logout registration -->
+
                 <div class="auth-section">                    
                 <?php
                     if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == 'true') {
                  if ($_SESSION['role'] == 'admin') {
                     echo '<span><a title="Dashboard" href="admin/index.php">        
-                        <span class="dashboard-icon">📊</span>
+                        <span class="dashboard-icon btn btn-light">📊</span>
                         </a></span>';
                      //logout
                     echo '<span><a title="Logout" href="logout.php">      
-                        <span class="logout-icon">🚪</span>
+                        <span class="logout-icon btn btn-light">🚪</span>
                         </a></span>';
 
                         }
@@ -94,15 +97,17 @@ if (session_status() === PHP_SESSION_NONE) {
                 <div class="nav-right">
                     <marquee>Free Shipping on Orders Over ৳1000!</marquee>
                 </div>
+                
+                <!-- Cart Icon -->
                 <div class="nav-right">
                     <a href="cart.php" class="nav-right-item">
-                        <span class="icon">🛒</span>
-                        (<span id="cartCount">0</span>)
-                    </a>
-                    <button class="nav-right-item btn btn-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
-                        🛒 (<span id="cartCountButton">0</span>)
-                    </button>
 
+                    </a>
+                    <button class= "icon nav-right-item btn btn-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">🛒</button>
+                        (<span id="cartCountButton">0</span>)
+                    <!-- <button class="nav-right-item btn btn-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
+                        🛒 (<span id="cartCountButton">0</span>)
+                    </button> -->
                 </div>
             </div>
         </div>
