@@ -83,7 +83,7 @@ $(document).ready(function() {
     let cart = new Cart();
     function updateCartDisplay() {
         let allitems = cart.getSummary();
-        $("#cartCount").text(cart.getTotalItems());
+        $("#cartCountButton").text(cart.getTotalItems());
         $("#grandTotal").text(parseFloat(cart.getTotalPrice()).toFixed(2));
         populateItems(allitems.items, "#cartTable");
         populateItems(allitems.items, "#cartContent table tbody");

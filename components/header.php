@@ -100,11 +100,11 @@ if (session_status() === PHP_SESSION_NONE) {
                 
                 <!-- Cart Icon -->
                 <div class="nav-right">
-                    <a href="cart.php" class="nav-right-item">
+                    
 
-                    </a>
+                    
                     <button class= "icon nav-right-item btn btn-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">🛒</button>
-                        (<span id="cartCountButton">0</span>)
+                        <a href="cart.php" class="nav-right-item">(<span id="cartCountButton">0</span>)</a>
                     <!-- <button class="nav-right-item btn btn-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
                         🛒 (<span id="cartCountButton">0</span>)
                     </button> -->
@@ -207,6 +207,28 @@ if (session_status() === PHP_SESSION_NONE) {
   </div>
   <div class="offcanvas-body" id="cartContent">
     <!-- You can load cart content dynamically here using PHP or JS -->
+     <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Item</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Price</th>
+                <th scope="col">Total</th>
+                <th scope="col">Action</th>               
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-end fw-bold">Grand Total</td>
+                <td id="grandTotalCanvas" class="fw-bold">0.00</td>
+                <td></td>
+            </tr>
+        </tfoot>
+     </table>
+
     <?php include 'cart-preview.php'; // create this file for cart content preview ?>
   </div>
 </div>

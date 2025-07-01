@@ -112,12 +112,12 @@ try {
         }
 
         // Update stock using stored procedure
-        $db->rawQuery('CALL ProcessStockSale(?, ?, ?, ?)', [
+/*         $db->rawQuery('CALL ProcessStockSale(?, ?, ?, ?)', [
             (int)$item['id'],
             (int)$item['quantity'],
             $order_id,
             isset($_SESSION['user_id']) ? (int)$_SESSION['user_id'] : null
-        ]);
+        ]); */
     }
 
     // Insert payment transaction

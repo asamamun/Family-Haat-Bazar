@@ -145,3 +145,26 @@
     }
 })
     </script>
+    <script>
+        let cart = new Cart();
+        $(document).ready(function () {
+            // show the cart items in #cartContent
+            let allitems = cart.getSummary();
+            showCartItemsOffCanvas(allitems.items);
+        });
+        function showCartItemsOffCanvas(items) {
+            let cartItems = '';
+            items.forEach(item => {
+                cartItems += `
+                    <tr>
+                        <td>${item.name}</td>
+                        <td>${item.quantity}</td>
+                        <td>${item.price}</td>
+                        <td>${item.quantity * item.price}</td>
+                        <td><a href="#" class="remove-item" data-id="${item.id}"><i class="fas fa-times"></i></a></td>
+                    </tr>
+                `;
+            });
+            $('#cartContent table tbody').html(cartItems);
+        }
+    </script>

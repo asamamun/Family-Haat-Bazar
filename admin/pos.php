@@ -425,7 +425,17 @@ document.getElementById('completeSale').addEventListener('click', function() {
         data: data,
         success: function(response) {
             console.log(response);
-            alert('Sale completed successfully!');
+            if(response.success){
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: response.message + ",, Order # " + response.order_number,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                
+            }
+            // alert('Sale completed successfully!');
             cart = [];
             updateCart();
             bootstrap.Modal.getInstance(document.getElementById('paymentModal')).hide();

@@ -394,6 +394,9 @@ $(document).ready(function() {
             method: "POST",
             data: data,
             success: function(response) {
+                // response = JSON.parse(response);
+                console.log(response);
+
                 if (response.success) {
                     Swal.fire({
                         position: "top-end",
@@ -402,7 +405,11 @@ $(document).ready(function() {
                         showConfirmButton: false,
                         timer: 1500
                     }).then(() => {
-                        window.location.href = "order_confirmation.php"; // Redirect to a confirmation page
+                        // window.location.href = "order_confirmation.php"; // Redirect to a confirmation page
+                        //clear cart and load index
+                        cart.clearCart();
+                        // updateCartDisplay();
+                        window.location.href = "index.php";
                     });
                 } else {
                     Swal.fire({

@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 26, 2025 at 09:18 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Generation Time: Jul 01, 2025 at 01:39 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -358,7 +358,7 @@ INSERT INTO `categories` (`id`, `name`, `slug`, `description`, `image`, `is_acti
 (6, 'kids', 'kids item', 'sdf sdf sdf d f', '683fe25a77b34_1749017178.jpg', 1, 0, '2025-06-04 06:06:18', '2025-06-04 06:06:18'),
 (7, 'Cattle', 'cattle', 'asdfdsf', '684d1e18a671f_1749884440.png', 1, 0, '2025-06-14 07:00:40', '2025-06-14 07:00:40'),
 (8, 'sdfgdfsgdfg', 'gfdgsdfgsfd', 'gdfsgvsdfgfdg', '684d256a6fc3a_1749886314.jpg', 1, 0, '2025-06-14 07:31:54', '2025-06-14 07:31:54'),
-(9, 'Jhuma', 'jhuma', 'jhuma', '685b79dab87fe_1750825434.jpg', 1, 0, '2025-06-25 04:23:54', '2025-06-25 04:23:54');
+(9, 'panio', 'panio', 'fd sdfsdfsadfsdf sdfsda f', '685a490fdccb8_1750747407.webp', 1, 0, '2025-06-24 06:43:27', '2025-06-24 06:43:27');
 
 -- --------------------------------------------------------
 
@@ -477,7 +477,7 @@ CREATE TABLE `monthly_sales_summary` (
 
 CREATE TABLE `orders` (
   `id` int(11) NOT NULL,
-  `order_number` varchar(50) NOT NULL,
+  `order_number` varchar(30) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
   `order_type` enum('online','pos') NOT NULL,
   `status` enum('pending','processing','shipped','delivered','cancelled','refunded') DEFAULT 'pending',
@@ -523,10 +523,17 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `order_number`, `user_id`, `order_type`, `status`, `payment_status`, `payment_method`, `transaction_id`, `subtotal`, `discount_amount`, `coupon_id`, `tax_amount`, `shipping_amount`, `total_amount`, `currency`, `notes`, `billing_first_name`, `billing_last_name`, `billing_company`, `billing_address_line_1`, `billing_address_line_2`, `billing_city`, `billing_state`, `billing_postal_code`, `billing_country`, `billing_phone`, `shipping_first_name`, `shipping_last_name`, `shipping_company`, `shipping_address_line_1`, `shipping_address_line_2`, `shipping_city`, `shipping_state`, `shipping_postal_code`, `shipping_country`, `shipping_phone`, `processed_by`, `processed_at`, `created_at`, `updated_at`) VALUES
-(1, 'ORD-1750919793-6815', NULL, 'online', 'pending', 'pending', 'cash', NULL, 715.98, 0.00, NULL, 53.70, 0.00, 769.68, 'BDT', 'vbngf', 'fgh', 'vbnf', 'nfgng', 'nfgn', 'ggf', 'vbn', 'fgn', 'vbn', 'fgnvb', 'n', 'fgh', 'vbnf', 'nfgng', 'nfgn', 'ggf', 'vbn', 'fgn', 'vbn', 'fgnvb', 'n', NULL, NULL, '2025-06-26 02:36:33', '2025-06-26 02:36:33'),
-(2, 'ORD-1750920032-8019', NULL, 'online', 'pending', 'pending', 'cash', NULL, 761.97, 0.00, NULL, 114.30, 0.00, 876.27, 'BDT', 'lets see!', 'kuddus', 'boyati', 'xyz co', 'mirpur', 'dhaka', 'dhaka', 'Bangladesh', '1204', 'Bangladesh', '123456', 'kuddus', 'boyati', 'xyz co', 'mirpur', 'dhaka', 'dhaka', 'Bangladesh', '1204', 'Bangladesh', '123456', NULL, NULL, '2025-06-26 02:40:32', '2025-06-26 02:40:32'),
-(3, 'ORD-1750920651-5496', NULL, 'online', 'pending', 'pending', 'cash', NULL, 2049.97, 0.00, NULL, 153.75, 0.00, 2203.72, 'BDT', 'Product chira-fata dile khobor ache', 'Imteaz', 'khan', 'taz co.ltd.', 'East Kazipara', 'Kazipara', 'Mirpur', 'Dhaka', '1216', 'Bangladesh', '01877226699', 'Imteaz', 'khan', 'taz co.ltd.', 'East Kazipara', 'Kazipara', 'Mirpur', 'Dhaka', '1216', 'Bangladesh', '01877226699', NULL, NULL, '2025-06-26 02:50:51', '2025-06-26 02:50:51'),
-(4, 'ORD-1750920663-2648', NULL, 'online', 'pending', 'pending', 'cash', NULL, 2049.97, 0.00, NULL, 153.75, 0.00, 2203.72, 'BDT', 'Product chira-fata dile khobor ache', 'Imteaz', 'khan', 'taz co.ltd.', 'East Kazipara', 'Kazipara', 'Mirpur', 'Dhaka', '1216', 'Bangladesh', '01877226699', 'Imteaz', 'khan', 'taz co.ltd.', 'East Kazipara', 'Kazipara', 'Mirpur', 'Dhaka', '1216', 'Bangladesh', '01877226699', NULL, NULL, '2025-06-26 02:51:03', '2025-06-26 02:51:03');
+(1, 'ORD-1751351897-7559', NULL, 'online', 'pending', 'pending', 'bkash', '123123123', 361.97, 0.07, NULL, 18.10, 0.00, 380.00, 'BDT', 'test', 'A', 'B', 'C', 'D', 'E', 'F', 'G', '1216', 'H', '123123123', 'A', 'B', 'C', 'D', 'E', 'F', 'G', '1216', 'H', '123123123', NULL, NULL, '2025-07-01 06:38:17', '2025-07-01 06:38:17'),
+(2, 'ORD-1751352003-3662', NULL, 'online', 'pending', 'pending', 'bkash', '123123123', 361.97, 0.07, NULL, 18.10, 0.00, 380.00, 'BDT', 'test', 'A', 'B', 'C', 'D', 'E', 'F', 'G', '1216', 'H', '123123123', 'A', 'B', 'C', 'D', 'E', 'F', 'G', '1216', 'H', '123123123', NULL, NULL, '2025-07-01 06:40:03', '2025-07-01 06:40:03'),
+(3, 'ORD-1751352032-6555', NULL, 'online', 'pending', 'pending', 'bkash', '123123123', 361.97, 0.07, NULL, 18.10, 0.00, 380.00, 'BDT', 'test', 'A', 'B', 'C', 'D', 'E', 'F', 'G', '1216', 'H', '123123123', 'A', 'B', 'C', 'D', 'E', 'F', 'G', '1216', 'H', '123123123', NULL, NULL, '2025-07-01 06:40:32', '2025-07-01 06:40:32'),
+(4, 'ORD-1751352109-3696', NULL, 'online', 'pending', 'pending', 'bkash', '123123123', 361.97, 0.07, NULL, 18.10, 0.00, 380.00, 'BDT', 'test', 'A', 'B', 'C', 'D', 'E', 'F', 'G', '1216', 'H', '123123123', 'A', 'B', 'C', 'D', 'E', 'F', 'G', '1216', 'H', '123123123', NULL, NULL, '2025-07-01 06:41:49', '2025-07-01 06:41:49'),
+(5, 'ORD-1751352202-6597', NULL, 'online', 'pending', 'pending', 'bkash', 'sadfdsf', 361.97, 0.07, NULL, 18.10, 0.00, 380.00, 'BDT', 'sdfasdf', 'A', 'B', 'C', 'D', 'E', 'F', 'G', '1216', 'bangladesh', '123123', 'A', 'B', 'C', 'D', 'E', 'F', 'G', '1216', 'bangladesh', '123123', NULL, NULL, '2025-07-01 06:43:22', '2025-07-01 06:43:22'),
+(6, 'ORD-1751352476-7252', NULL, 'online', 'pending', 'pending', 'bkash', 'sadfdsf', 127.92, 0.07, NULL, 6.40, 0.00, 134.25, 'BDT', 'sdfasdf', 'A', 'B', 'C', 'D', 'E', 'F', 'G', '1216', 'bangladesh', '123123', 'A', 'B', 'C', 'D', 'E', 'F', 'G', '1216', 'bangladesh', '123123', NULL, NULL, '2025-07-01 06:47:56', '2025-07-01 06:47:56'),
+(7, 'ORD-1751352519-1216', NULL, 'online', 'pending', 'pending', 'bkash', 'sadfdsf', 127.92, 0.07, NULL, 6.40, 0.00, 134.25, 'BDT', 'sdfasdf', 'A', 'B', 'C', 'D', 'E', 'F', 'G', '1216', 'bangladesh', '123123', 'A', 'B', 'C', 'D', 'E', 'F', 'G', '1216', 'bangladesh', '123123', NULL, NULL, '2025-07-01 06:48:39', '2025-07-01 06:48:39'),
+(8, 'ORD-1751352687-2426', NULL, 'online', 'pending', 'pending', 'bkash', 'hhh', 127.92, 4.32, NULL, 6.40, 0.00, 130.00, 'BDT', 'hhh', 'hh', 'hh', 'hh', 'hh', 'hh', 'hh', 'hh', '1234', 'hh', '123', 'hh', 'hh', 'hh', 'hh', 'hh', 'hh', 'hh', '1234', 'hh', '123', NULL, NULL, '2025-07-01 06:51:27', '2025-07-01 06:51:27'),
+(9, 'POS-1751352758-8916', 7, 'pos', 'delivered', 'paid', 'cash', NULL, 361.97, 0.00, NULL, 28.96, 0.00, 390.93, 'BDT', '', '', '', NULL, '', NULL, '', NULL, '', '', '', '', '', NULL, '', NULL, '', NULL, '', '', '', 7, '2025-07-01 06:52:38', '2025-07-01 06:52:38', '2025-07-01 06:52:38'),
+(10, 'POS-1751352994-4326', 7, 'pos', 'delivered', 'paid', 'cash', NULL, 361.97, 0.00, NULL, 28.96, 0.00, 390.93, 'BDT', '', '', '', NULL, '', NULL, '', NULL, '', '', '', '', '', NULL, '', NULL, '', NULL, '', '', '', 7, '2025-07-01 06:56:34', '2025-07-01 06:56:34', '2025-07-01 06:56:34'),
+(11, 'POS-1751353171-5902', 7, 'pos', 'delivered', 'paid', 'cash', NULL, 395.97, 0.00, NULL, 31.68, 0.00, 427.65, 'BDT', '', '', '', NULL, '', NULL, '', NULL, '', '', '', '', '', NULL, '', NULL, '', NULL, '', '', '', 7, '2025-07-01 06:59:31', '2025-07-01 06:59:31', '2025-07-01 06:59:31');
 
 -- --------------------------------------------------------
 
@@ -551,15 +558,33 @@ CREATE TABLE `order_items` (
 --
 
 INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `product_name`, `product_sku`, `quantity`, `unit_price`, `total_price`, `created_at`) VALUES
-(1, 1, 5, 'Smartphone XYZ', 'PHN-001', 1, 699.99, 699.99, '2025-06-26 02:36:33'),
-(2, 1, 1, 'Cotton T-Shirt', 'TSH-001', 1, 15.99, 15.99, '2025-06-26 02:36:33'),
-(3, 2, 5, 'Smartphone XYZ', 'PHN-001', 1, 699.99, 699.99, '2025-06-26 02:40:32'),
-(4, 2, 1, 'Cotton T-Shirt', 'TSH-001', 1, 15.99, 15.99, '2025-06-26 02:40:32'),
-(5, 2, 2, 'Denim Jacket', 'JKT-002', 1, 45.99, 45.99, '2025-06-26 02:40:32'),
-(6, 3, 18, 'Laptop 15\"', 'LAP-001', 2, 999.99, 1999.98, '2025-06-26 02:50:51'),
-(7, 3, 17, 'Remote Control Car', 'RCC-001', 1, 49.99, 49.99, '2025-06-26 02:50:51'),
-(8, 4, 18, 'Laptop 15\"', 'LAP-001', 2, 999.99, 1999.98, '2025-06-26 02:51:03'),
-(9, 4, 17, 'Remote Control Car', 'RCC-001', 1, 49.99, 49.99, '2025-06-26 02:51:03');
+(1, 1, 1, 'Cotton T-Shirt', 'TSH-001', 1, 15.99, 15.99, '2025-07-01 06:38:17'),
+(2, 1, 2, 'Denim Jacket', 'JKT-002', 1, 45.99, 45.99, '2025-07-01 06:38:17'),
+(3, 1, 3, 'Electric Scooter', 'SCO-001', 1, 299.99, 299.99, '2025-07-01 06:38:17'),
+(4, 2, 1, 'Cotton T-Shirt', 'TSH-001', 1, 15.99, 15.99, '2025-07-01 06:40:03'),
+(5, 2, 2, 'Denim Jacket', 'JKT-002', 1, 45.99, 45.99, '2025-07-01 06:40:03'),
+(6, 2, 3, 'Electric Scooter', 'SCO-001', 1, 299.99, 299.99, '2025-07-01 06:40:03'),
+(7, 3, 1, 'Cotton T-Shirt', 'TSH-001', 1, 15.99, 15.99, '2025-07-01 06:40:32'),
+(8, 3, 2, 'Denim Jacket', 'JKT-002', 1, 45.99, 45.99, '2025-07-01 06:40:32'),
+(9, 3, 3, 'Electric Scooter', 'SCO-001', 1, 299.99, 299.99, '2025-07-01 06:40:32'),
+(10, 4, 1, 'Cotton T-Shirt', 'TSH-001', 1, 15.99, 15.99, '2025-07-01 06:41:49'),
+(11, 4, 2, 'Denim Jacket', 'JKT-002', 1, 45.99, 45.99, '2025-07-01 06:41:49'),
+(12, 4, 3, 'Electric Scooter', 'SCO-001', 1, 299.99, 299.99, '2025-07-01 06:41:49'),
+(13, 5, 1, 'Cotton T-Shirt', 'TSH-001', 1, 15.99, 15.99, '2025-07-01 06:43:22'),
+(14, 5, 2, 'Denim Jacket', 'JKT-002', 1, 45.99, 45.99, '2025-07-01 06:43:22'),
+(15, 5, 3, 'Electric Scooter', 'SCO-001', 1, 299.99, 299.99, '2025-07-01 06:43:22'),
+(16, 6, 1, 'Cotton T-Shirt', 'TSH-001', 8, 15.99, 127.92, '2025-07-01 06:47:56'),
+(17, 7, 1, 'Cotton T-Shirt', 'TSH-001', 8, 15.99, 127.92, '2025-07-01 06:48:39'),
+(18, 8, 1, 'Cotton T-Shirt', 'TSH-001', 8, 15.99, 127.92, '2025-07-01 06:51:27'),
+(19, 9, 1, 'Cotton T-Shirt', 'TSH-001', 1, 15.99, 15.99, '2025-07-01 06:52:38'),
+(20, 9, 2, 'Denim Jacket', 'JKT-002', 1, 45.99, 45.99, '2025-07-01 06:52:38'),
+(21, 9, 3, 'Electric Scooter', 'SCO-001', 1, 299.99, 299.99, '2025-07-01 06:52:38'),
+(22, 10, 1, 'Cotton T-Shirt', 'TSH-001', 1, 15.99, 15.99, '2025-07-01 06:56:34'),
+(23, 10, 2, 'Denim Jacket', 'JKT-002', 1, 45.99, 45.99, '2025-07-01 06:56:34'),
+(24, 10, 3, 'Electric Scooter', 'SCO-001', 1, 299.99, 299.99, '2025-07-01 06:56:34'),
+(25, 11, 1, 'Cotton T-Shirt', 'TSH-001', 1, 15.99, 15.99, '2025-07-01 06:59:31'),
+(26, 11, 3, 'Electric Scooter', 'SCO-001', 1, 299.99, 299.99, '2025-07-01 06:59:31'),
+(27, 11, 6, 'Wireless Earbuds', 'EAR-001', 1, 79.99, 79.99, '2025-07-01 06:59:31');
 
 -- --------------------------------------------------------
 
@@ -584,10 +609,17 @@ CREATE TABLE `payment_transactions` (
 --
 
 INSERT INTO `payment_transactions` (`id`, `order_id`, `transaction_id`, `payment_method`, `amount`, `status`, `gateway_response`, `processed_at`, `created_at`) VALUES
-(1, 1, 'ORD-1750919793-6815', 'cash', 769.68, 'pending', NULL, NULL, '2025-06-26 02:36:33'),
-(2, 2, 'ORD-1750920032-8019', 'cash', 876.27, 'pending', NULL, NULL, '2025-06-26 02:40:32'),
-(3, 3, 'ORD-1750920651-5496', 'cash', 2203.72, 'pending', NULL, NULL, '2025-06-26 02:50:51'),
-(4, 4, 'ORD-1750920663-2648', 'cash', 2203.72, 'pending', NULL, NULL, '2025-06-26 02:51:03');
+(1, 1, '123123123', 'bkash', 380.00, 'pending', NULL, NULL, '2025-07-01 06:38:17'),
+(2, 2, '123123123', 'bkash', 380.00, 'pending', NULL, NULL, '2025-07-01 06:40:03'),
+(3, 3, '123123123', 'bkash', 380.00, 'pending', NULL, NULL, '2025-07-01 06:40:32'),
+(4, 4, '123123123', 'bkash', 380.00, 'pending', NULL, NULL, '2025-07-01 06:41:49'),
+(5, 5, 'sadfdsf', 'bkash', 380.00, 'pending', NULL, NULL, '2025-07-01 06:43:22'),
+(6, 6, 'sadfdsf', 'bkash', 134.25, 'pending', NULL, NULL, '2025-07-01 06:47:56'),
+(7, 7, 'sadfdsf', 'bkash', 134.25, 'pending', NULL, NULL, '2025-07-01 06:48:39'),
+(8, 8, 'hhh', 'bkash', 130.00, 'pending', NULL, NULL, '2025-07-01 06:51:27'),
+(9, 9, 'POS-1751352758-8916', 'cash', 390.93, 'success', NULL, '2025-07-01 06:52:38', '2025-07-01 06:52:38'),
+(10, 10, 'POS-1751352994-4326', 'cash', 390.93, 'success', NULL, '2025-07-01 06:56:34', '2025-07-01 06:56:34'),
+(11, 11, 'POS-1751353171-5902', 'cash', 427.65, 'success', NULL, '2025-07-01 06:59:31', '2025-07-01 06:59:31');
 
 -- --------------------------------------------------------
 
@@ -619,7 +651,7 @@ CREATE TABLE `products` (
   `dimensions` varchar(100) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `brand` varchar(100) DEFAULT NULL
+  `brand` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -627,26 +659,27 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `category_id`, `subcategory_id`, `name`, `slug`, `description`, `short_description`, `sku`, `barcode`, `selling_price`, `cost_price`, `markup_percentage`, `pricing_method`, `auto_update_price`, `stock_quantity`, `min_stock_level`, `image`, `is_hot_item`, `is_active`, `weight`, `dimensions`, `created_at`, `updated_at`, `brand`) VALUES
-(1, 3, NULL, 'Cotton T-Shirt', 'cotton-t-shirt', 'Comfortable cotton T-shirt.', 'Soft and breathable cotton T-shirt.', 'TSH-001', '1234567890123', 15.99, 8.00, 99.88, 'manual', 0, 50, 5, 'tshirt1.jpg', 1, 1, 0.20, '30x20x1 cm', '2025-06-22 06:00:00', '2025-06-26 06:40:32', ''),
-(2, 3, NULL, 'Denim Jacket', 'denim-jacket', 'Stylish denim jacket.', 'Classic blue denim jacket.', 'JKT-002', '1234567890124', 45.99, 30.00, 53.30, 'cost_plus', 0, 30, 5, 'denimjacket.jpg', 0, 1, 0.50, '40x30x2 cm', '2025-06-22 06:00:00', '2025-06-26 06:40:32', NULL),
-(3, 4, 6, 'Electric Scooter', 'electric-scooter', 'Eco-friendly electric scooter.', 'Fast and foldable scooter.', 'SCO-001', '1234567890125', 299.99, 200.00, 50.00, 'manual', 0, 20, 3, 'escooter.jpg', 1, 1, 10.00, '100x50x30 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
-(4, 4, 7, 'Toy Motorcycle', 'toy-motorcycle', 'Realistic toy motorcycle.', 'Battery-powered ride-on toy.', 'TOY-001', '1234567890126', 89.99, 50.00, 80.00, 'cost_plus', 0, 15, 2, 'toymotor.jpg', 0, 1, 2.00, '50x20x15 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
-(5, 5, 8, 'Smartphone XYZ', 'smartphone-xyz', 'Latest smartphone model.', 'High-performance smartphone.', 'PHN-001', '1234567890127', 699.99, 500.00, 40.00, 'market_based', 1, 25, 5, 'smartphone.jpg', 1, 1, 0.15, '15x7x0.8 cm', '2025-06-22 06:00:00', '2025-06-26 06:40:32', NULL),
-(6, 5, 8, 'Wireless Earbuds', 'wireless-earbuds', 'True wireless earbuds.', 'Crystal-clear audio earbuds.', 'EAR-001', '1234567890128', 79.99, 40.00, 99.98, 'manual', 0, 40, 5, 'earbuds.jpg', 0, 1, 0.05, '5x5x2 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
-(7, 6, NULL, 'Baby Stroller', 'baby-stroller', 'Lightweight baby stroller.', 'Foldable and durable stroller.', 'STR-001', '1234567890129', 129.99, 80.00, 62.49, 'cost_plus', 0, 10, 2, 'stroller.jpg', 1, 1, 5.00, '80x50x100 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
-(8, 6, NULL, 'Plush Teddy Bear', 'plush-teddy-bear', 'Soft plush teddy bear.', 'Cuddly toy for kids.', 'TOY-002', '1234567890130', 19.99, 10.00, 99.90, 'manual', 0, 60, 10, 'teddybear.jpg', 0, 1, 0.30, '20x15x10 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
-(9, 7, 12, 'Holstein Cow', 'holstein-cow', 'Healthy dairy cow.', 'High-yield milk cow.', 'COW-001', '1234567890131', 1500.00, 1200.00, 25.00, 'market_based', 0, 5, 1, 'holstein.jpg', 1, 1, 500.00, NULL, '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
-(10, 7, 12, 'Jersey Cow', 'jersey-cow', 'Premium jersey cow.', 'Efficient dairy cow.', 'COW-002', '1234567890132', 1400.00, 1100.00, 27.27, 'manual', 0, 3, 1, 'jersey.jpg', 0, 1, 450.00, NULL, '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
-(11, 3, NULL, 'Silk Saree', 'silk-saree', 'Elegant silk saree.', 'Traditional handwoven saree.', 'SAR-001', '1234567890133', 99.99, 60.00, 66.65, 'cost_plus', 0, 20, 3, 'saree.jpg', 1, 1, 0.40, '150x50x0.5 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
-(12, 4, 6, 'Car Cleaning Kit', 'car-cleaning-kit', 'Complete car cleaning kit.', 'All-in-one car care.', 'CLK-001', '1234567890134', 29.99, 15.00, 99.93, 'manual', 0, 35, 5, 'cleaningkit.jpg', 0, 1, 1.00, '30x20x10 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
-(13, 5, 8, 'LED TV 55\"', 'led-tv-55', '55-inch 4K LED TV.', 'Immersive viewing experience.', 'TV-001', '1234567890135', 499.99, 350.00, 42.85, 'market_based', 1, 15, 3, 'ledtv.jpg', 1, 1, 15.00, '120x80x10 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
-(14, 6, NULL, 'Wooden Puzzle', 'wooden-puzzle', 'Educational wooden puzzle.', 'Fun learning toy.', 'PUZ-001', '1234567890136', 14.99, 8.00, 87.38, 'cost_plus', 0, 50, 8, 'puzzle.jpg', 0, 1, 0.25, '20x20x1 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
-(15, 7, 12, 'Angus Bull', 'angus-bull', 'Strong Angus bull.', 'Premium beef cattle.', 'BUL-001', '1234567890137', 2000.00, 1600.00, 25.00, 'manual', 0, 2, 1, 'angus.jpg', 1, 1, 600.00, NULL, '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
-(16, 3, NULL, 'Leather Belt', 'leather-belt', 'Genuine leather belt.', 'Durable and stylish belt.', 'BLT-001', '1234567890138', 24.99, 12.00, 99.92, 'cost_plus', 0, 45, 5, 'belt.jpg', 0, 1, 0.10, '100x5x0.5 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
-(17, 4, 7, 'Remote Control Car', 'remote-control-car', 'Fast RC car.', 'Exciting remote control toy.', 'RCC-001', '1234567890139', 49.99, 25.00, 99.96, 'manual', 0, 25, 4, 'rccar.jpg', 1, 1, 1.50, '30x15x10 cm', '2025-06-22 06:00:00', '2025-06-26 06:51:03', NULL),
-(18, 5, 8, 'Laptop 15\"', 'laptop-15', 'High-performance 15-inch laptop.', 'Sleek and powerful laptop.', 'LAP-001', '1234567890140', 999.99, 700.00, 42.86, 'market_based', 1, 10, 2, 'laptop.jpg', 1, 1, 2.00, '35x25x2 cm', '2025-06-22 06:00:00', '2025-06-26 06:51:03', NULL),
-(19, 6, NULL, 'Diaper Bag', 'diaper-bag', 'Spacious diaper bag.', 'Multi-pocket baby bag.', 'BAG-001', '1234567890141', 39.99, 20.00, 99.95, 'cost_plus', 0, 30, 5, 'diaperbag.jpg', 0, 1, 0.80, '40x30x20 cm', '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL),
-(20, 7, 12, 'Goat', 'goat', 'Healthy dairy goat.', 'High-quality milk goat.', 'GOT-001', '1234567890142', 300.00, 200.00, 50.00, 'manual', 0, 8, 2, 'goat.jpg', 0, 1, 30.00, NULL, '2025-06-22 06:00:00', '2025-06-22 06:00:00', NULL);
+(1, 3, NULL, 'Cotton T-Shirt', 'cotton-t-shirt', 'Comfortable cotton T-shirt.', 'Soft and breathable cotton T-shirt.', 'TSH-001', '1234567890123', 15.99, 8.00, 99.88, 'manual', 0, 50, 5, 'tshirt1.jpg', 1, 1, 0.20, '30x20x1 cm', '2025-06-22 06:00:00', '2025-07-01 06:52:38', 2),
+(2, 3, NULL, 'Denim Jacket', 'denim-jacket', 'Stylish denim jacket.', 'Classic blue denim jacket.', 'JKT-002', '1234567890124', 45.99, 30.00, 53.30, 'cost_plus', 0, 30, 5, 'denimjacket.jpg', 0, 1, 0.50, '40x30x2 cm', '2025-06-22 06:00:00', '2025-07-01 06:52:38', 1),
+(3, 4, 6, 'Electric Scooter', 'electric-scooter', 'Eco-friendly electric scooter.', 'Fast and foldable scooter.', 'SCO-001', '1234567890125', 299.99, 200.00, 50.00, 'manual', 0, 20, 3, 'escooter.jpg', 1, 1, 10.00, '100x50x30 cm', '2025-06-22 06:00:00', '2025-07-01 06:52:38', 1),
+(4, 4, 7, 'Toy Motorcycle', 'toy-motorcycle', 'Realistic toy motorcycle.', 'Battery-powered ride-on toy.', 'TOY-001', '1234567890126', 89.99, 50.00, 80.00, 'cost_plus', 0, 15, 2, 'toymotor.jpg', 0, 1, 2.00, '50x20x15 cm', '2025-06-22 06:00:00', '2025-06-24 06:53:29', 1),
+(5, 5, 8, 'Smartphone XYZ', 'smartphone-xyz', 'Latest smartphone model.', 'High-performance smartphone.', 'PHN-001', '1234567890127', 699.99, 500.00, 40.00, 'market_based', 1, 25, 5, 'smartphone.jpg', 1, 1, 0.15, '15x7x0.8 cm', '2025-06-22 06:00:00', '2025-06-24 06:53:29', 1),
+(6, 5, 8, 'Wireless Earbuds', 'wireless-earbuds', 'True wireless earbuds.', 'Crystal-clear audio earbuds.', 'EAR-001', '1234567890128', 79.99, 40.00, 99.98, 'manual', 0, 40, 5, 'earbuds.jpg', 0, 1, 0.05, '5x5x2 cm', '2025-06-22 06:00:00', '2025-06-24 06:53:29', 1),
+(7, 6, NULL, 'Baby Stroller', 'baby-stroller', 'Lightweight baby stroller.', 'Foldable and durable stroller.', 'STR-001', '1234567890129', 129.99, 80.00, 62.49, 'cost_plus', 0, 10, 2, 'stroller.jpg', 1, 1, 5.00, '80x50x100 cm', '2025-06-22 06:00:00', '2025-06-24 06:53:29', 1),
+(8, 6, NULL, 'Plush Teddy Bear', 'plush-teddy-bear', 'Soft plush teddy bear.', 'Cuddly toy for kids.', 'TOY-002', '1234567890130', 19.99, 10.00, 99.90, 'manual', 0, 60, 10, 'teddybear.jpg', 0, 1, 0.30, '20x15x10 cm', '2025-06-22 06:00:00', '2025-06-24 06:53:29', 1),
+(9, 7, 12, 'Holstein Cow', 'holstein-cow', 'Healthy dairy cow.', 'High-yield milk cow.', 'COW-001', '1234567890131', 1500.00, 1200.00, 25.00, 'market_based', 0, 5, 1, 'holstein.jpg', 1, 1, 500.00, NULL, '2025-06-22 06:00:00', '2025-06-24 06:53:29', 1),
+(10, 7, 12, 'Jersey Cow', 'jersey-cow', 'Premium jersey cow.', 'Efficient dairy cow.', 'COW-002', '1234567890132', 1400.00, 1100.00, 27.27, 'manual', 0, 3, 1, 'jersey.jpg', 0, 1, 450.00, NULL, '2025-06-22 06:00:00', '2025-06-24 06:53:29', 1),
+(11, 3, NULL, 'Silk Saree', 'silk-saree', 'Elegant silk saree.', 'Traditional handwoven saree.', 'SAR-001', '1234567890133', 99.99, 60.00, 66.65, 'cost_plus', 0, 20, 3, 'saree.jpg', 1, 1, 0.40, '150x50x0.5 cm', '2025-06-22 06:00:00', '2025-06-24 06:53:29', 1),
+(12, 4, 6, 'Car Cleaning Kit', 'car-cleaning-kit', 'Complete car cleaning kit.', 'All-in-one car care.', 'CLK-001', '1234567890134', 29.99, 15.00, 99.93, 'manual', 0, 35, 5, 'cleaningkit.jpg', 0, 1, 1.00, '30x20x10 cm', '2025-06-22 06:00:00', '2025-06-24 06:53:29', 1),
+(13, 5, 8, 'LED TV 55\"', 'led-tv-55', '55-inch 4K LED TV.', 'Immersive viewing experience.', 'TV-001', '1234567890135', 499.99, 350.00, 42.85, 'market_based', 1, 15, 3, 'ledtv.jpg', 1, 1, 15.00, '120x80x10 cm', '2025-06-22 06:00:00', '2025-06-24 06:53:29', 1),
+(14, 6, NULL, 'Wooden Puzzle', 'wooden-puzzle', 'Educational wooden puzzle.', 'Fun learning toy.', 'PUZ-001', '1234567890136', 14.99, 8.00, 87.38, 'cost_plus', 0, 50, 8, 'puzzle.jpg', 0, 1, 0.25, '20x20x1 cm', '2025-06-22 06:00:00', '2025-06-24 06:53:29', 1),
+(15, 7, 12, 'Angus Bull', 'angus-bull', 'Strong Angus bull.', 'Premium beef cattle.', 'BUL-001', '1234567890137', 2000.00, 1600.00, 25.00, 'manual', 0, 2, 1, 'angus.jpg', 1, 1, 600.00, NULL, '2025-06-22 06:00:00', '2025-06-24 06:53:29', 1),
+(16, 3, NULL, 'Leather Belt', 'leather-belt', 'Genuine leather belt.', 'Durable and stylish belt.', 'BLT-001', '1234567890138', 24.99, 12.00, 99.92, 'cost_plus', 0, 45, 5, 'belt.jpg', 0, 1, 0.10, '100x5x0.5 cm', '2025-06-22 06:00:00', '2025-06-24 06:53:29', 1),
+(17, 4, 7, 'Remote Control Car', 'remote-control-car', 'Fast RC car.', 'Exciting remote control toy.', 'RCC-001', '1234567890139', 49.99, 25.00, 99.96, 'manual', 0, 25, 4, 'rccar.jpg', 1, 1, 1.50, '30x15x10 cm', '2025-06-22 06:00:00', '2025-06-24 06:53:29', 1),
+(18, 5, 8, 'Laptop 15\"', 'laptop-15', 'High-performance 15-inch laptop.', 'Sleek and powerful laptop.', 'LAP-001', '1234567890140', 999.99, 700.00, 42.86, 'market_based', 1, 10, 2, 'laptop.jpg', 1, 1, 2.00, '35x25x2 cm', '2025-06-22 06:00:00', '2025-06-24 06:53:29', 1),
+(19, 6, NULL, 'Diaper Bag', 'diaper-bag', 'Spacious diaper bag.', 'Multi-pocket baby bag.', 'BAG-001', '1234567890141', 39.99, 20.00, 99.95, 'cost_plus', 0, 30, 5, 'diaperbag.jpg', 0, 1, 0.80, '40x30x20 cm', '2025-06-22 06:00:00', '2025-06-24 06:53:29', 1),
+(20, 7, 12, 'Goat', 'goat', 'Healthy dairy goat.', 'High-quality milk goat.', 'GOT-001', '1234567890142', 300.00, 200.00, 50.00, 'manual', 0, 8, 2, 'goat.jpg', 0, 1, 30.00, NULL, '2025-06-22 06:00:00', '2025-06-24 06:53:29', 1),
+(21, 5, 16, 'IDB AC 2 ton', 'idb-ac-2-ton', 'df sdfsda fsdf safdd sdf f sdf sdfds ', ' sdfsd fdsaf sd', 'idbac2ton', '43543545fdgdfgfg', 45000.00, 42000.00, 0.00, 'manual', 0, 55, 5, '685b87960d02d_1750828950.png', 1, 1, 55.00, '55', '2025-06-25 05:22:30', '2025-06-25 05:22:30', 2);
 
 -- --------------------------------------------------------
 
@@ -824,7 +857,9 @@ INSERT INTO `subcategories` (`id`, `category_id`, `name`, `slug`, `description`,
 (7, 4, 'toys bike', 'toys-bike', 'sadf sdf sdfd sdfs f d123', '684d01c760e0a_1749877191.jpg', 1, 1, '2025-06-14 04:58:30', '2025-06-14 04:59:51'),
 (8, 5, 'Mobile phone', 'mobile-phone', 'dsf dsf sdfds fds sdf ', '684d1f3cbe978_1749884732.jpg', 1, 8, '2025-06-14 06:50:04', '2025-06-14 07:05:33'),
 (12, 7, 'goru1', 'goru1', 'sadfdsafdsf', '684d1eb2bff59_1749884594.jpg', 1, 0, '2025-06-14 07:03:15', '2025-06-14 07:03:15'),
-(14, 9, 'Toxic', 'toxic', 'toxic', '685b7a0824538_1750825480.jpg', 1, 0, '2025-06-25 04:24:42', '2025-06-25 04:24:42');
+(14, 9, 'amer sarbat', 'amer-sarbat', 'asf sadf sdfs afsd fdsf ', '685a492bafa50_1750747435.png', 1, 0, '2025-06-24 06:43:57', '2025-06-24 06:43:57'),
+(15, 4, 'Cars', 'cars', 'dsf sadf', '685b82ee186a2_1750827758.jpg', 1, 0, '2025-06-25 05:02:38', '2025-06-25 05:02:38'),
+(16, 5, 'AC', 'ac', 'dsfgdfg', '685b85aaebc84_1750828458.png', 1, 0, '2025-06-25 05:14:19', '2025-06-25 05:14:19');
 
 -- --------------------------------------------------------
 
@@ -941,10 +976,8 @@ ALTER TABLE `customer_addresses`
 --
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `order_number` (`order_number`),
   ADD KEY `coupon_id` (`coupon_id`),
   ADD KEY `processed_by` (`processed_by`),
-  ADD KEY `idx_order_number` (`order_number`),
   ADD KEY `idx_user_orders` (`user_id`),
   ADD KEY `idx_order_date` (`created_at`),
   ADD KEY `idx_order_type` (`order_type`),
@@ -984,7 +1017,8 @@ ALTER TABLE `products`
   ADD KEY `idx_pricing` (`pricing_method`,`auto_update_price`),
   ADD KEY `idx_products_category` (`category_id`,`is_active`),
   ADD KEY `idx_products_subcategory` (`subcategory_id`,`is_active`),
-  ADD KEY `idx_stock_low` (`stock_quantity`,`min_stock_level`);
+  ADD KEY `idx_stock_low` (`stock_quantity`,`min_stock_level`),
+  ADD KEY `products_ibfk_3` (`brand`);
 
 --
 -- Indexes for table `product_pricing_history`
@@ -1104,25 +1138,25 @@ ALTER TABLE `customer_addresses`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `payment_transactions`
 --
 ALTER TABLE `payment_transactions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `product_pricing_history`
@@ -1170,7 +1204,7 @@ ALTER TABLE `stock_movements`
 -- AUTO_INCREMENT for table `subcategories`
 --
 ALTER TABLE `subcategories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -1229,7 +1263,8 @@ ALTER TABLE `payment_transactions`
 --
 ALTER TABLE `products`
   ADD CONSTRAINT `products_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`),
-  ADD CONSTRAINT `products_ibfk_2` FOREIGN KEY (`subcategory_id`) REFERENCES `subcategories` (`id`);
+  ADD CONSTRAINT `products_ibfk_2` FOREIGN KEY (`subcategory_id`) REFERENCES `subcategories` (`id`),
+  ADD CONSTRAINT `products_ibfk_3` FOREIGN KEY (`brand`) REFERENCES `brands` (`id`);
 
 --
 -- Constraints for table `product_pricing_history`

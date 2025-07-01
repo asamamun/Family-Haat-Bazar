@@ -97,8 +97,8 @@ $products = $db->get('products');
 <?php require __DIR__ . '/components/footer.php'; ?>
 <script>
 $(document).ready(function() {
-let cart = new Cart();
-$("#cartCount").text(cart.getTotalItems());
+
+$("#cartCountButton").text(cart.getTotalItems());
 
         $(".cartBtn").click(function() {
            let id = $(this).data('id');
@@ -108,7 +108,8 @@ $("#cartCount").text(cart.getTotalItems());
            //add to cart class           
            let items = cart.addItem({id, name, price, quantity});
            console.log(items); 
-           $("#cartCount").text(items.length);
+           $("#cartCountButton").text(items.length);
+           showCartItemsOffCanvas(items);
         });
 })
 </script>
