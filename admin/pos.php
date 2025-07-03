@@ -43,6 +43,8 @@ $subcategories = $db->get('subcategories', null, ['id', 'name', 'category_id']);
 }
 </style>
 
+
+
 </head>
 <body class="sb-nav-fixed">
 <?php require __DIR__.'/components/navbar.php'; ?>
@@ -58,6 +60,20 @@ $subcategories = $db->get('subcategories', null, ['id', 'name', 'category_id']);
 
                 <div class="row">
                     <!-- Product Selection -->
+                     <!-- barcode section -->
+                      <div class="col-md-8">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-shopping-basket me-1"></i>
+                                Scan Product
+                            </div>
+                            <div class="card-body">
+                                <video id="video" width="200" height="150" style="border:1px solid #000"></video>
+                                <input type="text" id="scannedBarcode">
+                            </div>
+                        </div>
+                      </div>
+
                     <div class="col-md-8">
                         <div class="card mb-4">
                             <div class="card-header">
@@ -223,7 +239,7 @@ $subcategories = $db->get('subcategories', null, ['id', 'name', 'category_id']);
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss=" modal">Cancel</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss=" modal">Cancel</button> 
                                 <button type="button" class="btn btn-primary" id="completeSale">Complete Sale</button>
                             </div>
                         </div>
@@ -245,9 +261,61 @@ $subcategories = $db->get('subcategories', null, ['id', 'name', 'category_id']);
 <script src="<?= settings()['adminpage'] ?>assets/js/jquery-3.7.1.min.js"></script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    let cart = [];
+// Define cart and updateCart in global scope
+let cart = [];
 
+function updateCart() {
+    const cartBody = document.getElementById('cartBody');
+    cartBody.innerHTML = '';
+
+    let subtotal = 0;
+    cart.forEach(item => {
+        const total = item.price * item.quantity;
+        subtotal += total;
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${item.name}</td>
+            <td><input type="number" class="form-control form-control-sm qty-input" value="${item.quantity}" min="1" data-id="${item.id}"></td>
+            <td>$${item.price.toFixed(2)}</td>
+            <td>$${total.toFixed(2)}</td>
+            <td><button class="btn btn-sm btn-danger remove-item" data-id="${item.id}"><i class="fas fa-trash"></i></button></td>
+        `;
+        cartBody.appendChild(row);
+    });
+
+    const tax = subtotal * 0.08;
+    const total = subtotal + tax;
+
+    document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+    document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
+    document.getElementById('total').textContent = `$${total.toFixed(2)}`;
+    document.getElementById('modalTotal').value = `$${total.toFixed(2)}`;
+
+    // Update quantity
+    document.querySelectorAll('.qty-input').forEach(input => {
+        input.addEventListener('change', function() {
+            const id = this.dataset.id;
+            const newQty = parseInt(this.value);
+            const item = cart.find(item => item.id === id);
+            if (item && newQty > 0) {
+                item.quantity = newQty;
+                updateCart();
+            }
+        });
+    });
+
+    // Remove item
+    document.querySelectorAll('.remove-item').forEach(button => {
+        button.addEventListener('click', function() {
+            const id = this.dataset.id;
+            cart = cart.filter(item => item.id !== id);
+            updateCart();
+        });
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
     // Search and filter products
     const productSearch = document.getElementById('productSearch');
     const categoryFilter = document.getElementById('categoryFilter');
@@ -311,59 +379,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Update cart display
-    function updateCart() {
-        const cartBody = document.getElementById('cartBody');
-        cartBody.innerHTML = '';
-
-        let subtotal = 0;
-        cart.forEach(item => {
-            const total = item.price * item.quantity;
-            subtotal += total;
-
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${item.name}</td>
-                <td><input type="number" class="form-control form-control-sm qty-input" value="${item.quantity}" min="1" data-id="${item.id}"></td>
-                <td>$${item.price.toFixed(2)}</td>
-                <td>$${total.toFixed(2)}</td>
-                <td><button class="btn btn-sm btn-danger remove-item" data-id="${item.id}"><i class="fas fa-trash"></i></button></td>
-            `;
-            cartBody.appendChild(row);
-        });
-
-        const tax = subtotal * 0.08;
-        const total = subtotal + tax;
-
-        document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
-        document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
-        document.getElementById('total').textContent = `$${total.toFixed(2)}`;
-        document.getElementById('modalTotal').value = `$${total.toFixed(2)}`;
-
-        // Update quantity
-document.querySelectorAll('.qty-input').forEach(input => {
-
-            input.addEventListener('change', function() {
-                const id = this.dataset.id;
-                const newQty = parseInt(this.value);
-                const item = cart.find(item => item.id === id);
-                if (item && newQty > 0) {
-                    item.quantity = newQty;
-                    updateCart();
-                }
-            });
-        });
-
-        // Remove item
-        document.querySelectorAll('.remove-item').forEach(button => {
-            button.addEventListener('click', function() {
-                const id = this.dataset.id;
-                cart = cart.filter(item => item.id !== id);
-                updateCart();
-            });
-        });
-    }
-
     // Clear cart
     document.getElementById('clearCart').addEventListener('click', function() {
         cart = [];
@@ -394,60 +409,95 @@ document.querySelectorAll('.qty-input').forEach(input => {
         document.getElementById('change').value = `$${change.toFixed(2)}`;
     });
 
-        // Here you would typically send the sale data to the server
-// Complete sale
-document.getElementById('completeSale').addEventListener('click', function() {
+    // Complete sale
+    document.getElementById('completeSale').addEventListener('click', function(event) {
         event.preventDefault();        
-    const tendered = parseFloat(document.getElementById('amountTendered').value) || 0;
-    const total = parseFloat(document.getElementById('modalTotal').value.replace('$', '')) || 0;
-    if (tendered < total) {
-        alert('Insufficient amount tendered!');
-        return;
-    }
-
-    // Prepare data to send to process_order.php
-    let data = {
-        subtotal: parseFloat(($("#subtotal").text()).replace('$', '')),
-        discount_amount: parseFloat(($("#discount").text()).replace('$', '')),
-        tax_amount: parseFloat(($("#tax").text()).replace('$', '')),
-        shipping_amount: 0.00,
-        total_amount: parseFloat(($("#total").text()).replace('$', '')),
-        notes: null,
-        items: cart // assuming 'cart' is an array of items
-    };
-    // console.log("data",data);
-    // return;
-
-    // Send data via AJAX to process_order.php
-    $.ajax({
-        url: 'process_order.php',
-        method: 'POST',
-        data: data,
-        success: function(response) {
-            console.log(response);
-            if(response.success){
-                Swal.fire({
-                    position: "top-end",
-                    icon: "success",
-                    title: response.message + ",, Order # " + response.order_number,
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-                
-            }
-            // alert('Sale completed successfully!');
-            cart = [];
-            updateCart();
-            bootstrap.Modal.getInstance(document.getElementById('paymentModal')).hide();
-        },
-        error: function() {
-            alert('An error occurred while processing the order.');
+        const tendered = parseFloat(document.getElementById('amountTendered').value) || 0;
+        const total = parseFloat(document.getElementById('modalTotal').value.replace('$', '')) || 0;
+        if (tendered < total) {
+            alert('Insufficient amount tendered!');
+            return;
         }
+
+        // Prepare data to send to process_order.php
+        let data = {
+            subtotal: parseFloat(($("#subtotal").text()).replace('$', '')),
+            discount_amount: parseFloat(($("#discount").text()).replace('$', '')),
+            tax_amount: parseFloat(($("#tax").text()).replace('$', '')),
+            shipping_amount: 0.00,
+            total_amount: parseFloat(($("#total").text()).replace('$', '')),
+            notes: null,
+            items: cart
+        };
+
+        // Send data via AJAX to process_order.php
+        $.ajax({
+            url: 'process_order.php',
+            method: 'POST',
+            data: data,
+            success: function(response) {
+                console.log(response);
+                if(response.success){
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: response.message + ", Order # " + response.order_number,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    cart = [];
+                    updateCart();
+                    bootstrap.Modal.getInstance(document.getElementById('paymentModal')).hide();
+                }
+            },
+            error: function() {
+                alert('An error occurred while processing the order.');
+            }
+        });
     });
 });
-
-
-});
 </script>
+
+<!-- Barcode scanner -->
+<script type="module">
+    import { BrowserMultiFormatReader } from "https://cdn.jsdelivr.net/npm/@zxing/library@latest/+esm";
+
+    const codeReader = new BrowserMultiFormatReader();
+    window.onload = async () => {
+        const videoInputDevices = await codeReader.listVideoInputDevices();
+        const selectedDeviceId = videoInputDevices[0]?.deviceId;
+
+        codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', (result, err) => {
+            if (result) {
+                console.log(result);
+                // result.text has barcode
+                $.ajax({
+                    url: "apis/product.php",
+                    method: "GET",
+                    data: { code: result.text },
+                    success: function(data) {
+                        console.log(data);
+                        data = JSON.parse(data);
+                        const id = data.id;
+                        const name = data.name;
+                        const price = parseFloat(data.selling_price);
+
+                        const existingItem = cart.find(item => item.id === id);
+                        if (existingItem) {
+                            existingItem.quantity++;
+                        } else {
+                            cart.push({ id, name, price, quantity: 1 });
+                        }
+                        updateCart(); // Now accessible
+                    },
+                    error: function() {
+                        console.error('Error fetching product data');
+                    }
+                });
+            }
+        });
+    };
+</script>
+<!-- Barcode scanner end -->
 </body>
 </html>

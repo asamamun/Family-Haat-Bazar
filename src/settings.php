@@ -2,7 +2,7 @@
 if (!function_exists('settings')) {
     function settings()
     {
-       $root = "http://192.168.54.81/ROUND64/PHP/Family-Haat-Bazar/"; 
+       $root = "https://192.168.54.81/ROUND64/PHP/Family-Haat-Bazar/"; 
         return [
             'root'  => $root,
             'companyname'=> 'ShopEase',
@@ -13,7 +13,7 @@ if (!function_exists('settings')) {
             'user'=> 'root',
             'password'=> '',
             'database'=> 'haatbazar',            
-            'physical_path' => 'D:\xampp8240\htdocs\ROUND64\PHP\Family-Haat-Bazar'
+            'physical_path' => 'C:\xampp\htdocs\Project\Family-Haat-Bazar'
         ];
     }
 }

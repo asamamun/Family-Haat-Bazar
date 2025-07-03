@@ -17,6 +17,7 @@
         }
     ],
     "require": {
-        "intervention/image": "^3.11"
+        "intervention/image": "^3.11",
+        "picqer/php-barcode-generator": "^3.2"
     }
 }

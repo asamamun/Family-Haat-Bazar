@@ -39,6 +39,7 @@ exit; */
                                         <thead class="table-dark">
                                             <tr>
                                                 <th>ID</th>
+                                                <th><img src="assets/img/barcode.jpg" width="30px"/></th>
                                                 <th>Image</th>
                                                 <th>Name</th>
                                                 <th>Category</th>
@@ -142,7 +143,7 @@ exit; */
                                     <input type="text" class="form-control" id="sku" name="sku" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="barcode" class="form-label">Barcode</label>
+                                    <label for="barcode" class="form-label">Barcode(10 to 20 characters)</label>
                                     <input type="text" class="form-control" id="barcode" name="barcode" required>
                                 </div>
                                 <div class="mb-3">
@@ -268,6 +269,14 @@ exit; */
                 "columns": [{
                         "data": "id"
                     },
+                                        {
+                        "data": null,
+                        "render": function(data, type, row) {
+                            // console.log(row);
+                            return '<a href="barcode.php?id='+row.id+'"><i class="bi bi-upc-scan"></i></a>';
+                        }
+                    },
+
                     {
                         "data": "image",
                         "render": function(data, type, row) {
