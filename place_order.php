@@ -2,6 +2,13 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+// Check if the user is logged in, if not then redirect to login page
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    $_SESSION['message'] = "You must log in to place an order.";
+    header('Location: login.php');
+    exit;
+}
 require __DIR__ . '/vendor/autoload.php';
 use App\User;
 use App\model\Category;
@@ -382,7 +389,7 @@ $(document).ready(function() {
             totalPrice: cart.getTotalPrice(),
             discount_amount: $("#discount").val(),
             tax_amount: $("#vatAmount").text().replace("৳", ""),
-            grandTotal: $("#grandTotal").text().replace("৳", "")
+            grandTotal: $("#grandTotal").text().replace("৳", ""),
         };
 
         if (data.payment_method === "cash") {

@@ -41,7 +41,7 @@ try {
     // Insert into orders table
     $order_data = [
         'order_number' => $order_number,
-        'user_id' => isset($_SESSION['user_id']) ? (int)$_SESSION['user_id'] : null,
+        'user_id' => isset($_SESSION['userid']) ? (int)$_SESSION['userid'] : null,
         'order_type' => 'online',
         'status' => 'pending',
         'payment_status' => $_POST['payment_method'] == 'cash' ? 'pending' : 'pending',
@@ -116,7 +116,7 @@ try {
             (int)$item['id'],
             (int)$item['quantity'],
             $order_id,
-            isset($_SESSION['user_id']) ? (int)$_SESSION['user_id'] : null
+            isset($_SESSION['userid']) ? (int)$_SESSION['userid'] : null
         ]); */
     }
 

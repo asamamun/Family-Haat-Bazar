@@ -117,6 +117,8 @@ if (session_status() === PHP_SESSION_NONE) {
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <!-- Category Sidebar -->
+    <!-- Category Sidebar (emon vai) -->
+     
     <div class="category-sidebar" id="categorySidebar">
         <div class="sidebar-header">
             <h5 class="mb-0">Shop by Category</h5>
@@ -125,80 +127,97 @@ if (session_status() === PHP_SESSION_NONE) {
             </button>
         </div>
         <ul class="category-list">
-            <li class="category-item">
-                <a href="#" class="category-link" data-category="food">
-                    <span><i class="fas fa-apple-alt category-icon"></i>Food & Beverages</span>
-                    <i class="fas fa-chevron-right"></i>
-                </a>
-                <ul class="subcategory-list">
-                    <li><a href="fresh-fruits.php" class="subcategory-link">Fresh Fruits</a></li>
-                    <li><a href="#" class="subcategory-link">Vegetables</a></li>
-                    <li><a href="#" class="subcategory-link">Snacks & Cookies</a></li>
-                    <li><a href="#" class="subcategory-link">Beverages</a></li>
-                    <li><a href="#" class="subcategory-link">Dairy Products</a></li>
-                </ul>
-            </li>
-            <li class="category-item">
-                <a href="#" class="category-link" data-category="baby-care">
-                    <span><i class="fas fa-baby category-icon"></i>Baby Care</span>
-                    <i class="fas fa-chevron-right"></i>
-                </a>
-                <ul class="subcategory-list">
-                    <li><a href="#" class="subcategory-link">Diapers</a></li>
-                    <li><a href="#" class="subcategory-link">Baby Food</a></li>
-                    <li><a href="#" class="subcategory-link">Toys</a></li>
-                    <li><a href="#" class="subcategory-link">Baby Clothing</a></li>
-                </ul>
-            </li>
-            <li class="category-item">
-                <a href="#" class="category-link" data-category="home-kitchen">
-                    <span><i class="fas fa-home category-icon"></i>Home & Kitchen</span>
-                    <i class="fas fa-chevron-right"></i>
-                </a>
-                <ul class="subcategory-list">
-                    <li><a href="#" class="subcategory-link">Cookware</a></li>
-                    <li><a href="#" class="subcategory-link">Kitchen Appliances</a></li>
-                    <li><a href="#" class="subcategory-link">Storage Solutions</a></li>
-                    <li><a href="#" class="subcategory-link">Cleaning Supplies</a></li>
-                </ul>
-            </li>
-            <li class="category-item">
-                <a href="#" class="category-link" data-category="womens-corner">
-                    <span><i class="fas fa-female category-icon"></i>Women's Corner</span>
-                    <i class="fas fa-chevron-right"></i>
-                </a>
-                <ul class="subcategory-list">
-                    <li><a href="#" class="subcategory-link">Fashion & Clothing</a></li>
-                    <li><a href="#" class="subcategory-link">Accessories</a></li>
-                    <li><a href="#" class="subcategory-link">Footwear</a></li>
-                    <li><a href="#" class="subcategory-link">Handbags</a></li>
-                </ul>
-            </li>
-            <li class="category-item">
-                <a href="#" class="category-link" data-category="beauty-health">
-                    <span><i class="fas fa-heart category-icon"></i>Beauty & Health</span>
-                    <i class="fas fa-chevron-right"></i>
-                </a>
-                <ul class="subcategory-list">
-                    <li><a href="#" class="subcategory-link">Skincare</a></li>
-                    <li><a href="#" class="subcategory-link">Makeup</a></li>
-                    <li><a href="#" class="subcategory-link">Hair Care</a></li>
-                    <li><a href="#" class="subcategory-link">Health Supplements</a></li>
-                </ul>
-            </li>
-            <li class="category-item">
-                <a href="#" class="category-link" data-category="electronics">
-                    <span><i class="fas fa-laptop category-icon"></i>Electronics</span>
-                    <i class="fas fa-chevron-right"></i>
-                </a>
-                <ul class="subcategory-list">
-                    <li><a href="#" class="subcategory-link">Mobile Phones</a></li>
-                    <li><a href="#" class="subcategory-link">Computers</a></li>
-                    <li><a href="#" class="subcategory-link">Electronics Accessories</a></li>
-                </ul>
-            </li>
+            <?php
+            // Database connection
+            $conn = new mysqli("", "root", "", "haatbazar");
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
+
+            // Fetch active categories
+            $category_query = "SELECT id, name, slug FROM categories WHERE is_active = 1 ORDER BY sort_order, name";
+            $category_result = $conn->query($category_query);
+
+            // Map category names to Font Awesome icons
+            $category_icons = [
+                'Garments' => 'fas fa-tshirt',
+                'Automobiles' => 'fas fa-car',
+                'Electronics' => 'fas fa-laptop',
+                'kids' => 'fas fa-baby',
+                'Cattle' => 'fas fa-cow',
+                'sdfgdfsgdfg' => 'fas fa-box',
+                'panio' => 'fas fa-mug-hot'
+            ];
+
+            while ($category = $category_result->fetch_assoc()) {
+                $category_id = $category['id'];
+                $category_name = htmlspecialchars($category['name']);
+                $category_slug = htmlspecialchars($category['slug']);
+                $icon_class = isset($category_icons[$category_name]) ? $category_icons[$category_name] : 'fas fa-folder';
+
+                // Fetch subcategories
+                $subcategory_query = "SELECT id, name, slug FROM subcategories WHERE category_id = ? AND is_active = 1 ORDER BY sort_order, name";
+                $stmt = $conn->prepare($subcategory_query);
+                $stmt->bind_param("i", $category_id);
+                $stmt->execute();
+                $subcategory_result = $stmt->get_result();
+
+                // Output category
+                echo '<li class="category-item">';
+                echo '<a href="index.php?category=' . $category_id . '" class="category-link category-filter" data-category-id="' . $category_id . '" data-category="' . $category_slug . '">';
+                echo '<span><i class="' . $icon_class . ' category-icon"></i>' . $category_name . '</span>';
+                echo '<i class="fas fa-chevron-right"></i>';
+                echo '</a>';
+
+                // Output subcategories
+                if ($subcategory_result->num_rows > 0) {
+                    echo '<ul class="subcategory-list">';
+                    while ($subcategory = $subcategory_result->fetch_assoc()) {
+                        $subcategory_id = $subcategory['id'];
+                        $subcategory_name = htmlspecialchars($subcategory['name']);
+                        $subcategory_slug = htmlspecialchars($subcategory['slug']);
+                        echo '<li><a href="index.php?subcategory=' . $subcategory_id . '" class="subcategory-link subcategory-filter" data-subcategory-id="' . $subcategory_id . '">' . $subcategory_name . '</a></li>';
+                    }
+                    echo '</ul>';
+                }
+                echo '</li>';
+
+                $stmt->close();
+            }
+
+            $conn->close();
+            ?>
         </ul>
     </div>
+
+    <!-- JavaScript for Sidebar Interactivity -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const categoryLinks = document.querySelectorAll('.category-link');
+            const closeSidebarBtn = document.getElementById('closeSidebar');
+            const sidebar = document.getElementById('categorySidebar');
+
+            // Toggle subcategory visibility
+            categoryLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const subcategoryList = this.nextElementSibling;
+                    if (subcategoryList && subcategoryList.classList.contains('subcategory-list')) {
+                        const isActive = subcategoryList.classList.contains('active');
+                        document.querySelectorAll('.subcategory-list').forEach(list => list.classList.remove('active'));
+                        if (!isActive) {
+                            subcategoryList.classList.add('active');
+                        }
+                    }
+                });
+            });
+
+            // Close sidebar
+            closeSidebarBtn.addEventListener('click', function () {
+                sidebar.classList.add('closed');
+            });
+        });
+    </script>
     <!-- Off canves for cart -->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart" aria-labelledby="offcanvasCartLabel">
   <div class="offcanvas-header">
