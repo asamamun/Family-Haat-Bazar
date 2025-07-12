@@ -14,6 +14,7 @@ require __DIR__ . '/../vendor/autoload.php';
         <main>
             <?php require __DIR__ . '/components/sidebar.php'; ?>
             <div id="layoutSidenav_content">
+                
 
                 <!-- changed content -->
                 <!-- TODO: subcategory CRUD with AJAX -->
@@ -180,6 +181,7 @@ array(3) {
   }
 }*/
 ?>
+                        <h1 class="mt-4 mb-4 text-primary">Order Details</h1>
                         <div class="container">
                             <div class="row justify-content-center">
                                 <div class="col-md-12">
@@ -324,6 +326,36 @@ array(3) {
 
          
     </script>
+    <script>
+    $(document).ready(function () {
+        $('#confirmDelete').on('click', function () {
+            const selectedStatus = $('input[name="status"]:checked').val();
+            const orderId = <?= json_encode($id) ?>;
+
+            if (!selectedStatus) {
+                alert("Please select a status.");
+                return;
+            }
+
+            $.ajax({
+                url: 'update_order_status.php', // Create this file
+                type: 'POST',
+                data: {
+                    id: orderId,
+                    status: selectedStatus
+                },
+                success: function (response) {
+                    alert('Order status updated successfully!');
+                    location.reload();
+                },
+                error: function () {
+                    alert('Error updating order status.');
+                }
+            });
+        });
+    });
+</script>
+
 </body>
 
 </html>
