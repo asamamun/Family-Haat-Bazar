@@ -11,6 +11,7 @@ if (session_status() === PHP_SESSION_NONE) {
     <title><?= settings()['companyname'] ?> - <?= $page ?></title>
     <link rel="stylesheet" href="<?= settings()['homepage'] ?>assets/css/bootstrap.min.css">
     <script src="<?= settings()['homepage'] ?>assets/js/bootstrap.bundle.min.js"></script>
+    <script src="<?= settings()['homepage'] ?>assets/js/cart.js"></script>
     <!-- Add Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <link rel="stylesheet" href="<?= settings()['homepage'] ?>assets/css/styles.css">

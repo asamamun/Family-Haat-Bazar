@@ -54,46 +54,6 @@ require __DIR__ . '/../vendor/autoload.php';
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php
-                                            $db = new MysqliDb();
-                                            // show order and order details
-                                            $orders = $db->get('orders');
-                                            foreach ($orders as $order) {
-                                                echo "<tr>";
-                                                echo "<td>" . $order['id'] . "</td>";
-                                                echo "<td>" . $order['order_number'] . "</td>";
-                                                // echo "<td>" . $order['user_id'] . "</td>";
-                                                echo "<td>" . $order['order_type'] . "</td>";
-                                                echo "<td>" . $order['status'] . "</td>";
-                                                echo "<td>" . $order['payment_status'] . "</td>";
-                                                echo "<td>" . $order['payment_method'] . "</td>";
-                                                echo "<td>" . $order['transaction_id'] . "</td>";
-                                                echo "<td>" . $order['subtotal'] . "</td>";
-                                                echo "<td>" . $order['discount_amount'] . "</td>";
-                                                // echo "<td>" . $order['coupon_id'] . "</td>";
-                                                echo "<td>" . $order['tax_amount'] . "</td>";
-                                                // echo "<td>" . $order['shipping_amount'] . "</td>";
-                                                echo "<td>" . $order['total_amount'] . "</td>";
-                                                echo "<td>" . $order['currency'] . "</td>";
-                                                echo "<td>" . $order['notes'] . "</td>";
-                                                // echo "<td>" . $order['billing_first_name']." ". $order['billing_last_name'] . "</td>";
-                                                // echo "<td>" . $order['billing_phone'] . "</td>";
-                                                echo "<td>" . $order['created_at'] . "</td>";
-                                                echo "<td>" . $order['updated_at'] . "</td>";
-                                                echo "<td>
-                                                <a href='order-details.php?id=" . $order['id'] . "' class='btn btn-primary' title='View Order Details'><i class='bi bi-arrows-fullscreen'></i></a>
-                                                <a href='invoice.php?id=" . $order['id'] . "' class='btn btn-secondary' title='View Invoice'><i class='bi bi-receipt'></i></a>
-                                                </td>";
-                                                echo "</tr>";
-                                            }?>
-                                            <!-- Data will be loaded via AJAX -->
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
                                             <!-- Data will be loaded via AJAX -->
                                         </tbody>
                                     </table>
@@ -200,8 +160,8 @@ require __DIR__ . '/../vendor/autoload.php';
         </main>
     </div>
     <script src="<?= settings()['adminpage'] ?>assets/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    <script src="<?= settings()['adminpage'] ?>assets/js/scripts.js"></script>
     <script src="<?= settings()['adminpage'] ?>assets/js/jquery-3.7.1.min.js"></script>
+    <script src="<?= settings()['adminpage'] ?>assets/js/scripts.js"></script>
 <!--     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/dataTables.bootstrap5.min.js"></script> -->
 
@@ -209,9 +169,56 @@ require __DIR__ . '/../vendor/autoload.php';
 <script src="https://cdn.datatables.net/v/bs5/dt-2.3.2/datatables.min.js" integrity="sha384-rL0MBj9uZEDNQEfrmF51TAYo90+AinpwWp2+duU1VDW/RG7flzbPjbqEI3hlSRUv" crossorigin="anonymous"></script>
 
 
-    <script>
+<script>
+        $(document).ready(function() {
+            var table = $('#ordersTable').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": {
+                    "url": "order-ajax.php",
+                    "type": "POST",
+                    "data": {
+                        action: 'fetch'
+                    }
+                },
+                "columns": [
+                    { "data": "id" },
+                    { "data": "order_number" },
+                    { "data": "order_type" },
+                    { "data": "status" },
+                    { "data": "payment_status" },
+                    { "data": "payment_method" },
+                    { "data": "transaction_id" },
+                    { "data": "subtotal" },
+                    { "data": "discount_amount" },
+                    { "data": "tax_amount" },
+                    { "data": "total_amount" },
+                    { "data": "currency" },
+                    { "data": "notes" },
+                    { "data": "created_at" },
+                    { "data": "updated_at" },
+                    {
+                        "data": null,
+                        "render": function(data, type, row) {
+                            return '<a href="order-details.php?id=' + row.id + '" class="btn btn-primary" title="View Order Details"><i class="bi bi-arrows-fullscreen"></i></a>' +
+                                   '<a href="invoice.php?id=' + row.id + '" class="btn btn-secondary" title="View Invoice"><i class="bi bi-receipt"></i></a>';
+                        }
+                    }
+                ],
+                "responsive": true,
+                "order": [[0, "desc"]]
+            });
+        });
 
-         
+        function showAlert(type, message) {
+            Swal.fire({
+                position: "top-end",
+                icon: type,
+                title: message,
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
     </script>
 </body>
 

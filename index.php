@@ -173,6 +173,73 @@ $page = "Home";
             $('#cartCountButton').text(items.length);
             showCartItemsOffCanvas(items);
         });
+
+        let cart = new Cart();
+        function updateCartDisplay() {
+            let allitems = cart.getSummary();
+            $("#cartCountButton").text(cart.getTotalItems());
+            $("#grandTotalCanvas").text(parseFloat(cart.getTotalPrice()).toFixed(2));
+            populateItems(allitems.items, "#cartContent table tbody");
+        }
+
+        function populateItems(items, tableId) {
+            $(tableId).html("");
+            if (items.length === 0) {
+                $(tableId).append(`<tr><td colspan="5" class="text-center">Your cart is empty.</td></tr>`);
+                return;
+            }
+            items.forEach(item => {
+                $(tableId).append(`
+                    <tr>
+                        <td class="align-middle">${item.name}</td>
+                        <td class="align-middle">
+                            <input type="number" class="form-control form-control-sm qty-input" data-id="${item.id}" value="${item.quantity}" min="1" style="width: 60px;">
+                        </td>
+                        <td class="align-middle">৳${parseFloat(item.price).toFixed(2)}</td>
+                        <td class="align-middle">৳${(item.quantity * item.price).toFixed(2)}</td>
+                        <td class="align-middle">
+                            <button class="btn btn-danger btn-sm remove-item" data-id="${item.id}">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `);
+            });
+        }
+
+        // Initial cart load
+        updateCartDisplay();
+
+        // Remove item
+        $(document).on("click", ".remove-item", function() {
+            let id = $(this).data('id');
+            cart.removeItem(id);
+            updateCartDisplay();
+            Swal.fire({
+                icon: 'success',
+                title: 'Item Removed',
+                text: 'The item has been removed from your cart.',
+                timer: 1500,
+                showConfirmButton: false
+            });
+        });
+
+        // Quantity change
+        $(document).on("change", ".qty-input", function() {
+            let id = $(this).data('id');
+            let quantity = parseInt($(this).val());
+            if (quantity < 1) {
+                $(this).val(1);
+                quantity = 1;
+            }
+            cart.editItem(id, quantity);
+            updateCartDisplay();
+        });
+
+        // Update offcanvas cart when shown
+        $('#offcanvasCart').on('show.bs.offcanvas', function () {
+            updateCartDisplay();
+        });
     });
 </script>
 <?php $db->disconnect(); ?>
