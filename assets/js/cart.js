@@ -127,29 +127,3 @@ class Cart {
     };
   }
 }
-
-// Example usage:
-/*
-const cart = new Cart();
-
-// Adding items
-cart.addItem({
-  id: 'prod1',
-  name: 'T-Shirt',
-  price: 19.99,
-  quantity: 2,
-  image: 'tshirt.jpg',
-  attributes: { size: 'M', color: 'Blue' }
-});
-
-// Editing quantity
-cart.editItem('prod1', 3);
-
-// Removing item
-cart.removeItem('prod1');
-
-// Getting totals
-console.log(cart.getTotalItems()); // Number of items
-console.log(cart.getTotalPrice()); // Total price
-console.log(cart.getSummary()); // Full cart summary
-*/

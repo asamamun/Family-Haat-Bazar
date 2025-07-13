@@ -111,13 +111,10 @@ try {
             throw new Exception("Failed to add item: {$item['name']}");
         }
 
-        // Update stock using stored procedure
-/*         $db->rawQuery('CALL ProcessStockSale(?, ?, ?, ?)', [
-            (int)$item['id'],
-            (int)$item['quantity'],
-            $order_id,
-            isset($_SESSION['userid']) ? (int)$_SESSION['userid'] : null
-        ]); */
+        // Deduct stock quantity
+        $current_stock = $product['stock_quantity'];
+        $new_stock = $current_stock - (int)$item['quantity'];
+        $db->where('id', (int)$item['id'])->update('products', ['stock_quantity' => $new_stock]);
     }
 
     // Insert payment transaction

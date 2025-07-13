@@ -1,0 +1,8 @@
+[13-Jul-2025 11:49:22 Asia/Dhaka] PHP Fatal error:  Uncaught Error: Call to undefined method MysqliDb::raw() in D:\xampp8240\htdocs\ROUND64\PHP\Family-Haat-Bazar\admin\process_order.php:149
+Stack trace:
+#0 {main}
+  thrown in D:\xampp8240\htdocs\ROUND64\PHP\Family-Haat-Bazar\admin\process_order.php on line 149
+[13-Jul-2025 11:50:31 Asia/Dhaka] Array:[1,2,38,null]
+[13-Jul-2025 11:50:56 Asia/Dhaka] Array:[2,1,39,null]
+[13-Jul-2025 11:55:16 Asia/Dhaka] Array:[1,5,40,null]
+[13-Jul-2025 11:59:31 Asia/Dhaka] Array:[1,3,43,null]

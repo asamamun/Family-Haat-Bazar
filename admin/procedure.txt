@@ -1,0 +1,104 @@
+BEGIN
+    DECLARE remaining_qty INT DEFAULT quantity_param;
+    DECLARE batch_qty INT;
+    DECLARE batch_id_val INT;
+    DECLARE batch_cost DECIMAL(10,2);
+    DECLARE done INT DEFAULT FALSE;
+    
+    -- Cursor for FIFO stock batches
+    DECLARE batch_cursor CURSOR FOR
+        SELECT id, quantity_available, cost_price
+        FROM stock_batches
+        WHERE product_id = product_id_param 
+        AND quantity_available > 0
+        AND is_active = TRUE
+        ORDER BY received_date ASC, id ASC;
+    
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    
+    OPEN batch_cursor;
+    
+    batch_loop: LOOP
+        FETCH batch_cursor INTO batch_id_val, batch_qty, batch_cost;
+        
+        IF done OR remaining_qty <= 0 THEN
+            LEAVE batch_loop;
+        END IF;
+        
+        IF batch_qty >= remaining_qty THEN
+            -- This batch can fulfill remaining quantity
+            UPDATE stock_batches 
+            SET quantity_available = quantity_available - remaining_qty,
+                quantity_sold = quantity_sold + remaining_qty
+            WHERE id = batch_id_val;
+            
+            -- Record stock movement
+            INSERT INTO stock_movements (
+                product_id, 
+                batch_id,
+                movement_type, 
+                quantity, 
+                cost_price,
+                total_cost,
+                reference_type, 
+                reference_id,
+                created_by
+            ) VALUES (
+                product_id_param, 
+                batch_id_val,
+                'OUT', 
+                remaining_qty, 
+                batch_cost,
+                remaining_qty * batch_cost,
+                'SALE', 
+                order_id_param,
+                user_id_param
+            );
+            
+            SET remaining_qty = 0;
+        ELSE
+            -- Use entire batch and continue
+            UPDATE stock_batches 
+            SET quantity_available = 0,
+                quantity_sold = quantity_sold + batch_qty,
+                is_active = FALSE
+            WHERE id = batch_id_val;
+            
+            -- Record stock movement
+            INSERT INTO stock_movements (
+                product_id, 
+                batch_id,
+                movement_type, 
+                quantity, 
+                cost_price,
+                total_cost,
+                reference_type, 
+                reference_id,
+                created_by
+            ) VALUES (
+                product_id_param, 
+                batch_id_val,
+                'OUT', 
+                batch_qty, 
+                batch_cost,
+                batch_qty * batch_cost,
+                'SALE', 
+                order_id_param,
+                user_id_param
+            );
+            
+            SET remaining_qty = remaining_qty - batch_qty;
+        END IF;
+    END LOOP;
+    
+    CLOSE batch_cursor;
+    
+    -- Update product stock quantity
+    UPDATE products 
+    SET stock_quantity = stock_quantity - (quantity_param - remaining_qty),
+        updated_at = CURRENT_TIMESTAMP
+    WHERE id = product_id_param;
+    
+    -- Recalculate weighted average cost
+    CALL CalculateWeightedAverageCost(product_id_param);
+END

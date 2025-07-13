@@ -90,6 +90,20 @@
                                     <a class="nav-link" href="orders-all.php">All</a>                                    
                                 </nav>
                             </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseReports" aria-expanded="false" aria-controls="collapsePages">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Reports
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseReports" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="sales-report.php">Sales Report</a>
+                                    <a class="nav-link" href="product-report.php">Product Report</a>
+                                    <a class="nav-link" href="user-report.php">User Report</a>
+                                    <a class="nav-link" href="best-seller-report.php">Best Seller Report</a>
+                                    <a class="nav-link" href="low-inventory-report.php">Low Inventory Report</a>
+                                </nav>
+                            </div>
                             <!-- <div class="sb-sidenav-menu-heading">Addons</div>
                             <a class="nav-link" href="charts.html">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>

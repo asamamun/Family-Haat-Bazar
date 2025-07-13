@@ -174,7 +174,7 @@ $page = "Home";
             showCartItemsOffCanvas(items);
         });
 
-        let cart = new Cart();
+        window.cart = new Cart();
         function updateCartDisplay() {
             let allitems = cart.getSummary();
             $("#cartCountButton").text(cart.getTotalItems());

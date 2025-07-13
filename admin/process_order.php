@@ -99,7 +99,7 @@ try {
         'created_at' => date('Y-m-d H:i:s'),
         'updated_at' => null
     ];
-    error_log(json_encode($order_data));
+    // error_log(json_encode($order_data));
     /*
     {
     "order_number":"POS-1751268662-8158",
@@ -138,14 +138,17 @@ try {
         if (!$db->insert('order_items', $item_data)) {
             throw new Exception("Failed to add item: {$item['name']}");
         }
-
-        // Update stock using stored procedure
-/*         $db->rawQuery('CALL ProcessStockSale(?, ?, ?, ?)', [
+        error_log("Array:".json_encode([
             (int)$item['id'],
             (int)$item['quantity'],
             $order_id,
             isset($_SESSION['user_id']) ? (int)$_SESSION['user_id'] : null
-        ]); */
+        ]));
+
+        // Deduct stock quantity
+        $current_stock = $product['stock_quantity'];
+        $new_stock = $current_stock - (int)$item['quantity'];
+        $db->where('id', (int)$item['id'])->update('products', ['stock_quantity' => $new_stock]);
     }
 
     // Insert payment transaction
