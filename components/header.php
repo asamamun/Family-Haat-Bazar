@@ -11,109 +11,84 @@ if (session_status() === PHP_SESSION_NONE) {
     <title><?= settings()['companyname'] ?> - <?= $page ?></title>
     <link rel="stylesheet" href="<?= settings()['homepage'] ?>assets/css/bootstrap.min.css">
     <script src="<?= settings()['homepage'] ?>assets/js/bootstrap.bundle.min.js"></script>
-    <script src="<?= settings()['homepage'] ?>assets/js/cart.js"></script>
     <!-- Add Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <link rel="stylesheet" href="<?= settings()['homepage'] ?>assets/css/styles.css">
 <link rel="stylesheet" href="<?= settings()['homepage'] ?>assets/css/footer.css">
 <link rel="stylesheet" href="<?= settings()['homepage'] ?>assets/assets/owl.carousel.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
 <body>
-    <div class="container">
-    <nav class="customnavbar">
-        <!-- Top Bar - Prussian Blue -->
-        <div class="top-bar">
-            <div class="logo-section">
-                <div class="logo"><a href="index.php">ShopEase</a></div>
-            </div>
+    
+    
 
-            <!-- delivery location -->
-            <div class="delivery-location">
-                <span class="delivery-icon">🚚</span>
-                <span>Select your delivery location</span>
-            </div>
-            
-            <!-- search -->
-            <div class="search-container">
-                <input type="text" class="search-bar" placeholder="Search your products">
-                <button class="search-btn">🔍</button>
-            </div>
-            
-            <div class="right-section">
-                <select class="language-selector">
-                    <option>বাংলা</option>
-                    <option>English</option>
-                </select>
-                
-                <a href="#" class="app-download" title="Download App Now">
-                    <span class="app-icon">📱</span>
-                    <span >Download App Now</span>                   
-                </a>
-                
-                <!-- Login logout registration -->
-
-                <div class="auth-section">                    
-                <?php
-                    if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == 'true') {
-                 if ($_SESSION['role'] == 'admin') {
-                    echo '<span><a title="Dashboard" href="admin/index.php">        
-                        <span class="dashboard-icon btn btn-light">📊</span>
-                        </a></span>';
-                     //logout
-                    echo '<span><a title="Logout" href="logout.php">      
-                        <span class="logout-icon btn btn-light">🚪</span>
-                        </a></span>';
-
-                        }
-                    else {
-                    echo '<span><a class="btn btn-light" href="logout.php">Logout</a></span>';
-                        }
-                    } else {
-                    echo '<span><a class="btn btn-light" href="login.php">Sign In</a>  <a class="btn btn-light" href="registration.php">Sign up</a></span>';
-                    }
-                ?>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Bottom Navigation - Azure Blue -->
-        <div class="bottom-nav">
-            <div class="nav-menu">
-                <div class="nav-left">
-                    <div class="menu-toggle" id="categoryToggle">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="index.php"><img src="<?= settings()['logo'] ?>" alt="ShopEase Logo" width="90"></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:void(0);" id="categoryToggle">
+                    <div class="menu-toggle">
                         <span class="hamburger">☰</span>
                         <span>Select Category</span>
                     </div>
-                    
-                    <div class="nav-links">
-                        <ul>
-                            <li class="btn btn-outline-light"><a href="hot-deals.php">Hot Deals</a></li>
-                            <li class="btn btn-outline-light"><a href="brands.php">Brands</a></li>
-                        </ul>
-    
-                    </div>
-                </div>
-                <div class="nav-right">
-                    <marquee>Free Shipping on Orders Over ৳1000!</marquee>
-                </div>
-                
-                <!-- Cart Icon -->
-                <div class="nav-right">
-                    
-
-                    
-                    <button class= "icon nav-right-item btn btn-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">🛒</button>
-                        <a href="cart.php" class="nav-right-item">(<span id="cartCountButton">0</span>)</a>
-                    <!-- <button class="nav-right-item btn btn-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
-                        🛒 (<span id="cartCountButton">0</span>)
-                    </button> -->
-                </div>
-            </div>
+                </a></li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="index.php">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="hot-deals.php">Hot Deals</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="brands.php">Brands</a>
+                </li>
+            </ul>
+            <form class="d-flex" role="search">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <button class="icon nav-right-item btn btn-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">🛒</button>
+                </li>
+                <li class="nav-item">
+                    <a href="cart.php" class="nav-link">(<span id="cartCountButton">0</span>)</a>
+                </li>
+                <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == 'true'): ?>
+                    <?php if ($_SESSION['role'] == 'admin'): ?>
+                        <li class="nav-item">
+                            <a href="admin/index.php" class="nav-link btn btn-primary me-2">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="logout.php" class="nav-link btn btn-danger">Logout</a>
+                        </li>
+                    <?php else: ?>
+                        <li class="nav-item">
+                            <a href="logout.php" class="nav-link btn btn-primary">Logout</a>
+                        </li>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <li class="nav-item">
+                        <a href="login.php" class="nav-link btn btn-primary me-2">Sign In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="registration.php" class="nav-link btn btn-primary">Sign up</a>
+                    </li>
+                <?php endif; ?>
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>
 
+
+<div class="container">
     <!-- Sidebar Overlay -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
@@ -130,7 +105,11 @@ if (session_status() === PHP_SESSION_NONE) {
         <ul class="category-list">
             <?php
             // Database connection
-            $conn = new mysqli("", "root", "", "haatbazar");
+            $conn = new mysqli(
+                settings()['hostname'], 
+                settings()['user'], 
+                settings()['password'], 
+                settings()['database']);
             if ($conn->connect_error) {
                 die("Connection failed: " . $conn->connect_error);
             }

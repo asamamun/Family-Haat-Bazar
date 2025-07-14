@@ -5,9 +5,8 @@
                             <div class="sb-sidenav-menu-heading">Core</div>
                             
                                                        
-                            <a class="nav-link" href="../index.php" title="homepage" target="_blank">
-                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                <img src="<?= settings()['logo'] ?>" alt="site link">
+                            <a class="nav-link" href="../index.php" title="homepage" target="_blank">                                
+                                <img class="img-fluid" src="<?= settings()['logo'] ?>" alt="site link">
                             </a>
                             <a class="nav-link" href="index.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>

@@ -6,7 +6,7 @@ if (!function_exists('settings')) {
         return [
             'root'  => $root,
             'companyname'=> 'ShopEase',
-            'logo'=>$root."admin/assets/img/logo.svg",
+            'logo'=>$root."admin/assets/img/logo.png",
             'homepage'=> $root,
             'adminpage'=>$root.'admin/',
             'hostname'=> 'localhost',

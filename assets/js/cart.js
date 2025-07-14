@@ -17,7 +17,7 @@ class Cart {
 
   // Add item to cart
   addItem(item) {
-    console.log(item);
+    // console.log(item);
     if (!item.id || !item.name || !item.price || !item.quantity) {
       throw new Error('Item must have id, name, price, and quantity');
     }

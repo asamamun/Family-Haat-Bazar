@@ -172,6 +172,13 @@ $page = "Home";
             let items = cart.addItem({ id, name, price, quantity });
             $('#cartCountButton').text(items.length);
             showCartItemsOffCanvas(items);
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Item added to cart",
+                showConfirmButton: false,
+                timer: 1500
+            });
         });
 
         window.cart = new Cart();
