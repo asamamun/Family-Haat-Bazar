@@ -42,7 +42,7 @@ array(26) { ["id"]=> int(2) ["category_id"]=> int(5) ["subcategory_id"]=> int(16
                 <div class="row">
                     <div class="col-md-6">
                         <div class="images p-3">
-                            <div class="text-center p-4"> <img id="main-image" src="<?= settings()['root'] ?>assets/products/<?= $products[0]['image'] ?>" width="250" /> </div>
+                            <div class="text-center p-4"> <img id="main-image" src="<?= settings()['root'] ?>assets/products/<?= $products[0]['image'] ?>" width="250" onerror="this.onerror=null;this.src='<?= settings()['logo'] ?>';"/> </div>
 
                         </div>
                     </div>
@@ -61,7 +61,7 @@ array(26) { ["id"]=> int(2) ["category_id"]=> int(5) ["subcategory_id"]=> int(16
                             <!-- <div class="sizes mt-5">
                                 <h6 class="text-uppercase">Size</h6> <label class="radio"> <input type="radio" name="size" value="S" checked> <span>S</span> </label> <label class="radio"> <input type="radio" name="size" value="M"> <span>M</span> </label> <label class="radio"> <input type="radio" name="size" value="L"> <span>L</span> </label> <label class="radio"> <input type="radio" name="size" value="XL"> <span>XL</span> </label> <label class="radio"> <input type="radio" name="size" value="XXL"> <span>XXL</span> </label>
                             </div> -->
-                            <div class="cart mt-4 align-items-center"> <button class="btn btn-danger text-uppercase mr-2 px-4">Add to cart</button> <i class="fa fa-heart text-muted"></i> <i class="fa fa-share-alt text-muted"></i> </div>
+                            <div class="cart mt-4 align-items-center"> <button class="btn btn-danger text-uppercase mr-2 px-4 btn-add-cart" data-product-id="<?= $products[0]['id'] ?>" data-product-name="<?= htmlspecialchars($products[0]['name']) ?>" data-product-price="<?= $products[0]['selling_price'] ?>" data-product-image="<?= htmlspecialchars($products[0]['image']) ?>">Add to cart</button> <i class="fa fa-heart text-muted"></i> <i class="fa fa-share-alt text-muted"></i> </div>
                         </div>
                     </div>
                 </div>
@@ -77,37 +77,9 @@ array(26) { ["id"]=> int(2) ["category_id"]=> int(5) ["subcategory_id"]=> int(16
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
-    <script>
-
-
-        // Add to cart functionality
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('btn-add-cart')) {
-                const productName = e.target.closest('.card').querySelector('.card-title').textContent;
-                
-                // Create a temporary success message
-                const originalText = e.target.textContent;
-                e.target.textContent = 'Added!';
-                e.target.classList.remove('btn-primary');
-                e.target.classList.add('btn-success');
-                
-                setTimeout(() => {
-                    e.target.textContent = originalText;
-                    e.target.classList.remove('btn-success');
-                    e.target.classList.add('btn-primary');
-                }, 1500);
-            }
-        });
-
-        // Initialize products
-
-    </script>
 </div>
 
 <?php require __DIR__ . '/components/footer.php'; ?>
-<script>
-    
-</script>
 <?php $db->disconnect();?>
 </body>
 </html>

@@ -6,3 +6,9 @@ Stack trace:
 [13-Jul-2025 11:50:56 Asia/Dhaka] Array:[2,1,39,null]
 [13-Jul-2025 11:55:16 Asia/Dhaka] Array:[1,5,40,null]
 [13-Jul-2025 11:59:31 Asia/Dhaka] Array:[1,3,43,null]
+[14-Jul-2025 12:18:57 Asia/Dhaka] PHP Warning:  Undefined array key "username" in D:\xampp8240\htdocs\ROUND64\PHP\Family-Haat-Bazar\admin\components\navbar.php on line 19
+[14-Jul-2025 12:18:57 Asia/Dhaka] PHP Warning:  Undefined array key "username" in D:\xampp8240\htdocs\ROUND64\PHP\Family-Haat-Bazar\admin\components\sidebar.php on line 123
+[14-Jul-2025 12:19:32 Asia/Dhaka] PHP Warning:  Undefined array key "username" in D:\xampp8240\htdocs\ROUND64\PHP\Family-Haat-Bazar\admin\components\navbar.php on line 19
+[14-Jul-2025 12:19:32 Asia/Dhaka] PHP Warning:  Undefined array key "username" in D:\xampp8240\htdocs\ROUND64\PHP\Family-Haat-Bazar\admin\components\sidebar.php on line 123
+[14-Jul-2025 12:19:59 Asia/Dhaka] PHP Warning:  Undefined array key "username" in D:\xampp8240\htdocs\ROUND64\PHP\Family-Haat-Bazar\admin\components\navbar.php on line 19
+[14-Jul-2025 12:19:59 Asia/Dhaka] PHP Warning:  Undefined array key "username" in D:\xampp8240\htdocs\ROUND64\PHP\Family-Haat-Bazar\admin\components\sidebar.php on line 123

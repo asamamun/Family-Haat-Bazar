@@ -68,9 +68,9 @@
         </div>
     </footer>
 
-<script src="<?= settings()['homepage'] ?>assets/js/jquery-3.7.1.min.js"></script>
+
 <script src="<?= settings()['homepage'] ?>assets/owl.carousel.min.js"></script>
-<script src="<?= settings()['homepage'] ?>assets/js/cart.js"></script>
+
 <script>
     // Example starter JavaScript for disabling form submissions if there are invalid fields
 (() => {
@@ -128,25 +128,6 @@
         });
     </script>
     <script>
-      $('.owl-carousel').owlCarousel({
-    loop:true,
-    margin:10,
-    nav:true,
-    responsive:{
-        0:{
-            items:1
-        },
-        600:{
-            items:3
-        },
-        1000:{
-            items:5
-        }
-    }
-})
-    </script>
-    <script>
-        let cart = new Cart();
         $(document).ready(function () {
             // show the cart items in #cartContent
             let allitems = cart.getSummary();

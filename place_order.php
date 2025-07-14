@@ -272,12 +272,10 @@ $(document).ready(function() {
     }
 
     let cart = new Cart();
-    function updateCartDisplay() {
+    window.updateCartDisplay = function() {
         let allitems = cart.getSummary();
-        $("#cartCount").text(cart.getTotalItems());
-        $("#netTotal").text(`৳${parseFloat(cart.getTotalPrice()).toFixed(2)}`);
-        setTotal();
-        populateItems(allitems.items, "#cartTable");
+        $("#cartCountButton").text(cart.getTotalItems());
+        $("#grandTotal").text(parseFloat(cart.getTotalPrice()).toFixed(2));
         populateItems(allitems.items, "#cartContent table tbody");
     }
 

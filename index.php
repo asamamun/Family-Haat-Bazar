@@ -5,6 +5,11 @@ if (session_status() === PHP_SESSION_NONE) {
 require __DIR__ . '/vendor/autoload.php';
 $db = new MysqliDb();
 $page = "Home";
+
+// Fetch hot items for the carousel
+$db->where('is_hot_item', 1);
+$hotItems = $db->get('products');
+
 ?>
 <?php require __DIR__ . '/components/header.php'; ?>
 <br>
@@ -12,18 +17,14 @@ $page = "Home";
 <h1 style="text-align:center; font-weight:bold; color:red; ">Welcome to ShopEase</h1>
 <div><span style="font-family:sansherif">Our hot products</span></div>
 <div class="owl-carousel owl-theme">
-    <div class="item"><h4><img src="assets/images/fruits/green-tea.jpg" alt="green-tea"></h4><span>Green Tea</span></div>
-    <div class="item"><h4><img src="assets/images/fruits/halim-mix.jpg" alt="halim-mix"</h4></div>
-    <div class="item"><h4><img src="assets/images/fruits/apple.jpg" alt=""</h4></div>
-    <div class="item"><h4><img src="assets/images/fruits/Aam.jpg" alt=""</h4></div>
-    <div class="item"><h4><img src="assets/images/fruits/Dalim.jpg" alt="green-tea"</h4></div>
-    <div class="item"><h4><img src="assets/images/fruits/banana.jpg" alt="green-tea"</h4></div>
-    <div class="item"><h4><img src="assets/images/fruits/greenapple.jpg" alt="green-tea"</h4></div>
-    <div class="item"><h4><img src="assets/images/fruits/Guava.jpg" alt="green-tea"</h4></div>
-    <div class="item"><h4><img src="assets/images/fruits/Malta.jpg" alt="green-tea"</h4></div>
-    <div class="item"><h4><img src="assets/images/fruits/Naspati.jpg" alt="green-tea"0</h4></div>
-    <div class="item"><h4><img src="assets/images/fruits/pepe.jpg" alt="green-tea"1</h4></div>
-    <div class="item"><h4><img src="assets/images/fruits/pineapple.jpg" alt="green-tea"2</h4></div>
+    <?php foreach ($hotItems as $item): ?>
+        <div class="item">
+            <a href="product-details.php?id=<?= $item['id'] ?>" class="text-decoration-none text-dark">
+                <h4><img src="assets/products/<?php echo htmlspecialchars($item['image']); ?>" alt="<?php echo htmlspecialchars($item['name']); ?>" onerror="this.onerror=null;this.src='<?= settings()['logo'] ?>';"></h4>
+                <span><?php echo htmlspecialchars($item['name']); ?></span>
+            </a>
+        </div>
+    <?php endforeach; ?>
 </div>
 <!-- content end -->
 <!-- Our Products -->
@@ -83,7 +84,7 @@ $page = "Home";
                             var productHtml = `
                                 <div class="col-3 mb-3">
                                     <div class="card product-card h-100 shadow-sm d-flex flex-column">
-                                        <img src="${rootUrl}assets/products/${product.image}" class="card-img-top product-image" alt="${product.name}">
+                                        <img src="${rootUrl}assets/products/${product.image}" class="card-img-top product-image" alt="${product.name}" onerror="this.onerror=null;this.src='<?= settings()['logo'] ?>';">
                                         <div class="card-body flex-grow-1 p-2">
                                             <h6 class="card-title mb-2" style="font-size: 0.8rem; line-height: 1.2;">${product.name}</h6>
                                             <div class="mb-2">
@@ -93,7 +94,7 @@ $page = "Home";
                                             <a class="btn btn-outline-primary btn-sm" href="product-details.php?id=${product.id}">Details</a>
                                         </div>
                                         <div class="card-footer bg-transparent border-0">
-                                            <button data-id="${product.id}" data-name="${product.name}" data-price="${product.selling_price}" data-quantity="1" class="btn btn-primary btn-sm btn-add-cart w-100 cartBtn" style="font-size: 0.7rem; padding: 0.25rem 0.5rem;"> Add to Cart </button>
+                                            <button data-product-id="${product.id}" data-product-name="${product.name}" data-product-price="${product.selling_price}" data-quantity="1" data-product-image="${product.image}" class="btn btn-primary btn-sm btn-add-cart w-100 cartBtn" style="font-size: 0.7rem; padding: 0.25rem 0.5rem;"> Add to Cart </button>
                                         </div>
                                     </div>
                                 </div>`;
@@ -166,88 +167,25 @@ $page = "Home";
             loadProducts();
         });
 
-        $(document).on('click', '.cartBtn', function() {
-            let id = $(this).data('id');
-            let name = $(this).data('name');
-            let price = $(this).data('price');
-            let quantity = $(this).data('quantity');
-            let items = cart.addItem({ id, name, price, quantity });
-            $('#cartCountButton').text(items.length);
-            showCartItemsOffCanvas(items);
-            Swal.fire({
-                position: "top-end",
-                icon: "success",
-                title: "Item added to cart",
-                showConfirmButton: false,
-                timer: 1500
-            });
-        });
-
-        window.cart = new Cart();
-        function updateCartDisplay() {
-            let allitems = cart.getSummary();
-            $("#cartCountButton").text(cart.getTotalItems());
-            $("#grandTotalCanvas").text(parseFloat(cart.getTotalPrice()).toFixed(2));
-            populateItems(allitems.items, "#cartContent table tbody");
-        }
-
-        function populateItems(items, tableId) {
-            $(tableId).html("");
-            if (items.length === 0) {
-                $(tableId).append(`<tr><td colspan="5" class="text-center">Your cart is empty.</td></tr>`);
-                return;
+        // Initialize Owl Carousel
+        $('.owl-carousel').owlCarousel({
+            loop:true,
+            margin:10,
+            nav:true,
+            autoplay:true,
+            autoplayTimeout:3000,
+            autoplayHoverPause:true,
+            responsive:{
+                0:{
+                    items:1
+                },
+                600:{
+                    items:3
+                },
+                1000:{
+                    items:5
+                }
             }
-            items.forEach(item => {
-                $(tableId).append(`
-                    <tr>
-                        <td class="align-middle">${item.name}</td>
-                        <td class="align-middle">
-                            <input type="number" class="form-control form-control-sm qty-input" data-id="${item.id}" value="${item.quantity}" min="1" style="width: 60px;">
-                        </td>
-                        <td class="align-middle">৳${parseFloat(item.price).toFixed(2)}</td>
-                        <td class="align-middle">৳${(item.quantity * item.price).toFixed(2)}</td>
-                        <td class="align-middle">
-                            <button class="btn btn-danger btn-sm remove-item" data-id="${item.id}">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `);
-            });
-        }
-
-        // Initial cart load
-        updateCartDisplay();
-
-        // Remove item
-        $(document).on("click", ".remove-item", function() {
-            let id = $(this).data('id');
-            cart.removeItem(id);
-            updateCartDisplay();
-            Swal.fire({
-                icon: 'success',
-                title: 'Item Removed',
-                text: 'The item has been removed from your cart.',
-                timer: 1500,
-                showConfirmButton: false
-            });
-        });
-
-        // Quantity change
-        $(document).on("change", ".qty-input", function() {
-            let id = $(this).data('id');
-            let quantity = parseInt($(this).val());
-            if (quantity < 1) {
-                $(this).val(1);
-                quantity = 1;
-            }
-            cart.editItem(id, quantity);
-            updateCartDisplay();
-        });
-
-        // Update offcanvas cart when shown
-        $('#offcanvasCart').on('show.bs.offcanvas', function () {
-            updateCartDisplay();
         });
     });
 </script>

@@ -5,7 +5,7 @@ if (!function_exists('settings')) {
        $root = "http://192.168.54.81/ROUND64/PHP/Family-Haat-Bazar/"; 
         return [
             'root'  => $root,
-            'companyname'=> 'ShopEase',
+            'companyname'=> 'Shopno',
             'logo'=>$root."admin/assets/img/logo.png",
             'homepage'=> $root,
             'adminpage'=>$root.'admin/',
