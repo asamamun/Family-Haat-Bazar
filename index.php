@@ -82,16 +82,18 @@ $page = "Home";
                         response.products.forEach(function(product) {
                             var productHtml = `
                                 <div class="col-3 mb-3">
-                                    <div class="card product-card h-100 shadow-sm">
+                                    <div class="card product-card h-100 shadow-sm d-flex flex-column">
                                         <img src="${rootUrl}assets/products/${product.image}" class="card-img-top product-image" alt="${product.name}">
-                                        <div class="card-body d-flex flex-column p-2">
+                                        <div class="card-body flex-grow-1 p-2">
                                             <h6 class="card-title mb-2" style="font-size: 0.8rem; line-height: 1.2;">${product.name}</h6>
                                             <div class="mb-2">
                                                 <span class="price" style="font-size: 0.9rem;">${product.selling_price}</span>
                                                 <small class="original-price ms-1">${product.stock_quantity}</small>
                                             </div>
                                             <a class="btn btn-outline-primary btn-sm" href="product-details.php?id=${product.id}">Details</a>
-                                            <button data-id="${product.id}" data-name="${product.name}" data-price="${product.selling_price}" data-quantity="1" class="btn btn-primary btn-sm btn-add-cart mt-auto cartBtn" style="font-size: 0.7rem; padding: 0.25rem 0.5rem;"> Add to Cart </button>
+                                        </div>
+                                        <div class="card-footer bg-transparent border-0">
+                                            <button data-id="${product.id}" data-name="${product.name}" data-price="${product.selling_price}" data-quantity="1" class="btn btn-primary btn-sm btn-add-cart w-100 cartBtn" style="font-size: 0.7rem; padding: 0.25rem 0.5rem;"> Add to Cart </button>
                                         </div>
                                     </div>
                                 </div>`;
