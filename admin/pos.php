@@ -21,9 +21,8 @@ $categories = $db->get('categories', null, ['id', 'name']);
 $subcategories = $db->get('subcategories', null, ['id', 'name', 'category_id']);
 ?>
 
-<?php require __DIR__.'/components/header.php'; ?>
+<?php require __DIR__ . '/components/header.php';?>
 
-<!-- Rest of the HTML, CSS, and JavaScript remains unchanged -->
 <style>
 #productGrid {
     max-height: 400px;
@@ -43,13 +42,10 @@ $subcategories = $db->get('subcategories', null, ['id', 'name', 'category_id']);
 }
 </style>
 
-
-
-</head>
 <body class="sb-nav-fixed">
-<?php require __DIR__.'/components/navbar.php'; ?>
+<?php require __DIR__ . '/components/navbar.php';?>
 <div id="layoutSidenav">
-    <?php require __DIR__.'/components/sidebar.php'; ?>
+    <?php require __DIR__ . '/components/sidebar.php';?>
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4">
@@ -61,15 +57,55 @@ $subcategories = $db->get('subcategories', null, ['id', 'name', 'category_id']);
                 <div class="row">
                     <!-- Product Selection -->
                      <!-- barcode section -->
-                      <div class="col-md-8">
+                      <div class="col-md-4">
                         <div class="card mb-4">
                             <div class="card-header">
-                                <i class="fas fa-shopping-basket me-1"></i>
+                                <i class="fas fa-qrcode me-1"></i>
                                 Scan Product
                             </div>
                             <div class="card-body">
-                                <video id="video" width="200" height="150" style="border:1px solid #000"></video>
-                                <input type="text" id="scannedBarcode">
+                                <video id="video" width="100%" height="120" style="border:1px solid #000"></video>
+                                <input type="text" id="scannedBarcode" class="form-control mt-2" placeholder="Barcode will appear here">
+                            </div>
+                        </div>
+                      </div>
+
+                      <!-- Today's Sales Summary -->
+                      <div class="col-md-4">
+                        <div class="card mb-4">
+                            <div class="card-header bg-success text-white">
+                                <i class="fas fa-chart-line me-1"></i>
+                                Today's Sales
+                            </div>
+                            <div class="card-body">
+                                <div class="row text-center">
+                                    <div class="col-6">
+                                        <div class="border-end">
+                                            <h4 class="text-success mb-1" id="todaysSales">$0.00</h4>
+                                            <small class="text-muted">Total Sales</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <h4 class="text-primary mb-1" id="todaysOrders">0</h4>
+                                        <small class="text-muted">Orders</small>
+                                    </div>
+                                </div>
+                                <hr class="my-2">
+                                <div class="row text-center">
+                                    <div class="col-6">
+                                        <div class="border-end">
+                                            <h6 class="text-info mb-1" id="avgTransaction">$0.00</h6>
+                                            <small class="text-muted">Avg. Sale</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <h6 class="text-warning mb-1" id="itemsSold">0</h6>
+                                        <small class="text-muted">Items Sold</small>
+                                    </div>
+                                </div>
+                                <button class="btn btn-outline-success btn-sm w-100 mt-2" onclick="refreshStats()">
+                                    <i class="fas fa-sync-alt me-1"></i>Refresh
+                                </button>
                             </div>
                         </div>
                       </div>
@@ -94,48 +130,47 @@ $subcategories = $db->get('subcategories', null, ['id', 'name', 'category_id']);
                                         <select class="form-select" id="categoryFilter">
                                             <option value="">All Categories</option>
                                             <?php foreach ($categories as $category): ?>
-                                                <option value="<?= htmlspecialchars($category['id']) ?>">
-                                                    <?= htmlspecialchars($category['name']) ?>
+                                                <option value="<?=htmlspecialchars($category['id'])?>">
+                                                    <?=htmlspecialchars($category['name'])?>
                                                 </option>
-                                            <?php endforeach; ?>
+                                            <?php endforeach;?>
                                         </select>
                                     </div>
                                     <div class="col-md-4">
                                         <select class="form-select" id="subcategoryFilter">
                                             <option value="">All Subcategories</option>
                                             <?php foreach ($subcategories as $subcategory): ?>
-                                                <option value="<?= htmlspecialchars($subcategory['id']) ?>" 
-                                                        data-category="<?= htmlspecialchars($subcategory['category_id']) ?>">
-                                                    <?= htmlspecialchars($subcategory['name']) ?>
+                                                <option value="<?=htmlspecialchars($subcategory['id'])?>"
+                                                        data-category="<?=htmlspecialchars($subcategory['category_id'])?>">
+                                                    <?=htmlspecialchars($subcategory['name'])?>
                                                 </option>
-                                            <?php endforeach; ?>
+                                            <?php endforeach;?>
                                         </select>
                                     </div>
                                 </div>
-                                
+
                                 <div class="row" id="productGrid">
                                     <?php foreach ($products as $product): ?>
-                                        <div class="col-md-3 mb-3 product-item" 
-                                             data-id="<?= htmlspecialchars($product['id']) ?>"
-                                             data-name="<?= htmlspecialchars(strtolower($product['name'])) ?>" 
-                                             data-category="<?= htmlspecialchars($product['category_id']) ?>"
-                                             data-subcategory="<?= htmlspecialchars($product['subcategory_id'] ?? '') ?>">
+                                        <div class="col-md-3 mb-3 product-item"
+                                             data-id="<?=htmlspecialchars($product['id'])?>"
+                                             data-name="<?=htmlspecialchars(strtolower($product['name']))?>"
+                                             data-category="<?=htmlspecialchars($product['category_id'])?>"
+                                             data-subcategory="<?=htmlspecialchars($product['subcategory_id'] ?? '')?>">
                                             <div class="card product-card">
-                                            <img src="<?= settings()['root'] ?>assets/products/<?= htmlspecialchars($product['image'] ?? '') ?>" class="card-img-top" alt="<?= htmlspecialchars($product['name']) ?>">
+                                            <img src="<?=settings()['root']?>assets/products/<?=htmlspecialchars($product['image'] ?? '')?>" class="card-img-top" alt="<?=htmlspecialchars($product['name'])?>">
                                                 <div class="card-body">
-                                                    <h6 class="card-title"><?= htmlspecialchars($product['name']) ?> (ID: <?= $product['id'] ?>)</h6>
-                                                    <p class="card-text">$<?= number_format($product['selling_price'], 2) ?></p>
-                                                    <button class="btn btn-sm btn-primary add-to-cart" 
-                                                            data-id="<?= $product['id'] ?>" 
-                                                            data-price="<?= $product['selling_price'] ?>" 
-                                                            data-name="<?= htmlspecialchars($product['name']) ?>">
-                                                            
+                                                    <h6 class="card-title"><?=htmlspecialchars($product['name'])?> (ID: <?=$product['id']?>)</h6>
+                                                    <p class="card-text">$<?=number_format($product['selling_price'], 2)?></p>
+                                                    <button class="btn btn-sm btn-primary add-to-cart"
+                                                            data-id="<?=$product['id']?>"
+                                                            data-price="<?=$product['selling_price']?>"
+                                                            data-name="<?=htmlspecialchars($product['name'])?>">
                                                         Add
                                                     </button>
                                                 </div>
                                             </div>
                                         </div>
-                                    <?php endforeach; ?>
+                                    <?php endforeach;?>
                                 </div>
                             </div>
                         </div>
@@ -170,14 +205,36 @@ $subcategories = $db->get('subcategories', null, ['id', 'name', 'category_id']);
                                     <div class="col-md-6">
                                         <button class="btn btn-danger w-100" id="clearCart">Clear</button>
                                     </div>
-                                    <div class
-
-="col-md-6">
+                                    <div class="col-md-6">
                                         <button class="btn btn-warning w-100" id="holdCart">Hold</button>
                                     </div>
                                 </div>
 
-                                <div class="mt-4 p-3 bg-light rounded" id="cartSummary">
+                                <!-- Discount and Notes Section -->
+                                <div class="mt-3">
+                                    <div class="row mb-2">
+                                        <div class="col-6">
+                                            <label class="form-label small">Discount Amount</label>
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text">$</span>
+                                                <input type="number" class="form-control" id="discountInput" placeholder="0.00" step="0.01" min="0">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="form-label small">Discount %</label>
+                                            <div class="input-group input-group-sm">
+                                                <input type="number" class="form-control" id="discountPercent" placeholder="0" step="0.1" min="0" max="100">
+                                                <span class="input-group-text">%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label small">Order Notes</label>
+                                        <textarea class="form-control form-control-sm" id="orderNotes" rows="2" placeholder="Add notes for this order..."></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="mt-3 p-3 bg-light rounded" id="cartSummary">
                                     <div class="d-flex justify-content-between mb-2">
                                         <span>Subtotal:</span>
                                         <span id="subtotal">$0.00</span>
@@ -188,7 +245,7 @@ $subcategories = $db->get('subcategories', null, ['id', 'name', 'category_id']);
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span>Discount:</span>
-                                        <span id="discount">$0.00</span>
+                                        <span id="discount" class="text-danger">-$0.00</span>
                                     </div>
                                     <hr>
                                     <div class="d-flex justify-content-between fw-bold">
@@ -239,7 +296,7 @@ $subcategories = $db->get('subcategories', null, ['id', 'name', 'category_id']);
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss=" modal">Cancel</button> 
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                 <button type="button" class="btn btn-primary" id="completeSale">Complete Sale</button>
                             </div>
                         </div>
@@ -247,18 +304,16 @@ $subcategories = $db->get('subcategories', null, ['id', 'name', 'category_id']);
                 </div>
             </div>
         </main>
-        <?php require __DIR__.'/components/footer.php'; ?>
+        <?php require __DIR__ . '/components/footer.php';?>
     </div>
 </div>
 
-<script src="<?= settings()['adminpage'] ?>assets/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-<script src="<?= settings()['adminpage'] ?>assets/js/scripts.js"></script>
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script> -->
-<!-- <script src="<?= settings()['adminpage'] ?>assets/demo/chart-area-demo.js"></script>
-<script src="<?= settings()['adminpage'] ?>assets/demo/chart-bar-demo.js"></script> -->
+<script src="<?=settings()['adminpage']?>assets/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="<?=settings()['adminpage']?>assets/js/scripts.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
-<script src="<?= settings()['adminpage'] ?>assets/js/datatables-simple-demo.js"></script>
-<script src="<?= settings()['adminpage'] ?>assets/js/jquery-3.7.1.min.js"></script>
+<script src="<?=settings()['adminpage']?>assets/js/datatables-simple-demo.js"></script>
+<script src="<?=settings()['adminpage']?>assets/js/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
 // Define cart and updateCart in global scope
@@ -284,11 +339,24 @@ function updateCart() {
         cartBody.appendChild(row);
     });
 
+    // Calculate discount
+    const discountAmount = parseFloat(document.getElementById('discountInput').value) || 0;
+    const discountPercent = parseFloat(document.getElementById('discountPercent').value) || 0;
+
+    let totalDiscount = discountAmount;
+    if (discountPercent > 0) {
+        totalDiscount = Math.max(totalDiscount, subtotal * (discountPercent / 100));
+    }
+
+    // Ensure discount doesn't exceed subtotal
+    totalDiscount = Math.min(totalDiscount, subtotal);
+
     const tax = subtotal * 0.08;
-    const total = subtotal + tax;
+    const total = subtotal + tax - totalDiscount;
 
     document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
     document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
+    document.getElementById('discount').textContent = `-$${totalDiscount.toFixed(2)}`;
     document.getElementById('total').textContent = `$${total.toFixed(2)}`;
     document.getElementById('modalTotal').value = `$${total.toFixed(2)}`;
 
@@ -352,8 +420,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const itemCategory = item.dataset.category;
             const itemSubcategory = item.dataset.subcategory;
 
-            const matchesSearch = searchTerm === '' || 
-                                name.includes(searchTerm) || 
+            const matchesSearch = searchTerm === '' ||
+                                name.includes(searchTerm) ||
                                 id === searchTerm;
             const matchesCategory = !category || itemCategory === category;
             const matchesSubcategory = !subcategory || itemSubcategory === subcategory;
@@ -382,6 +450,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Clear cart
     document.getElementById('clearCart').addEventListener('click', function() {
         cart = [];
+        document.getElementById('discountInput').value = '';
+        document.getElementById('discountPercent').value = '';
+        document.getElementById('orderNotes').value = '';
         updateCart();
     });
 
@@ -389,6 +460,23 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('holdCart').addEventListener('click', function() {
         sessionStorage.setItem('heldCart', JSON.stringify(cart));
         alert('Cart held successfully!');
+    });
+
+    // Discount input event listeners
+    document.getElementById('discountInput').addEventListener('input', function() {
+        // Clear percentage when amount is entered
+        if (this.value) {
+            document.getElementById('discountPercent').value = '';
+        }
+        updateCart();
+    });
+
+    document.getElementById('discountPercent').addEventListener('input', function() {
+        // Clear amount when percentage is entered
+        if (this.value) {
+            document.getElementById('discountInput').value = '';
+        }
+        updateCart();
     });
 
     // Checkout
@@ -411,7 +499,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Complete sale
     document.getElementById('completeSale').addEventListener('click', function(event) {
-        event.preventDefault();        
+        event.preventDefault();
         const tendered = parseFloat(document.getElementById('amountTendered').value) || 0;
         const total = parseFloat(document.getElementById('modalTotal').value.replace('$', '')) || 0;
         if (tendered < total) {
@@ -419,15 +507,30 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
+        // Get discount and notes
+        const discountAmount = parseFloat(document.getElementById('discountInput').value) || 0;
+        const discountPercent = parseFloat(document.getElementById('discountPercent').value) || 0;
+        const orderNotes = document.getElementById('orderNotes').value.trim();
+
+        // Calculate final discount
+        const subtotal = parseFloat(document.getElementById('subtotal').textContent.replace('$', ''));
+        let finalDiscount = discountAmount;
+        if (discountPercent > 0) {
+            finalDiscount = Math.max(finalDiscount, subtotal * (discountPercent / 100));
+        }
+        finalDiscount = Math.min(finalDiscount, subtotal);
+
         // Prepare data to send to process_order.php
         let data = {
-            subtotal: parseFloat(($("#subtotal").text()).replace('$', '')),
-            discount_amount: parseFloat(($("#discount").text()).replace('$', '')),
-            tax_amount: parseFloat(($("#tax").text()).replace('$', '')),
+            subtotal: subtotal,
+            discount_amount: finalDiscount,
+            tax_amount: parseFloat(document.getElementById('tax').textContent.replace('$', '')),
             shipping_amount: 0.00,
-            total_amount: parseFloat(($("#total").text()).replace('$', '')),
-            notes: null,
-            items: cart
+            total_amount: total,
+            notes: orderNotes || null,
+            items: cart,
+            payment_method: document.getElementById('paymentMethod').value,
+            amount_tendered: tendered
         };
 
         // Send data via AJAX to process_order.php
@@ -435,6 +538,7 @@ document.addEventListener('DOMContentLoaded', function() {
             url: 'process_order.php',
             method: 'POST',
             data: data,
+            dataType: 'json',
             success: function(response) {
                 console.log(response);
                 if(response.success){
@@ -443,19 +547,58 @@ document.addEventListener('DOMContentLoaded', function() {
                         icon: "success",
                         title: response.message + ", Order # " + response.order_number,
                         showConfirmButton: false,
-                        timer: 1500
+                        timer: 2000
                     });
+                    // Clear everything
                     cart = [];
+                    document.getElementById('discountInput').value = '';
+                    document.getElementById('discountPercent').value = '';
+                    document.getElementById('orderNotes').value = '';
+                    document.getElementById('amountTendered').value = '';
                     updateCart();
                     bootstrap.Modal.getInstance(document.getElementById('paymentModal')).hide();
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.message || 'Failed to process order'
+                    });
                 }
             },
             error: function() {
-                alert('An error occurred while processing the order.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An error occurred while processing the order.'
+                });
             }
         });
     });
+
+    // Load today's sales stats on page load
+    loadTodaysStats();
 });
+
+function refreshStats() {
+    loadTodaysStats();
+}
+
+function loadTodaysStats() {
+    $.ajax({
+        url: 'apis/todays-sales.php',
+        method: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            $('#todaysSales').text('$' + parseFloat(data.total_sales || 0).toFixed(2));
+            $('#todaysOrders').text(data.total_orders || 0);
+            $('#avgTransaction').text('$' + parseFloat(data.avg_transaction || 0).toFixed(2));
+            $('#itemsSold').text(data.items_sold || 0);
+        },
+        error: function() {
+            console.log('Error loading today\'s stats');
+        }
+    });
+}
 </script>
 
 <!-- Barcode scanner -->

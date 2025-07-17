@@ -8,41 +8,41 @@ if (session_status() === PHP_SESSION_NONE) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= settings()['companyname'] ?> - <?= $page ?></title>
-    
+    <title><?=settings()['companyname']?> - <?=$page?></title>
+
     <!-- Open Graph Protocol Meta Tags -->
-    <meta property="og:title" content="<?= isset($og_title) ? $og_title : settings()['companyname'] . ' - ' . $page ?>">
-    <meta property="og:description" content="<?= isset($og_description) ? $og_description : 'Shop the best products at ' . settings()['companyname'] . '. Quality products, great prices, fast delivery.' ?>">
-    <meta property="og:image" content="<?= isset($og_image) ? $og_image : ltrim(settings()['logo'], '/') ?>">
-    <meta property="og:url" content="<?= isset($og_url) ? $og_url : 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ?>">
-    <meta property="og:type" content="<?= isset($og_type) ? $og_type : 'website' ?>">
-    <meta property="og:site_name" content="<?= settings()['companyname'] ?>">
-    
+    <meta property="og:title" content="<?=isset($og_title) ? $og_title : settings()['companyname'] . ' - ' . $page?>">
+    <meta property="og:description" content="<?=isset($og_description) ? $og_description : 'Shop the best products at ' . settings()['companyname'] . '. Quality products, great prices, fast delivery.'?>">
+    <meta property="og:image" content="<?=isset($og_image) ? $og_image : ltrim(settings()['logo'], '/')?>">
+    <meta property="og:url" content="<?=isset($og_url) ? $og_url : 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']?>">
+    <meta property="og:type" content="<?=isset($og_type) ? $og_type : 'website'?>">
+    <meta property="og:site_name" content="<?=settings()['companyname']?>">
+
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="<?= isset($og_title) ? $og_title : settings()['companyname'] . ' - ' . $page ?>">
-    <meta name="twitter:description" content="<?= isset($og_description) ? $og_description : 'Shop the best products at ' . settings()['companyname'] . '. Quality products, great prices, fast delivery.' ?>">
-    <meta name="twitter:image" content="<?= isset($og_image) ? $og_image : ltrim(settings()['logo'], '/') ?>">
+    <meta name="twitter:title" content="<?=isset($og_title) ? $og_title : settings()['companyname'] . ' - ' . $page?>">
+    <meta name="twitter:description" content="<?=isset($og_description) ? $og_description : 'Shop the best products at ' . settings()['companyname'] . '. Quality products, great prices, fast delivery.'?>">
+    <meta name="twitter:image" content="<?=isset($og_image) ? $og_image : ltrim(settings()['logo'], '/')?>">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Add Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-<link rel="stylesheet" href="<?= settings()['homepage'] ?>assets/css/styles.css">
-<link rel="stylesheet" href="<?= settings()['homepage'] ?>assets/css/footer.css">
-<link rel="stylesheet" href="<?= settings()['homepage'] ?>assets/assets/owl.carousel.min.css">
-<script src="<?= settings()['homepage'] ?>assets/js/jquery-3.7.1.min.js"></script>
-<script src="<?= settings()['homepage'] ?>assets/js/cart.js"></script>
+<link rel="stylesheet" href="<?=settings()['homepage']?>assets/css/styles.css">
+<link rel="stylesheet" href="<?=settings()['homepage']?>assets/css/footer.css">
+<link rel="stylesheet" href="<?=settings()['homepage']?>assets/assets/owl.carousel.min.css">
+<script src="<?=settings()['homepage']?>assets/js/jquery-3.7.1.min.js"></script>
+<script src="<?=settings()['homepage']?>assets/js/cart.js"></script>
 <script>console.log("Cart.js loaded. Cart is defined: ", typeof Cart !== 'undefined');</script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
 <body>
-    
-    
+
+
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="index.php"><img src="<?= settings()['logo'] ?>" alt="ShopEase Logo" width="90"></a>
+        <a class="navbar-brand" href="index.php"><img src="<?=settings()['logo']?>" alt="ShopEase Logo" width="90"></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -81,14 +81,30 @@ if (session_status() === PHP_SESSION_NONE) {
                         <li class="nav-item">
                             <a href="admin/index.php" class="nav-link btn btn-primary me-2">Dashboard</a>
                         </li>
-                        <li class="nav-item">
-                            <a href="logout.php" class="nav-link btn btn-danger">Logout</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle btn btn-outline-primary" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle me-1"></i><?=htmlspecialchars($_SESSION['username'] ?? $_SESSION['email'] ?? 'Admin')?>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="user-orders.php"><i class="fas fa-shopping-bag me-2"></i>My Orders</a></li>
+                                <li><a class="dropdown-item" href="user-settings.php"><i class="fas fa-cog me-2"></i>User Settings</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="logout.php"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                            </ul>
                         </li>
                     <?php else: ?>
-                        <li class="nav-item">
-                            <a href="logout.php" class="nav-link btn btn-primary">Logout</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle btn btn-outline-primary" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle me-1"></i><?=htmlspecialchars($_SESSION['username'] ?? $_SESSION['email'] ?? 'User')?>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="user-orders.php"><i class="fas fa-shopping-bag me-2"></i>My Orders</a></li>
+                                <li><a class="dropdown-item" href="user-settings.php"><i class="fas fa-cog me-2"></i>User Settings</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="logout.php"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                            </ul>
                         </li>
-                    <?php endif; ?>
+                    <?php endif;?>
                 <?php else: ?>
                     <li class="nav-item">
                         <a href="login.php" class="nav-link btn btn-primary me-2">Sign In</a>
@@ -96,7 +112,7 @@ if (session_status() === PHP_SESSION_NONE) {
                     <li class="nav-item">
                         <a href="registration.php" class="nav-link btn btn-primary">Sign up</a>
                     </li>
-                <?php endif; ?>
+                <?php endif;?>
             </ul>
         </div>
     </div>
@@ -109,7 +125,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
     <!-- Category Sidebar -->
     <!-- Category Sidebar (emon vai) -->
-     
+
     <div class="category-sidebar" id="categorySidebar">
         <div class="sidebar-header">
             <h5 class="mb-0">Shop by Category</h5>
@@ -119,69 +135,69 @@ if (session_status() === PHP_SESSION_NONE) {
         </div>
         <ul class="category-list">
             <?php
-            // Database connection
-            $conn = new mysqli(
-                settings()['hostname'], 
-                settings()['user'], 
-                settings()['password'], 
-                settings()['database']);
-            if ($conn->connect_error) {
-                die("Connection failed: " . $conn->connect_error);
-            }
+// Database connection
+$conn = new mysqli(
+    settings()['hostname'],
+    settings()['user'],
+    settings()['password'],
+    settings()['database']);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
-            // Fetch active categories
-            $category_query = "SELECT id, name, slug FROM categories WHERE is_active = 1 ORDER BY sort_order, name";
-            $category_result = $conn->query($category_query);
+// Fetch active categories
+$category_query = "SELECT id, name, slug FROM categories WHERE is_active = 1 ORDER BY sort_order, name";
+$category_result = $conn->query($category_query);
 
-            // Map category names to Font Awesome icons
-            $category_icons = [
-                'Garments' => 'fas fa-tshirt',
-                'Automobiles' => 'fas fa-car',
-                'Electronics' => 'fas fa-laptop',
-                'kids' => 'fas fa-baby',
-                'Cattle' => 'fas fa-cow',
-                'sdfgdfsgdfg' => 'fas fa-box',
-                'panio' => 'fas fa-mug-hot'
-            ];
+// Map category names to Font Awesome icons
+$category_icons = [
+    'Garments' => 'fas fa-tshirt',
+    'Automobiles' => 'fas fa-car',
+    'Electronics' => 'fas fa-laptop',
+    'kids' => 'fas fa-baby',
+    'Cattle' => 'fas fa-cow',
+    'sdfgdfsgdfg' => 'fas fa-box',
+    'panio' => 'fas fa-mug-hot',
+];
 
-            while ($category = $category_result->fetch_assoc()) {
-                $category_id = $category['id'];
-                $category_name = htmlspecialchars($category['name']);
-                $category_slug = htmlspecialchars($category['slug']);
-                $icon_class = isset($category_icons[$category_name]) ? $category_icons[$category_name] : 'fas fa-folder';
+while ($category = $category_result->fetch_assoc()) {
+    $category_id = $category['id'];
+    $category_name = htmlspecialchars($category['name']);
+    $category_slug = htmlspecialchars($category['slug']);
+    $icon_class = isset($category_icons[$category_name]) ? $category_icons[$category_name] : 'fas fa-folder';
 
-                // Fetch subcategories
-                $subcategory_query = "SELECT id, name, slug FROM subcategories WHERE category_id = ? AND is_active = 1 ORDER BY sort_order, name";
-                $stmt = $conn->prepare($subcategory_query);
-                $stmt->bind_param("i", $category_id);
-                $stmt->execute();
-                $subcategory_result = $stmt->get_result();
+    // Fetch subcategories
+    $subcategory_query = "SELECT id, name, slug FROM subcategories WHERE category_id = ? AND is_active = 1 ORDER BY sort_order, name";
+    $stmt = $conn->prepare($subcategory_query);
+    $stmt->bind_param("i", $category_id);
+    $stmt->execute();
+    $subcategory_result = $stmt->get_result();
 
-                // Output category
-                echo '<li class="category-item">';
-                echo '<a href="index.php?category=' . $category_id . '" class="category-link category-filter" data-category-id="' . $category_id . '" data-category="' . $category_slug . '">';
-                echo '<span><i class="' . $icon_class . ' category-icon"></i>' . $category_name . '</span>';
-                echo '<i class="fas fa-chevron-right"></i>';
-                echo '</a>';
+    // Output category
+    echo '<li class="category-item">';
+    echo '<a href="index.php?category=' . $category_id . '" class="category-link category-filter" data-category-id="' . $category_id . '" data-category="' . $category_slug . '">';
+    echo '<span><i class="' . $icon_class . ' category-icon"></i>' . $category_name . '</span>';
+    echo '<i class="fas fa-chevron-right"></i>';
+    echo '</a>';
 
-                // Output subcategories
-                if ($subcategory_result->num_rows > 0) {
-                    echo '<ul class="subcategory-list">';
-                    while ($subcategory = $subcategory_result->fetch_assoc()) {
-                        $subcategory_id = $subcategory['id'];
-                        $subcategory_name = htmlspecialchars($subcategory['name']);
-                        $subcategory_slug = htmlspecialchars($subcategory['slug']);
-                        echo '<li><a href="index.php?subcategory=' . $subcategory_id . '" class="subcategory-link subcategory-filter" data-subcategory-id="' . $subcategory_id . '">' . $subcategory_name . '</a></li>';
-                    }
-                    echo '</ul>';
-                }
-                echo '</li>';
+    // Output subcategories
+    if ($subcategory_result->num_rows > 0) {
+        echo '<ul class="subcategory-list">';
+        while ($subcategory = $subcategory_result->fetch_assoc()) {
+            $subcategory_id = $subcategory['id'];
+            $subcategory_name = htmlspecialchars($subcategory['name']);
+            $subcategory_slug = htmlspecialchars($subcategory['slug']);
+            echo '<li><a href="index.php?subcategory=' . $subcategory_id . '" class="subcategory-link subcategory-filter" data-subcategory-id="' . $subcategory_id . '">' . $subcategory_name . '</a></li>';
+        }
+        echo '</ul>';
+    }
+    echo '</li>';
 
-                $stmt->close();
-            }
+    $stmt->close();
+}
 
-            $conn->close();
-            ?>
+$conn->close();
+?>
         </ul>
     </div>
 
@@ -228,7 +244,7 @@ if (session_status() === PHP_SESSION_NONE) {
                 <th scope="col">Quantity</th>
                 <th scope="col">Price</th>
                 <th scope="col">Total</th>
-                <th scope="col">Action</th>               
+                <th scope="col">Action</th>
             </tr>
         </thead>
         <tbody>
@@ -251,3 +267,15 @@ if (session_status() === PHP_SESSION_NONE) {
     <div class="main-content">
         <?php require __DIR__ . '/dismissalert.php';?>
         <?php require __DIR__ . '/sessiondata.php';?>
+
+<script>
+function openUserSettings() {
+    // For now, show a simple alert. You can later create a user settings page or modal
+    Swal.fire({
+        title: 'User Settings',
+        text: 'User settings functionality will be implemented soon.',
+        icon: 'info',
+        confirmButtonText: 'OK'
+    });
+}
+</script>

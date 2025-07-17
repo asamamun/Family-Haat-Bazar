@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 12, 2025 at 08:52 AM
+-- Generation Time: Jul 18, 2025 at 12:12 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -545,7 +545,12 @@ INSERT INTO `orders` (`id`, `order_number`, `user_id`, `order_type`, `status`, `
 (18, 'ORD-1751433945-2357', NULL, 'online', 'pending', 'pending', 'cash', NULL, 400.00, 0.00, NULL, 20.00, 0.00, 420.00, 'BDT', 'r5ft', 'a', 'b', 'c', 'as', 'ac', 'z', 'u', '12', 'Bangladesh', '01335458555', 'a', 'b', 'c', 'as', 'ac', 'z', 'u', '12', 'Bangladesh', '01335458555', NULL, NULL, '2025-07-02 01:25:45', '2025-07-02 01:25:45'),
 (19, 'POS-1751434047-2280', 7, 'pos', 'delivered', 'paid', 'cash', NULL, 18000.00, 0.00, NULL, 1440.00, 0.00, 19440.00, 'BDT', '', '', '', NULL, '', NULL, '', NULL, '', '', '', '', '', NULL, '', NULL, '', NULL, '', '', '', 7, '2025-07-02 01:27:27', '2025-07-02 01:27:27', '2025-07-02 05:27:27'),
 (20, 'ORD-1751437246-8160', NULL, 'online', 'pending', 'pending', 'cash', NULL, 419.99, 0.00, NULL, 21.00, 0.00, 440.99, 'BDT', '', 'a', 'b', 'c', 'as', 'ac', 'z', 'g', '12', 'Bangladesh', '01335458555', 'a', 'b', 'c', 'as', 'ac', 'z', 'g', '12', 'Bangladesh', '01335458555', NULL, NULL, '2025-07-02 02:20:46', '2025-07-02 02:20:46'),
-(21, 'ORD-1752302433-4646', NULL, 'online', 'pending', 'pending', 'cash', NULL, 129.99, 0.00, NULL, 6.50, 0.00, 136.49, 'BDT', 'fg', 'a', 'b', 'c', 'as', 'ac', 'z', 'g', '12', 'Bangladesh', '01335458555', 'a', 'b', 'c', 'as', 'ac', 'z', 'g', '12', 'Bangladesh', '01335458555', NULL, NULL, '2025-07-12 02:40:33', '2025-07-12 02:40:33');
+(21, 'ORD-1752302433-4646', NULL, 'online', 'pending', 'pending', 'cash', NULL, 129.99, 0.00, NULL, 6.50, 0.00, 136.49, 'BDT', 'fg', 'a', 'b', 'c', 'as', 'ac', 'z', 'g', '12', 'Bangladesh', '01335458555', 'a', 'b', 'c', 'as', 'ac', 'z', 'g', '12', 'Bangladesh', '01335458555', NULL, NULL, '2025-07-12 02:40:33', '2025-07-12 02:40:33'),
+(22, 'ORD-1752768973-7692', 7, 'online', 'pending', 'pending', 'bkash', '123', 2175.00, 0.00, NULL, 326.25, 0.00, 2501.25, 'BDT', 'tttt', 'AA', 'BB', 'CC', 'DD', 'EE', 'FF', 'GG', '1234', 'Bangladesh', '123', 'AA', 'BB', 'CC', 'DD', 'EE', 'FF', 'GG', '1234', 'Bangladesh', '123456', NULL, NULL, '2025-07-17 12:16:13', '2025-07-17 12:16:13'),
+(23, 'ORD-1752772560-5671', 7, 'online', 'pending', 'pending', 'bkash', '3543545535', 51635.99, 0.00, NULL, 7745.40, 0.00, 59381.39, 'BDT', 'dsfdsffdg', 'Abu', 'Al-Mamun', 'GNSL', 'Nahin Tower', 'Arambag R/A', 'Dhaka', 'Dhaka', '1216', 'Bangladesh', '01911039525', 'Abu', 'Al-Mamun', 'GNSL', 'Nahin Tower', 'Arambag R/A', 'Dhaka', 'Dhaka', '1216', 'Bangladesh', '01911039525', NULL, NULL, '2025-07-17 13:16:00', '2025-07-17 13:16:00'),
+(24, 'POS-1752774764-5302', 7, 'pos', 'delivered', 'paid', 'cash', NULL, 1640.99, 72.27, NULL, 131.28, 0.00, 1700.00, 'BDT', '', '', '', NULL, '', NULL, '', NULL, '', '', '', '', '', NULL, '', NULL, '', NULL, '', '', '', 7, '2025-07-17 13:52:44', '2025-07-17 13:52:44', '2025-07-17 17:52:44'),
+(25, 'POS-1752774931-7569', 7, 'pos', 'delivered', 'paid', 'cash', NULL, 45360.00, 988.80, NULL, 3628.80, 0.00, 48000.00, 'BDT', 'almost 1k discount', '', '', NULL, '', NULL, '', NULL, '', '', '', '', '', NULL, '', NULL, '', NULL, '', '', '', 7, '2025-07-17 13:55:31', '2025-07-17 13:55:31', '2025-07-17 17:55:31'),
+(26, 'POS-1752775698-8415', 7, 'pos', 'delivered', 'paid', 'cash', NULL, 107860.00, 488.80, NULL, 8628.80, 0.00, 116000.00, 'BDT', 'thank you mam', '', '', NULL, '', NULL, '', NULL, '', '', '', '', '', NULL, '', NULL, '', NULL, '', '', '', 7, '2025-07-17 14:08:18', '2025-07-17 14:08:18', '2025-07-17 18:08:18');
 
 -- --------------------------------------------------------
 
@@ -610,7 +615,33 @@ INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `product_name`, `prod
 (38, 19, 47, 'monitor', 'm123', 1, 18000.00, 18000.00, '2025-07-02 01:27:27'),
 (39, 20, 22, 'Rice', 'sk123454', 1, 120.00, 120.00, '2025-07-02 02:20:46'),
 (40, 20, 3, 'Electric Scooter', 'SCO-001', 1, 299.99, 299.99, '2025-07-02 02:20:46'),
-(41, 21, 7, 'Baby Stroller', 'STR-001', 1, 129.99, 129.99, '2025-07-12 02:40:33');
+(41, 21, 7, 'Baby Stroller', 'STR-001', 1, 129.99, 129.99, '2025-07-12 02:40:33'),
+(42, 22, 15, 'Angus Bull', 'BUL-001', 1, 2000.00, 2000.00, '2025-07-17 12:16:15'),
+(43, 22, 29, 'air freshnar', '741', 1, 175.00, 175.00, '2025-07-17 12:16:16'),
+(44, 23, 1, 'Cotton T-Shirt', 'TSH-001', 1, 15.99, 15.99, '2025-07-17 13:16:00'),
+(45, 23, 21, 'IDB AC 2 ton', 'idbac2ton', 1, 45000.00, 45000.00, '2025-07-17 13:16:00'),
+(46, 23, 22, 'Rice', 'sk123454', 1, 120.00, 120.00, '2025-07-17 13:16:00'),
+(47, 23, 40, 'Scooter', 's456', 1, 5000.00, 5000.00, '2025-07-17 13:16:00'),
+(48, 23, 45, 'Iron', 'i369', 1, 1500.00, 1500.00, '2025-07-17 13:16:00'),
+(49, 24, 1, 'Cotton T-Shirt', 'TSH-001', 1, 15.99, 15.99, '2025-07-17 13:52:44'),
+(50, 24, 26, 'Baasmati Rice', '1254', 3, 150.00, 450.00, '2025-07-17 13:52:45'),
+(51, 24, 27, 'aci salt', '456', 1, 50.00, 50.00, '2025-07-17 13:52:45'),
+(52, 24, 28, 'detergent powder', '258', 1, 200.00, 200.00, '2025-07-17 13:52:45'),
+(53, 24, 29, 'air freshnar', '741', 4, 175.00, 700.00, '2025-07-17 13:52:45'),
+(54, 24, 34, 'orange juice', 'sdafsdf', 1, 25.00, 25.00, '2025-07-17 13:52:45'),
+(55, 24, 32, 'Berry Juice', '452', 1, 25.00, 25.00, '2025-07-17 13:52:45'),
+(56, 24, 30, 'air freshnar green', '789', 1, 175.00, 175.00, '2025-07-17 13:52:46'),
+(57, 25, 24, 'Mustard oil', 'sku-123', 1, 120.00, 120.00, '2025-07-17 13:55:31'),
+(58, 25, 23, 'Brown Rice', '435retretrt', 1, 120.00, 120.00, '2025-07-17 13:55:31'),
+(59, 25, 22, 'Rice', 'sk123454', 1, 120.00, 120.00, '2025-07-17 13:55:31'),
+(60, 25, 21, 'IDB AC 2 ton', 'idbac2ton', 1, 45000.00, 45000.00, '2025-07-17 13:55:31'),
+(61, 26, 21, 'IDB AC 2 ton', 'idbac2ton', 1, 45000.00, 45000.00, '2025-07-17 14:08:19'),
+(62, 26, 22, 'Rice', 'sk123454', 1, 120.00, 120.00, '2025-07-17 14:08:20'),
+(63, 26, 23, 'Brown Rice', '435retretrt', 1, 120.00, 120.00, '2025-07-17 14:08:21'),
+(64, 26, 24, 'Mustard oil', 'sku-123', 1, 120.00, 120.00, '2025-07-17 14:08:21'),
+(65, 26, 43, 'Laptop', 'lp1232', 1, 35000.00, 35000.00, '2025-07-17 14:08:21'),
+(66, 26, 42, 'blender', 'b123', 1, 2500.00, 2500.00, '2025-07-17 14:08:21'),
+(67, 26, 41, 'Fridge', 'f123', 1, 25000.00, 25000.00, '2025-07-17 14:08:21');
 
 -- --------------------------------------------------------
 
@@ -655,7 +686,12 @@ INSERT INTO `payment_transactions` (`id`, `order_id`, `transaction_id`, `payment
 (18, 18, 'ORD-1751433945-2357', 'cash', 420.00, 'pending', NULL, NULL, '2025-07-02 01:25:45'),
 (19, 19, 'POS-1751434047-2280', 'cash', 19440.00, 'success', NULL, '2025-07-02 01:27:27', '2025-07-02 01:27:27'),
 (20, 20, 'ORD-1751437246-8160', 'cash', 440.99, 'pending', NULL, NULL, '2025-07-02 02:20:46'),
-(21, 21, 'ORD-1752302433-4646', 'cash', 136.49, 'pending', NULL, NULL, '2025-07-12 02:40:33');
+(21, 21, 'ORD-1752302433-4646', 'cash', 136.49, 'pending', NULL, NULL, '2025-07-12 02:40:33'),
+(22, 22, '123', 'bkash', 2501.25, 'pending', NULL, NULL, '2025-07-17 12:16:16'),
+(23, 23, '3543545535', 'bkash', 59381.39, 'pending', NULL, NULL, '2025-07-17 13:16:00'),
+(24, 24, 'POS-1752774764-5302', 'cash', 1700.00, 'success', NULL, '2025-07-17 13:52:46', '2025-07-17 13:52:46'),
+(25, 25, 'POS-1752774931-7569', 'cash', 48000.00, 'success', NULL, '2025-07-17 13:55:31', '2025-07-17 13:55:31'),
+(26, 26, 'POS-1752775698-8415', 'cash', 116000.00, 'success', NULL, '2025-07-17 14:08:21', '2025-07-17 14:08:21');
 
 -- --------------------------------------------------------
 
@@ -695,7 +731,7 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `category_id`, `subcategory_id`, `name`, `slug`, `description`, `short_description`, `sku`, `barcode`, `selling_price`, `cost_price`, `markup_percentage`, `pricing_method`, `auto_update_price`, `stock_quantity`, `min_stock_level`, `image`, `is_hot_item`, `is_active`, `weight`, `dimensions`, `created_at`, `updated_at`, `brand`) VALUES
-(1, 3, NULL, 'Cotton T-Shirt', 'cotton-t-shirt', 'Comfortable cotton T-shirt.', 'Soft and breathable cotton T-shirt.', 'TSH-001', '1234567890123', 15.99, 8.00, 99.88, 'manual', 0, 50, 5, 'tshirt1.jpg', 1, 1, 0.20, '30x20x1 cm', '2025-06-22 06:00:00', '2025-07-01 06:52:38', 2),
+(1, 3, NULL, 'Cotton T-Shirt', 'cotton-t-shirt', 'Comfortable cotton T-shirt.', 'Soft and breathable cotton T-shirt.', 'TSH-001', '1234567890123', 15.99, 8.00, 99.88, 'manual', 0, 48, 5, 'tshirt1.jpg', 1, 1, 0.20, '30x20x1 cm', '2025-06-22 06:00:00', '2025-07-17 17:52:45', 2),
 (2, 3, NULL, 'Denim Jacket', 'denim-jacket', 'Stylish denim jacket.', 'Classic blue denim jacket.', 'JKT-002', '1234567890124', 45.99, 30.00, 53.30, 'cost_plus', 0, 30, 5, 'denimjacket.jpg', 0, 1, 0.50, '40x30x2 cm', '2025-06-22 06:00:00', '2025-07-01 06:52:38', 1),
 (3, 4, 6, 'Electric Scooter', 'electric-scooter', 'Eco-friendly electric scooter.', 'Fast and foldable scooter.', 'SCO-001', '1234567890125', 299.99, 200.00, 50.00, 'manual', 0, 20, 3, 'escooter.jpg', 1, 1, 10.00, '100x50x30 cm', '2025-06-22 06:00:00', '2025-07-01 06:52:38', 1),
 (4, 4, 7, 'Toy Motorcycle', 'toy-motorcycle', 'Realistic toy motorcycle.', 'Battery-powered ride-on toy.', 'TOY-001', '1234567890126', 89.99, 50.00, 80.00, 'cost_plus', 0, 15, 2, 'toymotor.jpg', 0, 1, 2.00, '50x20x15 cm', '2025-06-22 06:00:00', '2025-06-24 06:53:29', 1),
@@ -709,34 +745,34 @@ INSERT INTO `products` (`id`, `category_id`, `subcategory_id`, `name`, `slug`, `
 (12, 4, 6, 'Car Cleaning Kit', 'car-cleaning-kit', 'Complete car cleaning kit.', 'All-in-one car care.', 'CLK-001', '1234567890134', 29.99, 15.00, 99.93, 'manual', 0, 35, 5, 'cleaningkit.jpg', 0, 1, 1.00, '30x20x10 cm', '2025-06-22 06:00:00', '2025-06-24 06:53:29', 1),
 (13, 5, 8, 'LED TV 55\"', 'led-tv-55', '55-inch 4K LED TV.', 'Immersive viewing experience.', 'TV-001', '1234567890135', 499.99, 350.00, 42.85, 'market_based', 1, 15, 3, 'ledtv.jpg', 1, 1, 15.00, '120x80x10 cm', '2025-06-22 06:00:00', '2025-06-24 06:53:29', 1),
 (14, 6, NULL, 'Wooden Puzzle', 'wooden-puzzle', 'Educational wooden puzzle.', 'Fun learning toy.', 'PUZ-001', '1234567890136', 14.99, 8.00, 87.38, 'cost_plus', 0, 50, 8, 'puzzle.jpg', 0, 1, 0.25, '20x20x1 cm', '2025-06-22 06:00:00', '2025-06-24 06:53:29', 1),
-(15, 7, 12, 'Angus Bull', 'angus-bull', 'Strong Angus bull.', 'Premium beef cattle.', 'BUL-001', '1234567890137', 2000.00, 1600.00, 25.00, 'manual', 0, 2, 1, 'angus.jpg', 1, 1, 600.00, NULL, '2025-06-22 06:00:00', '2025-06-24 06:53:29', 1),
+(15, 7, 12, 'Angus Bull', 'angus-bull', 'Strong Angus bull.', 'Premium beef cattle.', 'BUL-001', '1234567890137', 2000.00, 1600.00, 25.00, 'manual', 0, 1, 1, 'angus.jpg', 1, 1, 600.00, NULL, '2025-06-22 06:00:00', '2025-07-17 16:16:16', 1),
 (16, 3, NULL, 'Leather Belt', 'leather-belt', 'Genuine leather belt.', 'Durable and stylish belt.', 'BLT-001', '1234567890138', 24.99, 12.00, 99.92, 'cost_plus', 0, 45, 5, 'belt.jpg', 0, 1, 0.10, '100x5x0.5 cm', '2025-06-22 06:00:00', '2025-06-24 06:53:29', 1),
 (17, 4, 7, 'Remote Control Car', 'remote-control-car', 'Fast RC car.', 'Exciting remote control toy.', 'RCC-001', '1234567890139', 49.99, 25.00, 99.96, 'manual', 0, 25, 4, 'rccar.jpg', 1, 1, 1.50, '30x15x10 cm', '2025-06-22 06:00:00', '2025-06-24 06:53:29', 1),
 (18, 5, 8, 'Laptop 15\"', 'laptop-15', 'High-performance 15-inch laptop.', 'Sleek and powerful laptop.', 'LAP-001', '1234567890140', 999.99, 700.00, 42.86, 'market_based', 1, 10, 2, 'laptop.jpg', 1, 1, 2.00, '35x25x2 cm', '2025-06-22 06:00:00', '2025-06-24 06:53:29', 1),
 (19, 6, NULL, 'Diaper Bag', 'diaper-bag', 'Spacious diaper bag.', 'Multi-pocket baby bag.', 'BAG-001', '1234567890141', 39.99, 20.00, 99.95, 'cost_plus', 0, 30, 5, 'diaperbag.jpg', 0, 1, 0.80, '40x30x20 cm', '2025-06-22 06:00:00', '2025-06-24 06:53:29', 1),
 (20, 7, 12, 'Goat', 'goat', 'Healthy dairy goat.', 'High-quality milk goat.', 'GOT-001', '1234567890142', 300.00, 200.00, 50.00, 'manual', 0, 8, 2, 'goat.jpg', 0, 1, 30.00, NULL, '2025-06-22 06:00:00', '2025-06-24 06:53:29', 1),
-(21, 5, 16, 'IDB AC 2 ton', 'idb-ac-2-ton', 'df sdfsda fsdf safdd sdf f sdf sdfds ', ' sdfsd fdsaf sd', 'idbac2ton', '43543545fdgdfgfg', 45000.00, 42000.00, 0.00, 'manual', 0, 55, 5, '685b87960d02d_1750828950.png', 1, 1, 55.00, '55', '2025-06-25 05:22:30', '2025-06-25 05:22:30', 2),
-(22, 10, 18, 'Rice', 'rice', 'rice', 'rice', 'sk123454', '34534545', 120.00, 110.00, 5.00, 'manual', 1, 120, 10, '6864a5a852527_1751426472.jpg', 1, 1, 1.00, '10*10', '2025-07-02 03:21:14', '2025-07-02 03:21:14', 1),
-(23, 10, 18, 'Brown Rice', 'brown-rice', 'brown-rice', 'brown-rice', '435retretrt', '5465465654656', 120.00, 110.00, 5.00, 'manual', 1, 120, 10, '6864a611cd45a_1751426577.jpg', 1, 1, 1.00, '66x66', '2025-07-02 03:22:57', '2025-07-02 03:22:57', 2),
-(24, 10, 18, 'Mustard oil', 'mustard-oil', 'mustard-oil', 'mustard-oil', 'sku-123', '9876543', 120.00, 110.00, 5.00, 'manual', 1, 120, 10, '6864a66ab3e69_1751426666.jpg', 1, 1, 1.00, '66x66', '2025-07-02 03:24:26', '2025-07-02 03:24:26', 1),
-(26, 10, 18, 'Baasmati Rice', 'baasmati-rice', 'baasmati-rice', 'baasmati-rice', '1254', '3454545', 150.00, 120.00, 5.00, 'manual', 1, 500, 12, '6864a76580b2a_1751426917.jpg', 1, 1, 1.00, '10*10', '2025-07-02 03:28:37', '2025-07-02 03:28:37', 1),
-(27, 10, 18, 'aci salt', 'aci-salt', 'aci salt jar', 'aci salt jar', '456', '654321', 50.00, 45.00, 5.00, 'manual', 1, 124, 12, '6864a7b492eed_1751426996.jpg', 1, 1, 1.00, '66x66', '2025-07-02 03:29:56', '2025-07-02 03:29:56', 1),
-(28, 10, 17, 'detergent powder', 'detergent-powder', 'detergent-powder', 'detergent-powder', '258', '852', 200.00, 190.00, 5.00, 'manual', 1, 200, 20, '6864a814593ba_1751427092.jpg', 1, 1, 1.00, '66x66', '2025-07-02 03:31:32', '2025-07-02 03:31:32', 1),
-(29, 10, 17, 'air freshnar', 'air-freshnar', 'air freshnar', 'air freshnar', '741', '147', 175.00, 155.00, 10.00, 'manual', 1, 20, 10, '6864a85b88a4b_1751427163.jpg', 1, 1, 1.00, '66x66', '2025-07-02 03:32:43', '2025-07-02 03:32:43', 1),
-(30, 10, 17, 'air freshnar green', 'air-freshnar-green', 'air freshnar green', 'air freshnar green', '789', '987', 175.00, 155.00, 10.00, 'manual', 1, 120, 10, '6864a8d145c04_1751427281.jpg', 1, 1, 1.00, '10*10', '2025-07-02 03:34:41', '2025-07-02 03:34:41', 1),
+(21, 5, 16, 'IDB AC 2 ton', 'idb-ac-2-ton', 'df sdfsda fsdf safdd sdf f sdf sdfds ', ' sdfsd fdsaf sd', 'idbac2ton', '43543545fdgdfgfg', 45000.00, 42000.00, 0.00, 'manual', 0, 52, 5, '685b87960d02d_1750828950.png', 1, 1, 55.00, '55', '2025-06-25 05:22:30', '2025-07-17 18:08:20', 2),
+(22, 10, 18, 'Rice', 'rice', 'rice', 'rice', 'sk123454', '34534545', 120.00, 110.00, 5.00, 'manual', 1, 117, 10, '6864a5a852527_1751426472.jpg', 1, 1, 1.00, '10*10', '2025-07-02 03:21:14', '2025-07-17 18:08:20', 1),
+(23, 10, 18, 'Brown Rice', 'brown-rice', 'brown-rice', 'brown-rice', '435retretrt', '5465465654656', 120.00, 110.00, 5.00, 'manual', 1, 118, 10, '6864a611cd45a_1751426577.jpg', 1, 1, 1.00, '66x66', '2025-07-02 03:22:57', '2025-07-17 18:08:21', 2),
+(24, 10, 18, 'Mustard oil', 'mustard-oil', 'mustard-oil', 'mustard-oil', 'sku-123', '9876543', 120.00, 110.00, 5.00, 'manual', 1, 118, 10, '6864a66ab3e69_1751426666.jpg', 1, 1, 1.00, '66x66', '2025-07-02 03:24:26', '2025-07-17 18:08:21', 1),
+(26, 10, 18, 'Baasmati Rice', 'baasmati-rice', 'baasmati-rice', 'baasmati-rice', '1254', '3454545', 150.00, 120.00, 5.00, 'manual', 1, 497, 12, '6864a76580b2a_1751426917.jpg', 1, 1, 1.00, '10*10', '2025-07-02 03:28:37', '2025-07-17 17:52:45', 1),
+(27, 10, 18, 'aci salt', 'aci-salt', 'aci salt jar', 'aci salt jar', '456', '654321', 50.00, 45.00, 5.00, 'manual', 1, 123, 12, '6864a7b492eed_1751426996.jpg', 1, 1, 1.00, '66x66', '2025-07-02 03:29:56', '2025-07-17 17:52:45', 1),
+(28, 10, 17, 'detergent powder', 'detergent-powder', 'detergent-powder', 'detergent-powder', '258', '852', 200.00, 190.00, 5.00, 'manual', 1, 199, 20, '6864a814593ba_1751427092.jpg', 1, 1, 1.00, '66x66', '2025-07-02 03:31:32', '2025-07-17 17:52:45', 1),
+(29, 10, 17, 'air freshnar', 'air-freshnar', 'air freshnar', 'air freshnar', '741', '147', 175.00, 155.00, 10.00, 'manual', 1, 15, 10, '6864a85b88a4b_1751427163.jpg', 1, 1, 1.00, '66x66', '2025-07-02 03:32:43', '2025-07-17 17:52:45', 1),
+(30, 10, 17, 'air freshnar green', 'air-freshnar-green', 'air freshnar green', 'air freshnar green', '789', '987', 175.00, 155.00, 10.00, 'manual', 1, 119, 10, '6864a8d145c04_1751427281.jpg', 1, 1, 1.00, '10*10', '2025-07-02 03:34:41', '2025-07-17 17:52:46', 1),
 (31, 10, 17, 'Mango Juice', 'mango-juice', 'Mango Juice', 'Mango Juice', '135', '531', 25.00, 20.00, 5.00, 'manual', 1, 50, 10, '6864a929e769d_1751427369.jpg', 1, 1, 1.00, '10*10', '2025-07-02 03:36:10', '2025-07-02 03:36:10', 4),
-(32, 10, 17, 'Berry Juice', 'berry-juice', 'Berry Juice', 'Berry Juice', '452', '254', 25.00, 20.00, 5.00, 'manual', 1, 20, 10, '6864a969a0e9f_1751427433.jpg', 1, 1, 1.00, '10*10', '2025-07-02 03:37:13', '2025-07-02 03:37:13', 4),
-(34, 10, 17, 'orange juice', 'orange-juice', 'orange juice', 'orange juice', 'sdafsdf', '3453', 25.00, 20.00, 5.00, 'manual', 1, 20, 10, '6864a9dbd14c2_1751427547.jpg', 1, 1, 1.00, '10*10', '2025-07-02 03:39:07', '2025-07-02 03:39:07', 4),
+(32, 10, 17, 'Berry Juice', 'berry-juice', 'Berry Juice', 'Berry Juice', '452', '254', 25.00, 20.00, 5.00, 'manual', 1, 19, 10, '6864a969a0e9f_1751427433.jpg', 1, 1, 1.00, '10*10', '2025-07-02 03:37:13', '2025-07-17 17:52:45', 4),
+(34, 10, 17, 'orange juice', 'orange-juice', 'orange juice', 'orange juice', 'sdafsdf', '3453', 25.00, 20.00, 5.00, 'manual', 1, 19, 10, '6864a9dbd14c2_1751427547.jpg', 1, 1, 1.00, '10*10', '2025-07-02 03:39:07', '2025-07-17 17:52:45', 4),
 (35, 10, 17, 'Chanachur', 'chanachur', 'Chanachur', 'Chanachur', '9851', '1598', 35.00, 25.00, 10.00, 'manual', 1, 20, 10, '6864aae4f1ca4_1751427812.jpg', 1, 1, 1.00, '10*10', '2025-07-02 03:43:33', '2025-07-02 03:43:33', 1),
 (36, 10, 17, 'Pusti Ata', 'pusti-ata', 'Pusti Ata', 'Pusti Ata', 'p123', '123', 150.00, 140.00, 5.00, 'manual', 1, 200, 10, '6864ab50d409b_1751427920.jpg', 1, 1, 2.00, '10*10', '2025-07-02 03:45:20', '2025-07-02 03:45:20', 5),
 (38, 10, 17, 'Pusti Suji', 'pusti-suji', 'Pusti Suji', 'Pusti Suji', 's123', '132', 50.00, 45.00, 10.00, 'manual', 1, 200, 10, '6864aba665169_1751428006.jpg', 1, 1, 1.00, '10*10', '2025-07-02 03:46:46', '2025-07-02 03:46:46', 5),
 (39, 10, 17, 'Pusti Lentil', 'pusti-lentil', 'Pusti Lentil', 'Pusti Lentil', 'l123', '3121', 110.00, 100.00, 5.00, 'manual', 1, 200, 10, '6864ac0ba36fc_1751428107.jpg', 1, 1, 1.00, '10*10', '2025-07-02 03:48:27', '2025-07-02 03:48:27', 5),
-(40, 5, 19, 'Scooter', 'scooter', 'Scooter', 'Scooter', 's456', '4152', 5000.00, 4500.00, 5.00, 'manual', 1, 50, 10, '6864acc0e7a8e_1751428288.jpg', 1, 1, 1.00, '10*10', '2025-07-02 03:51:29', '2025-07-02 03:51:29', 6),
-(41, 5, 19, 'Fridge', 'fridge', 'fridge', 'fridge', 'f123', 'fff123', 25000.00, 23000.00, 5.00, 'manual', 1, 20, 10, '6864ad10275f3_1751428368.jpg', 1, 1, 1.00, '66x66', '2025-07-02 03:52:48', '2025-07-02 03:52:48', 6),
-(42, 5, 19, 'blender', 'blender', 'blender', 'blender', 'b123', 'b1b23', 2500.00, 2100.00, 5.00, 'manual', 1, 20, 5, '6864ad5ef198b_1751428446.jpg', 1, 1, 1.00, '10*10', '2025-07-02 03:54:07', '2025-07-02 03:54:07', 6),
-(43, 5, 19, 'Laptop', 'laptop', 'laptop', 'laptop', 'lp1232', 'lp125', 35000.00, 30000.00, 10.00, 'manual', 1, 30, 10, '6864add2146e5_1751428562.jpg', 1, 1, 1.00, '10*10', '2025-07-02 03:56:02', '2025-07-02 03:56:02', 6),
+(40, 5, 19, 'Scooter', 'scooter', 'Scooter', 'Scooter', 's456', '4152', 5000.00, 4500.00, 5.00, 'manual', 1, 49, 10, '6864acc0e7a8e_1751428288.jpg', 1, 1, 1.00, '10*10', '2025-07-02 03:51:29', '2025-07-17 17:16:00', 6),
+(41, 5, 19, 'Fridge', 'fridge', 'fridge', 'fridge', 'f123', 'fff123', 25000.00, 23000.00, 5.00, 'manual', 1, 19, 10, '6864ad10275f3_1751428368.jpg', 1, 1, 1.00, '66x66', '2025-07-02 03:52:48', '2025-07-17 18:08:21', 6),
+(42, 5, 19, 'blender', 'blender', 'blender', 'blender', 'b123', 'b1b23', 2500.00, 2100.00, 5.00, 'manual', 1, 19, 5, '6864ad5ef198b_1751428446.jpg', 1, 1, 1.00, '10*10', '2025-07-02 03:54:07', '2025-07-17 18:08:21', 6),
+(43, 5, 19, 'Laptop', 'laptop', 'laptop', 'laptop', 'lp1232', 'lp125', 35000.00, 30000.00, 10.00, 'manual', 1, 29, 10, '6864add2146e5_1751428562.jpg', 1, 1, 1.00, '10*10', '2025-07-02 03:56:02', '2025-07-17 18:08:21', 6),
 (44, 5, 8, 'Mobile Phones', 'mobile-phones', 'mobile-phones', 'mobile-phones', 'mb123', 'mb123654', 2600.00, 2300.00, 5.00, 'manual', 1, 20, 10, '6864ae27107e1_1751428647.jpg', 1, 1, 1.00, '66x66', '2025-07-02 03:57:27', '2025-07-02 03:57:27', 6),
-(45, 5, 19, 'Iron', 'iron', 'Iron', 'Iron', 'i369', 'i963', 1500.00, 1200.00, 5.00, 'manual', 1, 20, 10, '6864ae7301e94_1751428723.jpg', 1, 1, 1.00, '10*10', '2025-07-02 03:58:43', '2025-07-02 03:58:43', 6),
+(45, 5, 19, 'Iron', 'iron', 'Iron', 'Iron', 'i369', 'i963', 1500.00, 1200.00, 5.00, 'manual', 1, 19, 10, '6864ae7301e94_1751428723.jpg', 1, 1, 1.00, '10*10', '2025-07-02 03:58:43', '2025-07-17 17:16:00', 6),
 (46, 5, 19, 'TV', 'tv', 'TV', 'TV', 'tv123', 'tv123', 33000.00, 28000.00, 5.00, 'manual', 1, 50, 10, '6864b3a5e0e54_1751430053.jpg', 1, 1, 10.00, '66x66', '2025-07-02 04:20:54', '2025-07-02 04:20:54', 6),
 (47, 5, 19, 'monitor', 'monitor', 'monitor', 'monitor', 'm123', 'm123', 18000.00, 16000.00, 10.00, 'manual', 1, 20, 10, '6864b43e325e9_1751430206.jpg', 1, 1, 10.00, '10*10', '2025-07-02 04:23:26', '2025-07-02 04:23:26', 6);
 
@@ -961,6 +997,50 @@ INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `phone`, `passwor
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `user_profiles`
+--
+
+CREATE TABLE `user_profiles` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `first_name` varchar(100) DEFAULT NULL,
+  `last_name` varchar(100) DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `date_of_birth` date DEFAULT NULL,
+  `gender` enum('male','female','other') DEFAULT NULL,
+  `billing_company` varchar(255) DEFAULT NULL,
+  `billing_address_line_1` varchar(255) DEFAULT NULL,
+  `billing_address_line_2` varchar(255) DEFAULT NULL,
+  `billing_city` varchar(100) DEFAULT NULL,
+  `billing_state` varchar(100) DEFAULT NULL,
+  `billing_postal_code` varchar(20) DEFAULT NULL,
+  `billing_country` varchar(100) DEFAULT 'Bangladesh',
+  `billing_phone` varchar(20) DEFAULT NULL,
+  `shipping_company` varchar(255) DEFAULT NULL,
+  `shipping_address_line_1` varchar(255) DEFAULT NULL,
+  `shipping_address_line_2` varchar(255) DEFAULT NULL,
+  `shipping_city` varchar(100) DEFAULT NULL,
+  `shipping_state` varchar(100) DEFAULT NULL,
+  `shipping_postal_code` varchar(20) DEFAULT NULL,
+  `shipping_country` varchar(100) DEFAULT 'Bangladesh',
+  `shipping_phone` varchar(20) DEFAULT NULL,
+  `same_as_billing` tinyint(1) DEFAULT 1,
+  `newsletter_subscription` tinyint(1) DEFAULT 0,
+  `sms_notifications` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `user_profiles`
+--
+
+INSERT INTO `user_profiles` (`id`, `user_id`, `first_name`, `last_name`, `phone`, `date_of_birth`, `gender`, `billing_company`, `billing_address_line_1`, `billing_address_line_2`, `billing_city`, `billing_state`, `billing_postal_code`, `billing_country`, `billing_phone`, `shipping_company`, `shipping_address_line_1`, `shipping_address_line_2`, `shipping_city`, `shipping_state`, `shipping_postal_code`, `shipping_country`, `shipping_phone`, `same_as_billing`, `newsletter_subscription`, `sms_notifications`, `created_at`, `updated_at`) VALUES
+(1, 7, 'Abu', 'Al-Mamun', '01911029525', '2025-07-01', 'male', 'GNSL', 'Nahin Tower', 'Arambag R/A', 'Dhaka', 'Dhaka', '1216', 'Bangladesh', '01911039525', 'GNSL', 'Nahin Tower', 'Arambag R/A', 'Dhaka', 'Dhaka', '1216', 'Bangladesh', '01911039525', 1, 0, 1, '2025-07-17 13:12:40', '2025-07-17 13:14:48');
+
+-- --------------------------------------------------------
+
+--
 -- Structure for view `daily_sales_summary`
 --
 DROP TABLE IF EXISTS `daily_sales_summary`;
@@ -1159,6 +1239,13 @@ ALTER TABLE `users`
   ADD KEY `idx_role` (`role`);
 
 --
+-- Indexes for table `user_profiles`
+--
+ALTER TABLE `user_profiles`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `user_id` (`user_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -1202,19 +1289,19 @@ ALTER TABLE `customer_addresses`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
 -- AUTO_INCREMENT for table `payment_transactions`
 --
 ALTER TABLE `payment_transactions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -1275,6 +1362,12 @@ ALTER TABLE `subcategories`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `user_profiles`
+--
+ALTER TABLE `user_profiles`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
@@ -1361,6 +1454,12 @@ ALTER TABLE `stock_movements`
 --
 ALTER TABLE `subcategories`
   ADD CONSTRAINT `subcategories_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `user_profiles`
+--
+ALTER TABLE `user_profiles`
+  ADD CONSTRAINT `user_profiles_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

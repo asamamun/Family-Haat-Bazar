@@ -3,7 +3,6 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 require __DIR__ . '/../vendor/autoload.php';
-use App\db;
 
 header('Content-Type: application/json');
 
@@ -22,8 +21,20 @@ try {
     ];
 
     foreach ($required_fields as $field) {
-        if (!isset($_POST[$field]) || (is_string($_POST[$field]) && empty($_POST[$field]) && $_POST[$field] !== '0.00')) {
+        if (!isset($_POST[$field])) {
             throw new Exception("Missing required field: $field");
+        }
+        
+        // Allow numeric fields to be 0 or '0' or '0.00'
+        if (in_array($field, ['discount_amount', 'tax_amount', 'totalPrice', 'grandTotal'])) {
+            if (!is_numeric($_POST[$field])) {
+                throw new Exception("Invalid numeric value for field: $field");
+            }
+        } else {
+            // For non-numeric fields, check if empty (but allow '0')
+            if (is_string($_POST[$field]) && empty($_POST[$field]) && $_POST[$field] !== '0') {
+                throw new Exception("Missing required field: $field");
+            }
         }
     }
 

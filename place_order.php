@@ -14,6 +14,34 @@ use App\User;
 use App\model\Category;
 $db = new MysqliDb();
 $page = "Checkout";
+
+// Debug: Test config function
+$vatDefault = config('vat.default');
+$vatRates = config('vat.rates');
+if (!$vatDefault || !$vatRates) {
+    error_log("Config error in place_order.php - VAT Default: " . ($vatDefault ?: 'NULL') . ", VAT Rates: " . (is_array($vatRates) ? 'OK' : 'NULL'));
+}
+
+// Get user profile for pre-filling forms
+$userId = $_SESSION['userid'];
+$userProfile = $db->where('user_id', $userId)->getOne('user_profiles');
+
+// If no profile exists, create a default one
+if (!$userProfile) {
+    $defaultProfile = [
+        'user_id' => $userId,
+        'first_name' => '',
+        'last_name' => '',
+        'phone' => '',
+        'billing_country' => 'Bangladesh',
+        'shipping_country' => 'Bangladesh',
+        'same_as_billing' => 1,
+        'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')
+    ];
+    $db->insert('user_profiles', $defaultProfile);
+    $userProfile = $db->where('user_id', $userId)->getOne('user_profiles');
+}
 ?>
 <?php require __DIR__ . '/components/header.php';?>
 <!-- content start -->
@@ -287,6 +315,55 @@ $(document).ready(function() {
     // Initial cart load
     updateCartDisplay();
     setTotal();
+
+    // Pre-fill forms with user profile data
+    function populateUserProfile() {
+        <?php if ($userProfile): ?>
+            // Populate billing form
+            $("#billing_first_name").val("<?= htmlspecialchars($userProfile['first_name'] ?? '') ?>");
+            $("#billing_last_name").val("<?= htmlspecialchars($userProfile['last_name'] ?? '') ?>");
+            $("#billing_company").val("<?= htmlspecialchars($userProfile['billing_company'] ?? '') ?>");
+            $("#billing_address_line_1").val("<?= htmlspecialchars($userProfile['billing_address_line_1'] ?? '') ?>");
+            $("#billing_address_line_2").val("<?= htmlspecialchars($userProfile['billing_address_line_2'] ?? '') ?>");
+            $("#billing_city").val("<?= htmlspecialchars($userProfile['billing_city'] ?? '') ?>");
+            $("#billing_state").val("<?= htmlspecialchars($userProfile['billing_state'] ?? '') ?>");
+            $("#billing_postal_code").val("<?= htmlspecialchars($userProfile['billing_postal_code'] ?? '') ?>");
+            $("#billing_country").val("<?= htmlspecialchars($userProfile['billing_country'] ?? 'Bangladesh') ?>");
+            $("#billing_phone").val("<?= htmlspecialchars($userProfile['billing_phone'] ?? $userProfile['phone'] ?? '') ?>");
+
+            // Handle same as billing checkbox
+            <?php if ($userProfile['same_as_billing'] ?? 1): ?>
+                $("#same_as_shipping").prop("checked", true);
+                // Copy billing to shipping
+                $("#shipping_first_name").val("<?= htmlspecialchars($userProfile['first_name'] ?? '') ?>");
+                $("#shipping_last_name").val("<?= htmlspecialchars($userProfile['last_name'] ?? '') ?>");
+                $("#shipping_company").val("<?= htmlspecialchars($userProfile['billing_company'] ?? '') ?>");
+                $("#shipping_address_line_1").val("<?= htmlspecialchars($userProfile['billing_address_line_1'] ?? '') ?>");
+                $("#shipping_address_line_2").val("<?= htmlspecialchars($userProfile['billing_address_line_2'] ?? '') ?>");
+                $("#shipping_city").val("<?= htmlspecialchars($userProfile['billing_city'] ?? '') ?>");
+                $("#shipping_state").val("<?= htmlspecialchars($userProfile['billing_state'] ?? '') ?>");
+                $("#shipping_postal_code").val("<?= htmlspecialchars($userProfile['billing_postal_code'] ?? '') ?>");
+                $("#shipping_country").val("<?= htmlspecialchars($userProfile['billing_country'] ?? 'Bangladesh') ?>");
+                $("#shipping_phone").val("<?= htmlspecialchars($userProfile['billing_phone'] ?? $userProfile['phone'] ?? '') ?>");
+            <?php else: ?>
+                $("#same_as_shipping").prop("checked", false);
+                // Populate shipping form with separate data
+                $("#shipping_first_name").val("<?= htmlspecialchars($userProfile['first_name'] ?? '') ?>");
+                $("#shipping_last_name").val("<?= htmlspecialchars($userProfile['last_name'] ?? '') ?>");
+                $("#shipping_company").val("<?= htmlspecialchars($userProfile['shipping_company'] ?? '') ?>");
+                $("#shipping_address_line_1").val("<?= htmlspecialchars($userProfile['shipping_address_line_1'] ?? '') ?>");
+                $("#shipping_address_line_2").val("<?= htmlspecialchars($userProfile['shipping_address_line_2'] ?? '') ?>");
+                $("#shipping_city").val("<?= htmlspecialchars($userProfile['shipping_city'] ?? '') ?>");
+                $("#shipping_state").val("<?= htmlspecialchars($userProfile['shipping_state'] ?? '') ?>");
+                $("#shipping_postal_code").val("<?= htmlspecialchars($userProfile['shipping_postal_code'] ?? '') ?>");
+                $("#shipping_country").val("<?= htmlspecialchars($userProfile['shipping_country'] ?? 'Bangladesh') ?>");
+                $("#shipping_phone").val("<?= htmlspecialchars($userProfile['shipping_phone'] ?? $userProfile['phone'] ?? '') ?>");
+            <?php endif; ?>
+        <?php endif; ?>
+    }
+
+    // Call the function to populate forms
+    populateUserProfile();
 
     // Same as shipping checkbox
     $("#same_as_shipping").on("change", function() {
