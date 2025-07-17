@@ -23,6 +23,37 @@ $totalPages = ceil($totalProducts / $limit);
 ?>
 
 <?php require __DIR__ . '/components/header.php'; ?>
+<style>
+    .card .card-img-top {
+        height: 150px;
+        width: 100%;
+        object-fit: contain;
+        object-position: center;
+        padding: 10px;
+        background-color: #f8f9fa;
+    }
+    
+    .card-body {
+        min-height: 140px;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .card-body .flex-grow-1 {
+        flex-grow: 1;
+        display: flex;
+        align-items: flex-start;
+    }
+    
+    .card-title {
+        font-size: 0.9rem;
+        line-height: 1.2;
+    }
+    
+    .card-footer {
+        padding: 0.5rem;
+    }
+</style>
 <!-- content start -->
 <div class="container my-4">
     <div class="fluid">

@@ -10,36 +10,95 @@ $page = "Home";
 $db->where('is_hot_item', 1);
 $hotItems = $db->get('products');
 
+// Open Graph data for homepage
+$og_title = settings()['companyname'] . " - Your One-Stop Online Shopping Destination";
+$og_description = "Discover amazing products at " . settings()['companyname'] . ". Shop electronics, garments, automobiles and more with great deals, quality products, and fast delivery.";
+$og_image = settings()['homepage'] . ltrim(settings()['logo'], '/');
+$og_url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+$og_type = "website";
+
 ?>
 <?php require __DIR__ . '/components/header.php'; ?>
-<br>
+<style>
+/* Optimized homepage layout - remove this style block to revert to original */
+.homepage-optimized {
+    padding-top: 1rem;
+}
+
+.homepage-optimized .welcome-section {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.homepage-optimized .welcome-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #dc3545;
+    margin-bottom: 0.5rem;
+}
+
+.homepage-optimized .carousel-subtitle {
+    font-size: 1.1rem;
+    color: #6c757d;
+    margin-bottom: 1rem;
+}
+
+.homepage-optimized .carousel-container {
+    margin-bottom: 2rem;
+}
+
+.homepage-optimized .products-section {
+    padding: 2rem 0;
+}
+
+.homepage-optimized .products-section h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.homepage-optimized .search-container {
+    margin-bottom: 2rem;
+}
+</style>
 <!-- content start -->
-<h1 style="text-align:center; font-weight:bold; color:red; ">Welcome to ShopEase</h1>
-<div><span style="font-family:sansherif">Our hot products</span></div>
-<div class="owl-carousel owl-theme">
-    <?php foreach ($hotItems as $item): ?>
-        <div class="item">
-            <a href="product-details.php?id=<?= $item['id'] ?>" class="text-decoration-none text-dark">
-                <h4><img src="assets/products/<?php echo htmlspecialchars($item['image']); ?>" alt="<?php echo htmlspecialchars($item['name']); ?>" onerror="this.onerror=null;this.src='<?= settings()['logo'] ?>';"></h4>
-                <span><?php echo htmlspecialchars($item['name']); ?></span>
-            </a>
+<div class="homepage-optimized">
+    <div class="container-fluid">
+        <div class="welcome-section">
+            <h1 class="welcome-title">Welcome to ShopEase</h1>
+            <div class="carousel-subtitle">Our Hot Products</div>
         </div>
-    <?php endforeach; ?>
+        
+        <div class="carousel-container">
+            <div class="owl-carousel owl-theme">
+                <?php foreach ($hotItems as $item): ?>
+                    <div class="item">
+                        <a href="product-details.php?id=<?= $item['id'] ?>" class="text-decoration-none text-dark">
+                            <h4><img src="assets/products/<?php echo htmlspecialchars($item['image']); ?>" alt="<?php echo htmlspecialchars($item['name']); ?>" onerror="this.onerror=null;this.src='<?= settings()['logo'] ?>';"></h4>
+                            <span><?php echo htmlspecialchars($item['name']); ?></span>
+                        </a>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
 </div>
 <!-- content end -->
+
 <!-- Our Products -->
-<div class="bg-light">
-    <div class="container-fluid py-4">
-        <div class="text-center mb-4">
-            <h1 class="display-4 text-primary">Our Products</h1>
+<div class="bg-light products-section">
+    <div class="container-fluid">
+        <div class="text-center">
+            <h1 class="text-primary">Our Products</h1>
         </div>
 
         <!-- Search and Filter -->
-        <div class="row mb-4">
-            <div class="col-md-6 offset-md-3">
-                <div class="input-group">
-                    <input type="text" id="searchInput" class="form-control" placeholder="Search for products...">
-                    <button id="searchButton" class="btn btn-primary">Search</button>
+        <div class="search-container">
+            <div class="row">
+                <div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+                    <div class="input-group">
+                        <input type="text" id="searchInput" class="form-control" placeholder="Search for products...">
+                        <button id="searchButton" class="btn btn-primary">Search</button>
+                    </div>
                 </div>
             </div>
         </div>

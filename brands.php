@@ -17,6 +17,25 @@ $brands = $db->get('brands');
     .brand-card {
         cursor: pointer;
     }
+    
+    .brand-card .card-img-top {
+        height: 120px;
+        width: 100%;
+        object-fit: contain;
+        object-position: center;
+        padding: 10px;
+        background-color: #f8f9fa;
+    }
+    
+    .brand-card .card-body {
+        padding: 0.75rem;
+    }
+    
+    .brand-card .card-title {
+        font-size: 0.9rem;
+        line-height: 1.2;
+        margin-bottom: 0;
+    }
 </style>
 <!-- content start -->
 <div class="container my-4">
@@ -60,18 +79,18 @@ $brands = $db->get('brands');
                         response.products.forEach(function(product) {
                             var productCard = `
                                 <div class="col-6 col-md-4 col-lg-3">
-                                    <a href="product-details.php?id=${product.id}" class="text-decoration-none text-dark">
-                                        <div class="card h-100 d-flex flex-column">
+                                    <div class="card h-100 d-flex flex-column">
+                                        <a href="product-details.php?id=${product.id}" class="text-decoration-none text-dark">
                                             <img src="assets/products/${product.image}" class="card-img-top" alt="${product.name}" onerror="this.onerror=null;this.src='<?= settings()['logo'] ?>';">
                                             <div class="card-body flex-grow-1">
                                                 <h5 class="card-title">${product.name}</h5>
                                                 <p class="card-text">Price: ${product.selling_price}</p>
                                             </div>
-                                            <div class="card-footer bg-transparent border-0">
-                                                <button class="btn btn-primary btn-add-cart w-100" data-product-id="${product.id}" data-product-name="${product.name}" data-product-price="${product.selling_price}" data-product-image="${product.image}">Add to Cart</button>
-                                            </div>
+                                        </a>
+                                        <div class="card-footer bg-transparent border-0">
+                                            <button class="btn btn-primary btn-add-cart w-100" data-product-id="${product.id}" data-product-name="${product.name}" data-product-price="${product.selling_price}" data-product-image="${product.image}">Add to Cart</button>
                                         </div>
-                                    </a>
+                                    </div>
                                 </div>`;
                             $('#product-container').append(productCard);
                         });

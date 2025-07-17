@@ -179,23 +179,7 @@ $page = "Checkout";
                             <td id="netTotal">৳0.00</td>
                         </tr>
                         <tr>
-                            <td>Discount</td>
-                            <td><input type="number" id="discount" value="0.00" min="0" step="0.01" class="form-control"></td>
-                        </tr>
-                        <tr>
-                            <td>VAT (%)</td>
-                            <td>
-                                <select name="vat" id="vat" class="form-select">
-                                    <?php
-                                    foreach (config('vat.rates') as $vat) {
-                                        echo "<option value='{$vat['value']}'>{$vat['name']}</option>";
-                                    }
-                                    ?>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>VAT Amount</td>
+                            <td>VAT (<?= config('vat.default') ?>)</td>
                             <td id="vatAmount">৳0.00</td>
                         </tr>
                         <tr>
@@ -275,25 +259,34 @@ $(document).ready(function() {
     window.updateCartDisplay = function() {
         let allitems = cart.getSummary();
         $("#cartCountButton").text(cart.getTotalItems());
-        $("#grandTotal").text(parseFloat(cart.getTotalPrice()).toFixed(2));
         populateItems(allitems.items, "#cartContent table tbody");
+        populateItems(allitems.items, "#cartTable");
+        setTotal(); // Update totals when cart changes
     }
 
     function setTotal() {
         let netTotal = parseFloat(cart.getTotalPrice());
-        let discount = parseFloat($("#discount").val()) || 0;
-        let vatRate = parseFloat($("#vat").val()) || 0;
+        let vatRate = <?php 
+            $vatConfig = config('vat.rates');
+            $defaultVat = config('vat.default');
+            foreach ($vatConfig as $vat) {
+                if ($vat['name'] === $defaultVat) {
+                    echo $vat['value'];
+                    break;
+                }
+            }
+        ?>;
         let vatAmount = netTotal * vatRate;
-        let grandTotal = netTotal + vatAmount - discount;
+        let grandTotal = netTotal + vatAmount;
+        
+        $("#netTotal").text(`৳${netTotal.toFixed(2)}`);
         $("#vatAmount").text(`৳${vatAmount.toFixed(2)}`);
         $("#grandTotal").text(`৳${grandTotal.toFixed(2)}`);
     }
 
     // Initial cart load
     updateCartDisplay();
-
-    // Discount and VAT change
-    $("#discount, #vat").on("change keyup", setTotal);
+    setTotal();
 
     // Same as shipping checkbox
     $("#same_as_shipping").on("change", function() {
@@ -385,7 +378,7 @@ $(document).ready(function() {
             items: cart.getSummary().items,
             totalItems: cart.getTotalItems(),
             totalPrice: cart.getTotalPrice(),
-            discount_amount: $("#discount").val(),
+            discount_amount: 0,
             tax_amount: $("#vatAmount").text().replace("৳", ""),
             grandTotal: $("#grandTotal").text().replace("৳", ""),
         };

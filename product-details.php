@@ -17,6 +17,25 @@ $product = $db->getOne('products'); */
         $db->orderBy("p.id", "DESC");
         $db->where("p.id", intval($_GET['id']));
         $products = $db->get("products p", null, "p.*, c.name as category_name, sc.name as subcategory_name, b.name as brand_name");
+
+// Open Graph data for product page
+if (!empty($products)) {
+    $product = $products[0];
+    $og_title = htmlspecialchars($product['name']) . " - " . settings()['companyname'];
+    $og_description = !empty($product['short_description']) ? 
+        htmlspecialchars($product['short_description']) : 
+        htmlspecialchars($product['description']);
+    $og_image = settings()['homepage'] . 'assets/products/' . htmlspecialchars($product['image']);
+    $og_url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    $og_type = "product";
+} else {
+    // Fallback if product not found
+    $og_title = "Product Not Found - " . settings()['companyname'];
+    $og_description = "The requested product could not be found.";
+    $og_image = settings()['homepage'] . ltrim(settings()['logo'], '/');
+    $og_url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    $og_type = "website";
+}
 /* var_dump($products);
 
 exit; */

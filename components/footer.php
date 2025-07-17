@@ -149,3 +149,12 @@
             $('#cartContent table tbody').html(cartItems);
         }
     </script>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9RHP7E8KTP"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-9RHP7E8KTP');
+</script>
