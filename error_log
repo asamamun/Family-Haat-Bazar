@@ -1,0 +1,5 @@
+[17-Jul-2025 17:48:27 Europe/Berlin] PHP Warning:  require(D:\xampp8212\htdocs\Family-Haat-Bazar/vendor/autoload.php): Failed to open stream: No such file or directory in D:\xampp8212\htdocs\Family-Haat-Bazar\index.php on line 5
+[17-Jul-2025 17:48:27 Europe/Berlin] PHP Fatal error:  Uncaught Error: Failed opening required 'D:\xampp8212\htdocs\Family-Haat-Bazar/vendor/autoload.php' (include_path='D:\xampp8212\php\PEAR') in D:\xampp8212\htdocs\Family-Haat-Bazar\index.php:5
+Stack trace:
+#0 {main}
+  thrown in D:\xampp8212\htdocs\Family-Haat-Bazar\index.php on line 5

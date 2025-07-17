@@ -3,6 +3,9 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+// Set timezone to Bangladesh Standard Time
+date_default_timezone_set('Asia/Dhaka');
+
 // Check if user is logged in
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     echo '<div class="alert alert-danger">Please log in to view order details.</div>';

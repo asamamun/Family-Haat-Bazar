@@ -1,0 +1,52 @@
+[18-Jul-2025 01:05:13 Asia/Dhaka] PHP Fatal error:  Uncaught Error: Call to undefined method MysqliDb::limit() in D:\xampp8212\htdocs\Family-Haat-Bazar\admin\apis\dashboard-stats.php:61
+Stack trace:
+#0 {main}
+  thrown in D:\xampp8212\htdocs\Family-Haat-Bazar\admin\apis\dashboard-stats.php on line 61
+[18-Jul-2025 01:10:16 Asia/Dhaka] PHP Fatal error:  Uncaught Error: Call to undefined method MysqliDb::limit() in D:\xampp8212\htdocs\Family-Haat-Bazar\admin\apis\dashboard-stats.php:61
+Stack trace:
+#0 {main}
+  thrown in D:\xampp8212\htdocs\Family-Haat-Bazar\admin\apis\dashboard-stats.php on line 61
+[18-Jul-2025 01:10:54 Asia/Dhaka] PHP Fatal error:  Uncaught Error: Call to undefined method MysqliDb::limit() in D:\xampp8212\htdocs\Family-Haat-Bazar\admin\apis\dashboard-stats.php:61
+Stack trace:
+#0 {main}
+  thrown in D:\xampp8212\htdocs\Family-Haat-Bazar\admin\apis\dashboard-stats.php on line 61
+[18-Jul-2025 01:10:57 Asia/Dhaka] PHP Fatal error:  Uncaught Error: Call to undefined method MysqliDb::limit() in D:\xampp8212\htdocs\Family-Haat-Bazar\admin\apis\dashboard-stats.php:61
+Stack trace:
+#0 {main}
+  thrown in D:\xampp8212\htdocs\Family-Haat-Bazar\admin\apis\dashboard-stats.php on line 61
+[18-Jul-2025 01:10:57 Asia/Dhaka] PHP Fatal error:  Uncaught Error: Call to undefined method MysqliDb::limit() in D:\xampp8212\htdocs\Family-Haat-Bazar\admin\apis\dashboard-stats.php:61
+Stack trace:
+#0 {main}
+  thrown in D:\xampp8212\htdocs\Family-Haat-Bazar\admin\apis\dashboard-stats.php on line 61
+[18-Jul-2025 01:10:58 Asia/Dhaka] PHP Fatal error:  Uncaught Error: Call to undefined method MysqliDb::limit() in D:\xampp8212\htdocs\Family-Haat-Bazar\admin\apis\dashboard-stats.php:61
+Stack trace:
+#0 {main}
+  thrown in D:\xampp8212\htdocs\Family-Haat-Bazar\admin\apis\dashboard-stats.php on line 61
+[18-Jul-2025 01:10:59 Asia/Dhaka] PHP Fatal error:  Uncaught Error: Call to undefined method MysqliDb::limit() in D:\xampp8212\htdocs\Family-Haat-Bazar\admin\apis\dashboard-stats.php:61
+Stack trace:
+#0 {main}
+  thrown in D:\xampp8212\htdocs\Family-Haat-Bazar\admin\apis\dashboard-stats.php on line 61
+[18-Jul-2025 01:10:59 Asia/Dhaka] PHP Fatal error:  Uncaught Error: Call to undefined method MysqliDb::limit() in D:\xampp8212\htdocs\Family-Haat-Bazar\admin\apis\dashboard-stats.php:61
+Stack trace:
+#0 {main}
+  thrown in D:\xampp8212\htdocs\Family-Haat-Bazar\admin\apis\dashboard-stats.php on line 61
+[18-Jul-2025 01:11:11 Asia/Dhaka] PHP Fatal error:  Uncaught Error: Call to undefined method MysqliDb::limit() in D:\xampp8212\htdocs\Family-Haat-Bazar\admin\apis\dashboard-stats.php:61
+Stack trace:
+#0 {main}
+  thrown in D:\xampp8212\htdocs\Family-Haat-Bazar\admin\apis\dashboard-stats.php on line 61
+[18-Jul-2025 01:11:17 Asia/Dhaka] PHP Fatal error:  Uncaught Error: Call to undefined method MysqliDb::limit() in D:\xampp8212\htdocs\Family-Haat-Bazar\admin\apis\dashboard-stats.php:61
+Stack trace:
+#0 {main}
+  thrown in D:\xampp8212\htdocs\Family-Haat-Bazar\admin\apis\dashboard-stats.php on line 61
+[18-Jul-2025 01:11:19 Asia/Dhaka] PHP Fatal error:  Uncaught Error: Call to undefined method MysqliDb::limit() in D:\xampp8212\htdocs\Family-Haat-Bazar\admin\apis\dashboard-stats.php:61
+Stack trace:
+#0 {main}
+  thrown in D:\xampp8212\htdocs\Family-Haat-Bazar\admin\apis\dashboard-stats.php on line 61
+[18-Jul-2025 01:11:19 Asia/Dhaka] PHP Fatal error:  Uncaught Error: Call to undefined method MysqliDb::limit() in D:\xampp8212\htdocs\Family-Haat-Bazar\admin\apis\dashboard-stats.php:61
+Stack trace:
+#0 {main}
+  thrown in D:\xampp8212\htdocs\Family-Haat-Bazar\admin\apis\dashboard-stats.php on line 61
+[18-Jul-2025 01:12:30 Asia/Dhaka] PHP Fatal error:  Uncaught Error: Call to undefined method MysqliDb::limit() in D:\xampp8212\htdocs\Family-Haat-Bazar\admin\apis\dashboard-stats.php:61
+Stack trace:
+#0 {main}
+  thrown in D:\xampp8212\htdocs\Family-Haat-Bazar\admin\apis\dashboard-stats.php on line 61

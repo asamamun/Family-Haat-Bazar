@@ -1,4 +1,7 @@
 <?php
+// Set default timezone for the application
+date_default_timezone_set('Asia/Dhaka');
+
 if (!function_exists('settings')) {
     function settings()
     {
@@ -13,6 +16,7 @@ if (!function_exists('settings')) {
             'user' => 'root',
             'password' => '',
             'database' => 'haatbazar',
+            'timezone' => 'Asia/Dhaka',
             'physical_path' => 'D:\xampp8212\htdocs\Family-Haat-Bazar',
         ];
     }

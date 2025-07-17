@@ -1,4 +1,7 @@
 <?php
+// Set timezone to Bangladesh Standard Time
+date_default_timezone_set('Asia/Dhaka');
+
 require __DIR__ . '/../vendor/autoload.php';
 
 header('Content-Type: application/json');

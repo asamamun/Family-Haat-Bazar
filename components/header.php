@@ -2,6 +2,8 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+// Set timezone to Bangladesh Standard Time
+date_default_timezone_set('Asia/Dhaka');
 ?>
 <!DOCTYPE html>
 <html lang="en">

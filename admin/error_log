@@ -12,3 +12,22 @@ Stack trace:
 [14-Jul-2025 12:19:32 Asia/Dhaka] PHP Warning:  Undefined array key "username" in D:\xampp8240\htdocs\ROUND64\PHP\Family-Haat-Bazar\admin\components\sidebar.php on line 123
 [14-Jul-2025 12:19:59 Asia/Dhaka] PHP Warning:  Undefined array key "username" in D:\xampp8240\htdocs\ROUND64\PHP\Family-Haat-Bazar\admin\components\navbar.php on line 19
 [14-Jul-2025 12:19:59 Asia/Dhaka] PHP Warning:  Undefined array key "username" in D:\xampp8240\htdocs\ROUND64\PHP\Family-Haat-Bazar\admin\components\sidebar.php on line 123
+[17-Jul-2025 19:52:44 Europe/Berlin] Array:[1,1,24,null]
+[17-Jul-2025 19:52:45 Europe/Berlin] Array:[26,3,24,null]
+[17-Jul-2025 19:52:45 Europe/Berlin] Array:[27,1,24,null]
+[17-Jul-2025 19:52:45 Europe/Berlin] Array:[28,1,24,null]
+[17-Jul-2025 19:52:45 Europe/Berlin] Array:[29,4,24,null]
+[17-Jul-2025 19:52:45 Europe/Berlin] Array:[34,1,24,null]
+[17-Jul-2025 19:52:45 Europe/Berlin] Array:[32,1,24,null]
+[17-Jul-2025 19:52:46 Europe/Berlin] Array:[30,1,24,null]
+[17-Jul-2025 19:55:31 Europe/Berlin] Array:[24,1,25,null]
+[17-Jul-2025 19:55:31 Europe/Berlin] Array:[23,1,25,null]
+[17-Jul-2025 19:55:31 Europe/Berlin] Array:[22,1,25,null]
+[17-Jul-2025 19:55:31 Europe/Berlin] Array:[21,1,25,null]
+[17-Jul-2025 20:08:19 Europe/Berlin] Array:[21,1,26,null]
+[17-Jul-2025 20:08:20 Europe/Berlin] Array:[22,1,26,null]
+[17-Jul-2025 20:08:21 Europe/Berlin] Array:[23,1,26,null]
+[17-Jul-2025 20:08:21 Europe/Berlin] Array:[24,1,26,null]
+[17-Jul-2025 20:08:21 Europe/Berlin] Array:[43,1,26,null]
+[17-Jul-2025 20:08:21 Europe/Berlin] Array:[42,1,26,null]
+[17-Jul-2025 20:08:21 Europe/Berlin] Array:[41,1,26,null]
