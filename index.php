@@ -64,7 +64,7 @@ $og_type = "website";
 <div class="homepage-optimized">
     <div class="container-fluid">
         <div class="welcome-section">
-            <h1 class="welcome-title">Welcome to ShopEase</h1>
+            <h1 class="welcome-title">Welcome to <?= settings()['companyname']/h1>
             <div class="carousel-subtitle">Our Hot Products</div>
         </div>
         
@@ -141,7 +141,7 @@ $og_type = "website";
                     if (response.products.length > 0) {
                         response.products.forEach(function(product) {
                             var productHtml = `
-                                <div class="col-3 mb-3">
+                                <div class="col-6 col-md-4 col-lg-3">
                                     <div class="card product-card h-100 shadow-sm d-flex flex-column">
                                         <img src="${rootUrl}assets/products/${product.image}" class="card-img-top product-image" alt="${product.name}" onerror="this.onerror=null;this.src='<?= settings()['logo'] ?>';">
                                         <div class="card-body flex-grow-1 p-2">

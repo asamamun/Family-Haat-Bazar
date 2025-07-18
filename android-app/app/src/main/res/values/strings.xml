@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Haat Bazar</string>
+    <string name="app_tagline">Your Family Shopping Destination</string>
+    <string name="loading">Loading...</string>
+    <string name="no_internet">No Internet Connection</string>
+    <string name="retry">Retry</string>
+    <string name="exit">Exit</string>
+    <string name="error">Error</string>
+    <string name="ok">OK</string>
+</resources>
