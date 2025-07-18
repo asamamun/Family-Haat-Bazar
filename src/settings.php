@@ -18,6 +18,15 @@ if (!function_exists('settings')) {
             'database' => 'haatbazar',
             'timezone' => 'Asia/Dhaka',
             'physical_path' => 'D:\xampp8212\htdocs\Family-Haat-Bazar',
+            // Email Configuration
+            'mail_host' => 'mail.coders64.xyz',
+            'mail_port' => 587,
+            'mail_username' => 'info@coders64.xyz',
+            'mail_password' => 'jmKLgHZ3{UXO[9Ll',
+            'mail_encryption' => 'tls',
+            'mail_from_address' => 'info@coders64.xyz',
+            'mail_from_name' => 'Haat Bazar',
+            'mail_reply_to' => 'info@coders64.xyz'
         ];
     }
 }

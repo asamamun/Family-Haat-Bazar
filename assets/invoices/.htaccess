@@ -1,0 +1,13 @@
+# Deny direct access to invoice files
+Order Deny,Allow
+Deny from all
+
+# Only allow access from localhost (for development)
+Allow from 127.0.0.1
+Allow from ::1
+
+# Block common file extensions
+<FilesMatch "\.(pdf|doc|docx|xls|xlsx)$">
+    Order Deny,Allow
+    Deny from all
+</FilesMatch>
