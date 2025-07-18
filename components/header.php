@@ -15,7 +15,10 @@ date_default_timezone_set('Asia/Dhaka');
     <!-- Open Graph Protocol Meta Tags -->
     <meta property="og:title" content="<?=isset($og_title) ? $og_title : settings()['companyname'] . ' - ' . $page?>">
     <meta property="og:description" content="<?=isset($og_description) ? $og_description : 'Shop the best products at ' . settings()['companyname'] . '. Quality products, great prices, fast delivery.'?>">
-    <meta property="og:image" content="<?=isset($og_image) ? $og_image : ltrim(settings()['logo'], '/')?>">
+    <meta property="og:image" content="<?=isset($og_image) ? $og_image : 'https://coders64.xyz/projects/haatbazar/' . ltrim(settings()['logo'], '/')?>">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="<?=isset($og_title) ? $og_title : settings()['companyname']?>">
     <meta property="og:url" content="<?=isset($og_url) ? $og_url : 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']?>">
     <meta property="og:type" content="<?=isset($og_type) ? $og_type : 'website'?>">
     <meta property="og:site_name" content="<?=settings()['companyname']?>">
@@ -24,7 +27,7 @@ date_default_timezone_set('Asia/Dhaka');
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="<?=isset($og_title) ? $og_title : settings()['companyname'] . ' - ' . $page?>">
     <meta name="twitter:description" content="<?=isset($og_description) ? $og_description : 'Shop the best products at ' . settings()['companyname'] . '. Quality products, great prices, fast delivery.'?>">
-    <meta name="twitter:image" content="<?=isset($og_image) ? $og_image : ltrim(settings()['logo'], '/')?>">
+    <meta name="twitter:image" content="<?=isset($og_image) ? $og_image : 'https://coders64.xyz/projects/haatbazar/' . ltrim(settings()['logo'], '/')?>">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Add Font Awesome for icons -->

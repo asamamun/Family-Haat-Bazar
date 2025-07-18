@@ -149,7 +149,7 @@ try {
     }
 
     $db->commit();
-
+    //TODO: email the invoice as PDF attachment to user's email address
     $response['success'] = true;
     $response['message'] = 'Order placed successfully';
     $response['order_number'] = $order_number;

@@ -2,38 +2,50 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-if(!isset($_GET['id'])){
+if (!isset($_GET['id'])) {
     header("HTTP/1.0 400 Bad Request");
     exit;
 }
 require __DIR__ . '/vendor/autoload.php';
-$db = new MysqliDb ();
+$db = new MysqliDb();
 $page = "Product Details";
 /* $db->where("id", intval($_GET['id']));
 $product = $db->getOne('products'); */
- $db->join("categories c", "p.category_id = c.id", "LEFT");
-        $db->join("subcategories sc", "p.subcategory_id = sc.id", "LEFT");
-        $db->join("brands b", "p.brand = b.id", "LEFT");
-        $db->orderBy("p.id", "DESC");
-        $db->where("p.id", intval($_GET['id']));
-        $products = $db->get("products p", null, "p.*, c.name as category_name, sc.name as subcategory_name, b.name as brand_name");
+$db->join("categories c", "p.category_id = c.id", "LEFT");
+$db->join("subcategories sc", "p.subcategory_id = sc.id", "LEFT");
+$db->join("brands b", "p.brand = b.id", "LEFT");
+$db->orderBy("p.id", "DESC");
+$db->where("p.id", intval($_GET['id']));
+$products = $db->get("products p", null, "p.*, c.name as category_name, sc.name as subcategory_name, b.name as brand_name");
 
 // Open Graph data for product page
 if (!empty($products)) {
     $product = $products[0];
     $og_title = htmlspecialchars($product['name']) . " - " . settings()['companyname'];
-    $og_description = !empty($product['short_description']) ? 
-        htmlspecialchars($product['short_description']) : 
-        htmlspecialchars($product['description']);
-    $og_image = settings()['homepage'] . 'assets/products/' . htmlspecialchars($product['image']);
-    $og_url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+
+    // Create rich description for social sharing
+    $price = "৳" . number_format($product['selling_price'], 2);
+    $og_description = !empty($product['short_description']) ?
+    htmlspecialchars($product['short_description']) . " | Price: " . $price :
+    htmlspecialchars($product['description']) . " | Price: " . $price;
+
+    // Ensure full URL for product image
+    $og_image = 'https://coders64.xyz/projects/haatbazar/assets/products/' . htmlspecialchars($product['image']);
+    $og_url = 'https://coders64.xyz/projects/haatbazar/product-details.php?id=' . intval($_GET['id']);
     $og_type = "product";
+
+    // Additional product-specific Open Graph tags
+    $og_product_price = $product['selling_price'];
+    $og_product_currency = "BDT";
+    $og_product_availability = $product['stock_quantity'] > 0 ? "in stock" : "out of stock";
+    $og_product_brand = htmlspecialchars($product['brand_name']);
+    $og_product_category = htmlspecialchars($product['category_name']);
 } else {
     // Fallback if product not found
     $og_title = "Product Not Found - " . settings()['companyname'];
     $og_description = "The requested product could not be found.";
-    $og_image = settings()['homepage'] . ltrim(settings()['logo'], '/');
-    $og_url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    $og_image = 'https://coders64.xyz/projects/haatbazar/' . ltrim(settings()['logo'], '/');
+    $og_url = 'https://coders64.xyz/projects/haatbazar/product-details.php?id=' . intval($_GET['id']);
     $og_type = "website";
 }
 /* var_dump($products);
@@ -41,7 +53,7 @@ if (!empty($products)) {
 exit; */
 /*
 array(26) { ["id"]=> int(2) ["category_id"]=> int(5) ["subcategory_id"]=> int(16) ["name"]=> string(4) "Akij" ["slug"]=> string(2) "ac" ["description"]=> string(7) "dsfgdfg" ["short_description"]=> string(15) " sdfsd fdsaf sd" ["sku"]=> string(9) "idbac2ton" ["barcode"]=> string(16) "43543545fdgdfgfg" ["selling_price"]=> string(8) "45000.00" ["cost_price"]=> string(8) "42000.00" ["markup_percentage"]=> string(4) "0.00" ["pricing_method"]=> string(6) "manual" ["auto_update_price"]=> int(0) ["stock_quantity"]=> int(55) ["min_stock_level"]=> int(5) ["image"]=> string(28) "685b85aaebc84_1750828458.png" ["is_hot_item"]=> int(1) ["is_active"]=> int(1) ["weight"]=> string(5) "55.00" ["dimensions"]=> string(2) "55" ["created_at"]=> string(19) "2025-06-24 05:49:06" ["updated_at"]=> string(19) "2025-06-25 11:14:19" ["brand"]=> int(2) ["sort_order"]=> int(0) ["logo"]=> string(28) "685a2040b8017_1750736960.jpg" }
-*/
+ */
 ?>
 <?php require __DIR__ . '/components/header.php';?>
 <!-- content start -->
@@ -50,7 +62,7 @@ array(26) { ["id"]=> int(2) ["category_id"]=> int(5) ["subcategory_id"]=> int(16
 
  <!-- Our Products -->
     <div class="bg-light">
-    <div class="container-fluid py-4">     
+    <div class="container-fluid py-4">
         <div class="row g-2" id="productContainer">
             <!--  -->
             <!--  -->
@@ -61,7 +73,7 @@ array(26) { ["id"]=> int(2) ["category_id"]=> int(5) ["subcategory_id"]=> int(16
                 <div class="row">
                     <div class="col-md-6">
                         <div class="images p-3">
-                            <div class="text-center p-4"> <img id="main-image" src="<?= settings()['root'] ?>assets/products/<?= $products[0]['image'] ?>" width="250" onerror="this.onerror=null;this.src='<?= settings()['logo'] ?>';"/> </div>
+                            <div class="text-center p-4"> <img id="main-image" src="<?=settings()['root']?>assets/products/<?=$products[0]['image']?>" width="250" onerror="this.onerror=null;this.src='<?=settings()['logo']?>';"/> </div>
 
                         </div>
                     </div>
@@ -70,17 +82,45 @@ array(26) { ["id"]=> int(2) ["category_id"]=> int(5) ["subcategory_id"]=> int(16
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="d-flex align-items-center"> <i class="fa fa-long-arrow-left"></i> <span class="ml-1">Back</span> </div> <i class="fa fa-shopping-cart text-muted"></i>
                             </div>
-                            <div class="mt-4 mb-3"> <span class="text-uppercase text-muted brand"><?= $products[0]['brand_name'] ?></span>
-                                <h5 class="text-uppercase"><?= $products[0]['name'] ?></h5>
-                                <div class="price d-flex flex-row align-items-center"> <span class="act-price">Taka <?= $products[0]['selling_price'] ?></span>
+                            <div class="mt-4 mb-3"> <span class="text-uppercase text-muted brand"><?=$products[0]['brand_name']?></span>
+                                <h5 class="text-uppercase"><?=$products[0]['name']?></h5>
+                                <div class="price d-flex flex-row align-items-center"> <span class="act-price">Taka <?=$products[0]['selling_price']?></span>
                                     <!-- <div class="ml-2"> <small class="dis-price">$59</small> <span>40% OFF</span> </div> -->
                                 </div>
                             </div>
-                            <p class="about"><?= $products[0]['description'] ?></p>
+                            <p class="about"><?=$products[0]['description']?></p>
                             <!-- <div class="sizes mt-5">
                                 <h6 class="text-uppercase">Size</h6> <label class="radio"> <input type="radio" name="size" value="S" checked> <span>S</span> </label> <label class="radio"> <input type="radio" name="size" value="M"> <span>M</span> </label> <label class="radio"> <input type="radio" name="size" value="L"> <span>L</span> </label> <label class="radio"> <input type="radio" name="size" value="XL"> <span>XL</span> </label> <label class="radio"> <input type="radio" name="size" value="XXL"> <span>XXL</span> </label>
                             </div> -->
-                            <div class="cart mt-4 align-items-center"> <button class="btn btn-danger text-uppercase mr-2 px-4 btn-add-cart" data-product-id="<?= $products[0]['id'] ?>" data-product-name="<?= htmlspecialchars($products[0]['name']) ?>" data-product-price="<?= $products[0]['selling_price'] ?>" data-product-image="<?= htmlspecialchars($products[0]['image']) ?>">Add to cart</button> <i class="fa fa-heart text-muted"></i> <i class="fa fa-share-alt text-muted"></i> </div>
+                            <div class="cart mt-4 align-items-center">
+                                <button class="btn btn-danger text-uppercase mr-2 px-4 btn-add-cart" data-product-id="<?=$products[0]['id']?>" data-product-name="<?=htmlspecialchars($products[0]['name'])?>" data-product-price="<?=$products[0]['selling_price']?>" data-product-image="<?=htmlspecialchars($products[0]['image'])?>">Add to cart</button>
+                                <i class="fa fa-heart text-muted"></i>
+                            </div>
+
+                            <!-- Social Share Buttons -->
+                            <div class="social-share mt-4">
+                                <h6 class="text-uppercase mb-3">Share this product</h6>
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <button class="btn btn-primary btn-sm social-btn" onclick="shareOnFacebook()" title="Share on Facebook">
+                                        <i class="fab fa-facebook-f"></i> Facebook
+                                    </button>
+                                    <button class="btn btn-info btn-sm social-btn" onclick="shareOnTwitter()" title="Share on Twitter">
+                                        <i class="fab fa-twitter"></i> Twitter
+                                    </button>
+                                    <button class="btn btn-success btn-sm social-btn" onclick="shareOnWhatsApp()" title="Share on WhatsApp">
+                                        <i class="fab fa-whatsapp"></i> WhatsApp
+                                    </button>
+                                    <button class="btn btn-danger btn-sm social-btn" onclick="shareOnPinterest()" title="Share on Pinterest">
+                                        <i class="fab fa-pinterest"></i> Pinterest
+                                    </button>
+                                    <button class="btn btn-primary btn-sm social-btn" onclick="shareOnLinkedIn()" title="Share on LinkedIn">
+                                        <i class="fab fa-linkedin-in"></i> LinkedIn
+                                    </button>
+                                    <button class="btn btn-secondary btn-sm social-btn" onclick="copyToClipboard()" title="Copy Link">
+                                        <i class="fas fa-link"></i> Copy Link
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -98,7 +138,7 @@ array(26) { ["id"]=> int(2) ["category_id"]=> int(5) ["subcategory_id"]=> int(16
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 </div>
 
-<?php require __DIR__ . '/components/footer.php'; ?>
+<?php require __DIR__ . '/components/footer.php';?>
 <?php $db->disconnect();?>
 </body>
 </html>
